@@ -1,0 +1,30 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "column-rename",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "{\"scenario_id\":\"column-rename\"}"}]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [{"text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed."}]
+        }
+      }
+    },
+    {
+      "eval_case_id": "missing-identifier",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "{\"scenario_id\":\"missing-identifier\"}"}]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [{"text": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed because no identifier can be fabricated safely."}]
+        }
+      }
+    }
+  ]
+}

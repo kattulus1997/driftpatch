@@ -1,0 +1,526 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"column-rename\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "column-rename",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected column-rename."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"update_field_sources\",\n  \"field_sources\": [\n    {\n      \"output_field\": \"name\",\n      \"source_field\": \"full_name\"\n    }\n  ],\n  \"delimiter\": null,\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The field 'name' was removed and 'full_name' was added in the 'after' schema.\",\n    \"The example values for 'full_name' ('Central Library', 'Riverside Clinic', 'North School') match the previous example values for 'name'.\",\n    \"The current failure indicates that 'name' is missing for all 3 rows.\"\n  ],\n  \"rationale\": \"The upstream data source renamed the column 'name' to 'full_name'. Updating the field source mapping for the output field 'name' to use the source field 'full_name' will satisfy the contract requirement.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied update_field_sources in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"delimiter-change\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "delimiter-change",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected delimiter-change."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"set_delimiter\",\n  \"delimiter\": \";\",\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"after.delimiter is ';'\",\n    \"current_failure shows all required fields (id, city, population) are missing\"\n  ],\n  \"rationale\": \"The upstream CSV source changed its delimiter from a comma to a semicolon. Updating the pipeline's delimiter to ';' will correctly parse the fields and resolve the contract failures.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied set_delimiter in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"integer-decimal\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "integer-decimal",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected integer-decimal."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"set_cast\",\n  \"field\": \"units\",\n  \"strategy\": \"integer_from_float\",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The 'units' field in the 'after' state contains values with decimal suffixes such as '12.0', '27.0', and '41.0'.\",\n    \"The current failure is 'transform: invalid literal for int() with base 10: '12.0''.\"\n  ],\n  \"rationale\": \"The 'units' field now contains float-like string representations of integers (e.g., '12.0'). Changing the cast strategy to 'integer_from_float' allows the pipeline to correctly parse these values into integers.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied set_cast in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"date-format\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "date-format",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected date-format."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"set_date_format\",\n  \"field\": \"published_on\",\n  \"input_format\": \"%d/%m/%Y\",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"current_failure: transform: time data '31/01/2026' does not match format '%Y-%m-%d'\",\n    \"after.fields[1].example_values: ['31/01/2026', '14/02/2026', '09/03/2026']\"\n  ],\n  \"rationale\": \"The date format for the 'published_on' field has changed from '%Y-%m-%d' to '%d/%m/%Y' (day/month/year with slashes), which is causing the date parsing to fail. Updating the date format configuration to '%d/%m/%Y' will resolve the issue.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied set_date_format in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"boolean-vocabulary\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "boolean-vocabulary",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected boolean-vocabulary."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"set_boolean_values\",\n  \"field\": \"active\",\n  \"true_values\": [\n    \"si\"\n  ],\n  \"false_values\": [\n    \"no\"\n  ],\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The 'after' state shows 'active' has example values ['si', 'no']\",\n    \"The current failure is 'transform: active has unknown boolean value 'si''\"\n  ],\n  \"rationale\": \"The boolean labels for the 'active' field changed from 'yes'/'no' to 'si'/'no'. Updating the boolean configuration to map 'si' to true and 'no' to false.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied set_boolean_values in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"json-record-path\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "json-record-path",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected json-record-path."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"set_record_path\",\n  \"path\": \"result.records\",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The 'after' state shows record_path is 'result.records' with 3 rows.\",\n    \"The current pipeline has record_path 'items' which results in 0 rows.\"\n  ],\n  \"rationale\": \"The upstream JSON API changed its nested structure, moving records from 'items' to 'result.records'. Updating the record path to 'result.records' will restore the row count and satisfy the contract.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied set_record_path in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

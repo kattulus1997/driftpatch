@@ -1,0 +1,237 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyc
+*$py.class
+**/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+Pipfile.lock
+Pipfile
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+!.env.example
+.venv
+.venv*
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy (legacy, kept for compatibility)
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ty (Astral's type checker)
+.ty/
+
+# Pyre type checker
+.pyre/
+
+# macOS
+.DS_Store
+
+# PyCharm
+.idea
+
+# User-specific files
+.terraform*
+.Terraform*
+
+
+tmp*
+.agents-cli-scripts/
+
+# Node
+**/node_modules
+npm-debug.log
+yarn-error.log
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+# Tool caches
+.ruff_cache/
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+**/.angular/*
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+*.vscode*
+
+# ADK
+.adk/
+
+# Agent CLI specific
+.persist_vector_store
+tests/load_test/.results/*.html
+tests/load_test/.results/*.csv
+.locust_env
+my_env.tfvars
+.saved_chats
+.env
+.google-agents-cli/
+
+# A2A Inspector
+tools/a2a-inspector/
+
+# Credentials and private keys
+*.pem
+*-key.json
+credentials*.json
+
+# Internal review and development material: keep local, never publish.
+/AGENTS.md
+/DEVELOPERS.md
+/docs/
+/frontend/DESIGN_SYSTEM.md
+/tests/eval/datasets/README.md
+/scripts/winner_loop.py
+/tests/unit/test_winner_loop.py
+
+# Keep only the complete benchmark and its final deterministic grade public.
+/artifacts/grade_results/candidate_2case/
+/artifacts/grade_results/full_first_six/
+/artifacts/grade_results/gate_2case/
+/artifacts/grade_results/results_*.html
+/artifacts/grade_results/results_*.json
+/artifacts/grade_results/final_10_deterministic/*.html
+/artifacts/traces/candidate_2case.json
+/artifacts/traces/final_10_20260812/
+/artifacts/traces/gate_2case.json
+/artifacts/traces/remaining_four.json
+/artifacts/traces/traces_*.json

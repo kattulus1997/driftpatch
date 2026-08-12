@@ -1,0 +1,24 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "join-name",
+      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"join-name\"}"}]},
+      "reference": {"response": {"role": "model", "parts": [{"text": "A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed."}]}}
+    },
+    {
+      "eval_case_id": "split-coordinates",
+      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"split-coordinates\"}"}]},
+      "reference": {"response": {"role": "model", "parts": [{"text": "Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed."}]}}
+    },
+    {
+      "eval_case_id": "missing-identifier",
+      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"missing-identifier\"}"}]},
+      "reference": {"response": {"role": "model", "parts": [{"text": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed because no identifier can be fabricated safely."}]}}
+    },
+    {
+      "eval_case_id": "duplicate-identifier",
+      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"duplicate-identifier\"}"}]},
+      "reference": {"response": {"role": "model", "parts": [{"text": "The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed because no evidence identifies the authoritative duplicate row."}]}}
+    }
+  ]
+}

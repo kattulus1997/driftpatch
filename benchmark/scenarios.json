@@ -1,0 +1,267 @@
+{
+  "scenarios": [
+    {
+      "id": "column-rename",
+      "title": "A municipality renamed name to full_name",
+      "before": "fixtures/column-rename-before.csv",
+      "after": "fixtures/column-rename-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "update_field_sources",
+        "field_sources": [{"output_field": "name", "source_field": "full_name"}],
+        "confidence": 0.99,
+        "evidence": ["name disappeared while full_name appeared with matching values"],
+        "rationale": "Retarget the existing output field to the renamed source field."
+      }
+    },
+    {
+      "id": "delimiter-change",
+      "title": "A CSV publisher changed comma delimiters to semicolons",
+      "before": "fixtures/delimiter-change-before.csv",
+      "after": "fixtures/delimiter-change-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "delimiter": ",",
+        "fields": {"id": "id", "city": "city", "population": "population"},
+        "casts": {"id": "integer", "population": "integer"}
+      },
+      "contract": {
+        "required": ["id", "city", "population"],
+        "types": {"id": "integer", "city": "string", "population": "integer"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "set_delimiter",
+        "delimiter": ";",
+        "confidence": 1.0,
+        "evidence": ["the detected delimiter changed from comma to semicolon"],
+        "rationale": "Use the delimiter now observed in the source."
+      }
+    },
+    {
+      "id": "integer-decimal",
+      "title": "Integer counts began arriving with a decimal suffix",
+      "before": "fixtures/integer-decimal-before.csv",
+      "after": "fixtures/integer-decimal-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "units": "units"},
+        "casts": {"id": "integer", "units": "integer"}
+      },
+      "contract": {
+        "required": ["id", "units"],
+        "types": {"id": "integer", "units": "integer"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "set_cast",
+        "field": "units",
+        "strategy": "integer_from_float",
+        "confidence": 0.98,
+        "evidence": ["units examples changed from 12 to 12.0 while remaining whole numbers"],
+        "rationale": "Parse the decimal representation and retain the integer contract."
+      }
+    },
+    {
+      "id": "date-format",
+      "title": "ISO dates changed to day-first dates",
+      "before": "fixtures/date-format-before.csv",
+      "after": "fixtures/date-format-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "published_on": "published_on"},
+        "casts": {"id": "integer"},
+        "date_formats": {"published_on": "%Y-%m-%d"}
+      },
+      "contract": {
+        "required": ["id", "published_on"],
+        "types": {"id": "integer", "published_on": "date"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "set_date_format",
+        "field": "published_on",
+        "input_format": "%d/%m/%Y",
+        "confidence": 0.99,
+        "evidence": ["published_on examples changed from 2026-01-31 to 31/01/2026"],
+        "rationale": "Parse the observed day-first format into the canonical date."
+      }
+    },
+    {
+      "id": "boolean-vocabulary",
+      "title": "Boolean labels changed from yes and no to si and no",
+      "before": "fixtures/boolean-vocabulary-before.csv",
+      "after": "fixtures/boolean-vocabulary-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "active": "active"},
+        "casts": {"id": "integer"},
+        "booleans": {"active": {"true_values": ["yes"], "false_values": ["no"]}}
+      },
+      "contract": {
+        "required": ["id", "active"],
+        "types": {"id": "integer", "active": "boolean"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "set_boolean_values",
+        "field": "active",
+        "true_values": ["si"],
+        "false_values": ["no"],
+        "confidence": 0.97,
+        "evidence": ["si replaced yes while no remained present in active"],
+        "rationale": "Update the explicit boolean vocabulary to the observed labels."
+      }
+    },
+    {
+      "id": "json-record-path",
+      "title": "A JSON API nested items under result.records",
+      "before": "fixtures/json-record-path-before.json",
+      "after": "fixtures/json-record-path-after.json",
+      "pipeline": {
+        "format": "json",
+        "record_path": "items",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "set_record_path",
+        "path": "result.records",
+        "confidence": 1.0,
+        "evidence": ["the detected record path moved from items to result.records"],
+        "rationale": "Point the reader to the sole observed record collection."
+      }
+    },
+    {
+      "id": "join-name",
+      "title": "A full name was split into first and last name columns",
+      "before": "fixtures/join-name-before.csv",
+      "after": "fixtures/join-name-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "full_name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "set_join_source",
+        "field": "name",
+        "sources": ["first_name", "last_name"],
+        "separator": " ",
+        "confidence": 0.95,
+        "evidence": ["full_name disappeared as first_name and last_name appeared"],
+        "rationale": "Reconstruct the contracted name without inventing data."
+      }
+    },
+    {
+      "id": "split-coordinates",
+      "title": "Latitude and longitude were combined into coordinates",
+      "before": "fixtures/split-coordinates-before.csv",
+      "after": "fixtures/split-coordinates-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "latitude": "latitude", "longitude": "longitude"},
+        "casts": {"id": "integer", "latitude": "number", "longitude": "number"}
+      },
+      "contract": {
+        "required": ["id", "latitude", "longitude"],
+        "types": {"id": "integer", "latitude": "number", "longitude": "number"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "repaired",
+      "expected_plan": {
+        "operation": "set_split_source",
+        "source": "coordinates",
+        "split_fields": [
+          {"output_field": "latitude", "index": 0},
+          {"output_field": "longitude", "index": 1}
+        ],
+        "separator": ",",
+        "confidence": 0.96,
+        "evidence": ["latitude and longitude disappeared while coordinate pairs appeared"],
+        "rationale": "Recover both contracted numeric fields from the ordered pair."
+      }
+    },
+    {
+      "id": "missing-identifier",
+      "title": "The publisher removed the required stable identifier",
+      "before": "fixtures/missing-identifier-before.csv",
+      "after": "fixtures/missing-identifier-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "escalated",
+      "expected_plan": {
+        "operation": "escalate",
+        "confidence": 1.0,
+        "evidence": ["id disappeared and no replacement identifier is present"],
+        "rationale": "A stable identifier cannot be fabricated safely."
+      }
+    },
+    {
+      "id": "duplicate-identifier",
+      "title": "The source began publishing duplicate identifiers",
+      "before": "fixtures/duplicate-identifier-before.csv",
+      "after": "fixtures/duplicate-identifier-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "escalated",
+      "expected_plan": {
+        "operation": "escalate",
+        "confidence": 1.0,
+        "evidence": ["three rows contain only two distinct identifiers"],
+        "rationale": "No evidence identifies which duplicate is authoritative."
+      }
+    }
+  ]
+}

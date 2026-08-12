@@ -1,0 +1,9 @@
+{
+  "result": {
+    "records": [
+      {"id": 1, "name": "Air station"},
+      {"id": 2, "name": "Water station"},
+      {"id": 3, "name": "Weather station"}
+    ]
+  }
+}

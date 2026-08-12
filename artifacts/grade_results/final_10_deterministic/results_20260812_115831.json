@@ -1,0 +1,2357 @@
+{
+  "eval_case_results": [
+    {
+      "eval_case_index": 0,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 1,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 2,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 3,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 4,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 5,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 6,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 7,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 8,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 9,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "summary_metrics": [
+    {
+      "metric_name": "decision_accuracy",
+      "num_cases_total": 10,
+      "num_cases_valid": 10,
+      "num_cases_error": 0,
+      "mean_score": 1.0,
+      "stdev_score": 0.0,
+      "pass_rate": null
+    }
+  ],
+  "win_rates": null,
+  "evaluation_dataset": [
+    {
+      "bigquery_source": null,
+      "gcs_source": null,
+      "eval_cases": [
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"column-rename\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "column-rename",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected column-rename.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"update_field_sources\",\n  \"field_sources\": [\n    {\n      \"output_field\": \"name\",\n      \"source_field\": \"full_name\"\n    }\n  ],\n  \"delimiter\": null,\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The field 'name' was removed and 'full_name' was added in the 'after' schema.\",\n    \"The example values for 'full_name' ('Central Library', 'Riverside Clinic', 'North School') match the previous example values for 'name'.\",\n    \"The current failure indicates that 'name' is missing for all 3 rows.\"\n  ],\n  \"rationale\": \"The upstream data source renamed the column 'name' to 'full_name'. Updating the field source mapping for the output field 'name' to use the source field 'full_name' will satisfy the contract requirement.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied update_field_sources in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"delimiter-change\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "delimiter-change",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected delimiter-change.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"set_delimiter\",\n  \"delimiter\": \";\",\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"after.delimiter is ';'\",\n    \"current_failure shows all required fields (id, city, population) are missing\"\n  ],\n  \"rationale\": \"The upstream CSV source changed its delimiter from a comma to a semicolon. Updating the pipeline's delimiter to ';' will correctly parse the fields and resolve the contract failures.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied set_delimiter in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"integer-decimal\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "integer-decimal",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected integer-decimal.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"set_cast\",\n  \"field\": \"units\",\n  \"strategy\": \"integer_from_float\",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The 'units' field in the 'after' state contains values with decimal suffixes such as '12.0', '27.0', and '41.0'.\",\n    \"The current failure is 'transform: invalid literal for int() with base 10: '12.0''.\"\n  ],\n  \"rationale\": \"The 'units' field now contains float-like string representations of integers (e.g., '12.0'). Changing the cast strategy to 'integer_from_float' allows the pipeline to correctly parse these values into integers.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied set_cast in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"date-format\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "date-format",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected date-format.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"set_date_format\",\n  \"field\": \"published_on\",\n  \"input_format\": \"%d/%m/%Y\",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"current_failure: transform: time data '31/01/2026' does not match format '%Y-%m-%d'\",\n    \"after.fields[1].example_values: ['31/01/2026', '14/02/2026', '09/03/2026']\"\n  ],\n  \"rationale\": \"The date format for the 'published_on' field has changed from '%Y-%m-%d' to '%d/%m/%Y' (day/month/year with slashes), which is causing the date parsing to fail. Updating the date format configuration to '%d/%m/%Y' will resolve the issue.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied set_date_format in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"boolean-vocabulary\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "boolean-vocabulary",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected boolean-vocabulary.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"set_boolean_values\",\n  \"field\": \"active\",\n  \"true_values\": [\n    \"si\"\n  ],\n  \"false_values\": [\n    \"no\"\n  ],\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The 'after' state shows 'active' has example values ['si', 'no']\",\n    \"The current failure is 'transform: active has unknown boolean value 'si''\"\n  ],\n  \"rationale\": \"The boolean labels for the 'active' field changed from 'yes'/'no' to 'si'/'no'. Updating the boolean configuration to map 'si' to true and 'no' to false.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied set_boolean_values in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"json-record-path\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "json-record-path",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected json-record-path.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"set_record_path\",\n  \"path\": \"result.records\",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The 'after' state shows record_path is 'result.records' with 3 rows.\",\n    \"The current pipeline has record_path 'items' which results in 0 rows.\"\n  ],\n  \"rationale\": \"The upstream JSON API changed its nested structure, moving records from 'items' to 'result.records'. Updating the record path to 'result.records' will restore the row count and satisfy the contract.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied set_record_path in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"join-name\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "join-name",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected join-name.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"set_join_source\",\n  \"field\": \"name\",\n  \"sources\": [\n    \"first_name\",\n    \"last_name\"\n  ],\n  \"separator\": \" \",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The field 'full_name' was removed in the upstream source.\",\n    \"Two new fields 'first_name' and 'last_name' were added.\",\n    \"Example values for 'first_name' are ['Ana', 'Luis', 'Marta'] and for 'last_name' are ['Torres', 'Vega', 'Soler'].\",\n    \"The contract requires the 'name' field, which was previously mapped to 'full_name'.\"\n  ],\n  \"rationale\": \"The upstream source split the 'full_name' field into 'first_name' and 'last_name'. To reconstruct the 'name' field required by the contract, we can join 'first_name' and 'last_name' with a space separator.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied set_join_source in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"split-coordinates\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "split-coordinates",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected split-coordinates.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"set_split_source\",\n  \"source\": \"coordinates\",\n  \"split_fields\": [\n    {\n      \"output_field\": \"latitude\",\n      \"index\": 0\n    },\n    {\n      \"output_field\": \"longitude\",\n      \"index\": 1\n    }\n  ],\n  \"separator\": \",\",\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"Removed fields: latitude, longitude\",\n    \"Added field: coordinates with example values like '40.4168,-3.7038'\",\n    \"Failure: required:latitude: missing=3 rows=3; required:longitude: missing=3 rows=3\"\n  ],\n  \"rationale\": \"The upstream source combined the latitude and longitude fields into a single 'coordinates' field separated by a comma. Splitting 'coordinates' on ',' into 'latitude' (index 0) and 'longitude' (index 1) restores the required fields.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied set_split_source in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"missing-identifier\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed. Reason: The required stable identifier 'id' has been removed from the source data, and there is no alternative field to map it to. A lossless repair is not possible, so we must escalate.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed because no identifier can be fabricated safely.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "missing-identifier",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected missing-identifier.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"escalate\",\n  \"field_sources\": [],\n  \"delimiter\": null,\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"The field 'id' was removed from the source schema in the 'after' state.\",\n    \"The contract requires 'id' as a required field and unique key.\"\n  ],\n  \"rationale\": \"The required stable identifier 'id' has been removed from the source data, and there is no alternative field to map it to. A lossless repair is not possible, so we must escalate.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied escalate in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed. Reason: The required stable identifier 'id' has been removed from the source data, and there is no alternative field to map it to. A lossless repair is not possible, so we must escalate.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"duplicate-identifier\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed. Reason: The upstream source is now publishing duplicate identifiers for the 'id' field, resulting in only 2 distinct values across 3 rows. This directly violates the contract's unique key constraint on 'id'. Since this is an upstream data quality issue that cannot be resolved losslessly via pipeline configuration, we must escalate.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed because no evidence identifies the authoritative duplicate row.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "duplicate-identifier",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected duplicate-identifier.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"operation\": \"escalate\",\n  \"field_sources\": [],\n  \"delimiter\": null,\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"current_failure: unique:id: rows=3 distinct=2\",\n    \"after: id distinct_count is 2, row_count is 3\"\n  ],\n  \"rationale\": \"The upstream source is now publishing duplicate identifiers for the 'id' field, resulting in only 2 distinct values across 3 rows. This directly violates the contract's unique key constraint on 'id'. Since this is an upstream data quality issue that cannot be resolved losslessly via pipeline configuration, we must escalate.\"\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Applied escalate in memory.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed. Reason: The upstream source is now publishing duplicate identifiers for the 'id' field, resulting in only 2 distinct values across 3 rows. This directly violates the contract's unique key constraint on 'id'. Since this is an upstream data quality issue that cannot be resolved losslessly via pipeline configuration, we must escalate.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        }
+      ],
+      "eval_dataset_df": null,
+      "candidate_name": null
+    }
+  ],
+  "metadata": {
+    "candidate_names": [
+      "candidate_1"
+    ],
+    "dataset_name": null,
+    "dataset_id": null,
+    "creation_timestamp": "2026-08-12T10:58:31.115078Z",
+    "dataset": [
+      {
+        "prompt_display_text": "{\"scenario_id\":\"column-rename\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"column-rename\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected column-rename.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"update_field_sources\\\",\\n  \\\"field_sources\\\": [\\n    {\\n      \\\"output_field\\\": \\\"name\\\",\\n      \\\"source_field\\\": \\\"full_name\\\"\\n    }\\n  ],\\n  \\\"delimiter\\\": null,\\n  \\\"field\\\": null,\\n  \\\"strategy\\\": null,\\n  \\\"input_format\\\": null,\\n  \\\"true_values\\\": [],\\n  \\\"false_values\\\": [],\\n  \\\"path\\\": null,\\n  \\\"sources\\\": [],\\n  \\\"source\\\": null,\\n  \\\"split_fields\\\": [],\\n  \\\"separator\\\": null,\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"The field 'name' was removed and 'full_name' was added in the 'after' schema.\\\",\\n    \\\"The example values for 'full_name' ('Central Library', 'Riverside Clinic', 'North School') match the previous example values for 'name'.\\\",\\n    \\\"The current failure indicates that 'name' is missing for all 3 rows.\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The upstream data source renamed the column 'name' to 'full_name'. Updating the field source mapping for the output field 'name' to use the source field 'full_name' will satisfy the contract requirement.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied update_field_sources in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"delimiter-change\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"delimiter-change\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected delimiter-change.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"set_delimiter\\\",\\n  \\\"delimiter\\\": \\\";\\\",\\n  \\\"field\\\": null,\\n  \\\"strategy\\\": null,\\n  \\\"input_format\\\": null,\\n  \\\"true_values\\\": [],\\n  \\\"false_values\\\": [],\\n  \\\"path\\\": null,\\n  \\\"sources\\\": [],\\n  \\\"source\\\": null,\\n  \\\"split_fields\\\": [],\\n  \\\"separator\\\": null,\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"after.delimiter is ';'\\\",\\n    \\\"current_failure shows all required fields (id, city, population) are missing\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The upstream CSV source changed its delimiter from a comma to a semicolon. Updating the pipeline's delimiter to ';' will correctly parse the fields and resolve the contract failures.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied set_delimiter in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"integer-decimal\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"integer-decimal\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected integer-decimal.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"set_cast\\\",\\n  \\\"field\\\": \\\"units\\\",\\n  \\\"strategy\\\": \\\"integer_from_float\\\",\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"The 'units' field in the 'after' state contains values with decimal suffixes such as '12.0', '27.0', and '41.0'.\\\",\\n    \\\"The current failure is 'transform: invalid literal for int() with base 10: '12.0''.\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The 'units' field now contains float-like string representations of integers (e.g., '12.0'). Changing the cast strategy to 'integer_from_float' allows the pipeline to correctly parse these values into integers.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied set_cast in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"date-format\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"date-format\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected date-format.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"set_date_format\\\",\\n  \\\"field\\\": \\\"published_on\\\",\\n  \\\"input_format\\\": \\\"%d/%m/%Y\\\",\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"current_failure: transform: time data '31/01/2026' does not match format '%Y-%m-%d'\\\",\\n    \\\"after.fields[1].example_values: ['31/01/2026', '14/02/2026', '09/03/2026']\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The date format for the 'published_on' field has changed from '%Y-%m-%d' to '%d/%m/%Y' (day/month/year with slashes), which is causing the date parsing to fail. Updating the date format configuration to '%d/%m/%Y' will resolve the issue.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied set_date_format in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"boolean-vocabulary\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"boolean-vocabulary\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected boolean-vocabulary.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"set_boolean_values\\\",\\n  \\\"field\\\": \\\"active\\\",\\n  \\\"true_values\\\": [\\n    \\\"si\\\"\\n  ],\\n  \\\"false_values\\\": [\\n    \\\"no\\\"\\n  ],\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"The 'after' state shows 'active' has example values ['si', 'no']\\\",\\n    \\\"The current failure is 'transform: active has unknown boolean value 'si''\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The boolean labels for the 'active' field changed from 'yes'/'no' to 'si'/'no'. Updating the boolean configuration to map 'si' to true and 'no' to false.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied set_boolean_values in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"json-record-path\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"json-record-path\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected json-record-path.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"set_record_path\\\",\\n  \\\"path\\\": \\\"result.records\\\",\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"The 'after' state shows record_path is 'result.records' with 3 rows.\\\",\\n    \\\"The current pipeline has record_path 'items' which results in 0 rows.\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The upstream JSON API changed its nested structure, moving records from 'items' to 'result.records'. Updating the record path to 'result.records' will restore the row count and satisfy the contract.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied set_record_path in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"join-name\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"join-name\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected join-name.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"set_join_source\\\",\\n  \\\"field\\\": \\\"name\\\",\\n  \\\"sources\\\": [\\n    \\\"first_name\\\",\\n    \\\"last_name\\\"\\n  ],\\n  \\\"separator\\\": \\\" \\\",\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"The field 'full_name' was removed in the upstream source.\\\",\\n    \\\"Two new fields 'first_name' and 'last_name' were added.\\\",\\n    \\\"Example values for 'first_name' are ['Ana', 'Luis', 'Marta'] and for 'last_name' are ['Torres', 'Vega', 'Soler'].\\\",\\n    \\\"The contract requires the 'name' field, which was previously mapped to 'full_name'.\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The upstream source split the 'full_name' field into 'first_name' and 'last_name'. To reconstruct the 'name' field required by the contract, we can join 'first_name' and 'last_name' with a space separator.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied set_join_source in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"split-coordinates\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"split-coordinates\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected split-coordinates.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"set_split_source\\\",\\n  \\\"source\\\": \\\"coordinates\\\",\\n  \\\"split_fields\\\": [\\n    {\\n      \\\"output_field\\\": \\\"latitude\\\",\\n      \\\"index\\\": 0\\n    },\\n    {\\n      \\\"output_field\\\": \\\"longitude\\\",\\n      \\\"index\\\": 1\\n    }\\n  ],\\n  \\\"separator\\\": \\\",\\\",\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"Removed fields: latitude, longitude\\\",\\n    \\\"Added field: coordinates with example values like '40.4168,-3.7038'\\\",\\n    \\\"Failure: required:latitude: missing=3 rows=3; required:longitude: missing=3 rows=3\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The upstream source combined the latitude and longitude fields into a single 'coordinates' field separated by a comma. Splitting 'coordinates' on ',' into 'latitude' (index 0) and 'longitude' (index 1) restores the required fields.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied set_split_source in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"missing-identifier\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"missing-identifier\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed because no identifier can be fabricated safely.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed because no identifier can be fabricated safely.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed. Reason: The required stable identifier 'id' has been removed from the source data, and there is no alternative field to map it to. A lossless repair is not possible, so we must escalate.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed. Reason: The required stable identifier 'id' has been removed from the source data, and there is no alternative field to map it to. A lossless repair is not possible, so we must escalate.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected missing-identifier.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"escalate\\\",\\n  \\\"field_sources\\\": [],\\n  \\\"delimiter\\\": null,\\n  \\\"field\\\": null,\\n  \\\"strategy\\\": null,\\n  \\\"input_format\\\": null,\\n  \\\"true_values\\\": [],\\n  \\\"false_values\\\": [],\\n  \\\"path\\\": null,\\n  \\\"sources\\\": [],\\n  \\\"source\\\": null,\\n  \\\"split_fields\\\": [],\\n  \\\"separator\\\": null,\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"The field 'id' was removed from the source schema in the 'after' state.\\\",\\n    \\\"The contract requires 'id' as a required field and unique key.\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The required stable identifier 'id' has been removed from the source data, and there is no alternative field to map it to. A lossless repair is not possible, so we must escalate.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied escalate in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed. Reason: The required stable identifier 'id' has been removed from the source data, and there is no alternative field to map it to. A lossless repair is not possible, so we must escalate.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"duplicate-identifier\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"duplicate-identifier\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed because no evidence identifies the authoritative duplicate row.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed because no evidence identifies the authoritative duplicate row.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed. Reason: The upstream source is now publishing duplicate identifiers for the 'id' field, resulting in only 2 distinct values across 3 rows. This directly violates the contract's unique key constraint on 'id'. Since this is an upstream data quality issue that cannot be resolved losslessly via pipeline configuration, we must escalate.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed. Reason: The upstream source is now publishing duplicate identifiers for the 'id' field, resulting in only 2 distinct values across 3 rows. This directly violates the contract's unique key constraint on 'id'. Since this is an upstream data quality issue that cannot be resolved losslessly via pipeline configuration, we must escalate.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected duplicate-identifier.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"operation\\\": \\\"escalate\\\",\\n  \\\"field_sources\\\": [],\\n  \\\"delimiter\\\": null,\\n  \\\"field\\\": null,\\n  \\\"strategy\\\": null,\\n  \\\"input_format\\\": null,\\n  \\\"true_values\\\": [],\\n  \\\"false_values\\\": [],\\n  \\\"path\\\": null,\\n  \\\"sources\\\": [],\\n  \\\"source\\\": null,\\n  \\\"split_fields\\\": [],\\n  \\\"separator\\\": null,\\n  \\\"confidence\\\": 1.0,\\n  \\\"evidence\\\": [\\n    \\\"current_failure: unique:id: rows=3 distinct=2\\\",\\n    \\\"after: id distinct_count is 2, row_count is 3\\\"\\n  ],\\n  \\\"rationale\\\": \\\"The upstream source is now publishing duplicate identifiers for the 'id' field, resulting in only 2 distinct values across 3 rows. This directly violates the contract's unique key constraint on 'id'. Since this is an upstream data quality issue that cannot be resolved losslessly via pipeline configuration, we must escalate.\\\"\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Applied escalate in memory.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed. Reason: The upstream source is now publishing duplicate identifiers for the 'id' field, resulting in only 2 distinct values across 3 rows. This directly violates the contract's unique key constraint on 'id'. Since this is an upstream data quality issue that cannot be resolved losslessly via pipeline configuration, we must escalate.\"}], \"role\": \"model\"}}]}]}"
+      }
+    ]
+  },
+  "agent_info": null
+}
