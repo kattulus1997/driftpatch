@@ -20,7 +20,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 FROM python:3.12-alpine3.22@sha256:a190708a2dec1bd18b1decb539f8e8f5407abaa9bf39cacda583f7f8c11db322 AS runtime
 
 USER root
-RUN apk upgrade --no-cache
+RUN apk upgrade --no-cache && python -m pip uninstall --yes pip
 WORKDIR /code
 COPY --from=python --chown=65532:65532 /code/.venv /code/.venv
 COPY app/ ./app/

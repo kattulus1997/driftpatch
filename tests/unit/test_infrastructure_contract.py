@@ -264,6 +264,7 @@ def test_release_container_builds_the_interface_and_runs_without_root() -> None:
     assert "RUN apk upgrade --no-cache" in dockerfile
     assert "FROM ghcr.io/astral-sh/uv:0.8.13@sha256:" in dockerfile
     assert "pip install" not in dockerfile
+    assert "python -m pip uninstall --yes pip" in dockerfile
     assert "RUN npm run build" in dockerfile
     assert "COPY benchmark/ ./benchmark/" in dockerfile
     assert "COPY --from=frontend /build/frontend/dist ./frontend/dist" in dockerfile
