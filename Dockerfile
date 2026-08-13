@@ -20,7 +20,9 @@ RUN uv sync --frozen --no-dev --no-install-project
 FROM alpine:3.22@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce AS runtime
 
 USER root
-RUN apk upgrade --no-cache && apk add --no-cache ca-certificates libstdc++ python3
+RUN apk upgrade --no-cache \
+    && apk add --no-cache ca-certificates libstdc++ python3 \
+    && rm -rf /usr/lib/python3.12/ensurepip
 WORKDIR /code
 COPY --from=python --chown=65532:65532 /code/.venv /code/.venv
 COPY app/ ./app/

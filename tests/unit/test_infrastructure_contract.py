@@ -266,6 +266,7 @@ def test_release_container_builds_the_interface_and_runs_without_root() -> None:
     assert "pip install" not in dockerfile
     assert "FROM alpine:3.22@sha256:" in dockerfile
     assert "apk add --no-cache ca-certificates libstdc++ python3" in dockerfile
+    assert "rm -rf /usr/lib/python3.12/ensurepip" in dockerfile
     assert 'ENTRYPOINT ["python3"]' in dockerfile
     assert "RUN npm run build" in dockerfile
     assert "COPY benchmark/ ./benchmark/" in dockerfile
