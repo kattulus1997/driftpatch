@@ -20,7 +20,7 @@ class Client:
     def queue_path(self, project: str, location: str, queue: str) -> str:
         return f"projects/{project}/locations/{location}/queues/{queue}"
 
-    async def create_task(self, **kwargs):
+    def create_task(self, **kwargs):
         self.calls.append(kwargs)
         if self.error:
             raise self.error

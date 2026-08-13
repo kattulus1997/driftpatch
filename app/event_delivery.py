@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
@@ -53,7 +54,7 @@ class CloudTasksEventPublisher:
     ) -> None:
         from google.cloud import tasks_v2
 
-        self._client = tasks_v2.CloudTasksAsyncClient()
+        self._client = tasks_v2.CloudTasksClient()
         self._parent = self._client.queue_path(project, location, queue)
         self._worker_url = worker_url.rstrip("/")
         self._invoker_service_account = invoker_service_account
@@ -94,7 +95,11 @@ class CloudTasksEventPublisher:
             ),
         )
         try:
-            await self._client.create_task(parent=self._parent, task=task)
+            await asyncio.to_thread(
+                self._client.create_task,
+                parent=self._parent,
+                task=task,
+            )
         except AlreadyExists:
             return
         except Exception as exc:
