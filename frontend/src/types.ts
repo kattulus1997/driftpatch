@@ -51,8 +51,11 @@ export type RepairPlan = {
 };
 
 export type ValidationResult = {
+  id?: string;
+  trigger?: string;
+  source_sha256?: string;
   scenario_id: string;
-  status: "repaired" | "escalated" | "failed";
+  status: "unchanged" | "repaired" | "escalated" | "failed";
   plan: RepairPlan;
   checks: {name: string; passed: boolean; detail: string}[];
   transformed_rows: number;
@@ -60,19 +63,26 @@ export type ValidationResult = {
   summary: string;
 };
 
+export type RunReceipt = {
+  id: string;
+  scenario_id: string;
+  status: "queued";
+};
+
+export type RunNotStarted = {
+  id: string;
+  scenario_id: string;
+  status: "not_started";
+};
+
+export type RunStatus = RunNotStarted | RunReceipt | ValidationResult;
+
 export type ScenarioItem = {
   id: string;
   title: string;
-  expected_status: "repaired" | "escalated";
   report: DriftReport;
 };
 
 export type ScenariosResponse = {
-  summary: {
-    decisions: number;
-    repaired: number;
-    escalated: number;
-    auto_merges: number;
-  };
   items: ScenarioItem[];
 };

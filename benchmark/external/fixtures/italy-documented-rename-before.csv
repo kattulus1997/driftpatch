@@ -1,0 +1,4 @@
+data,codice_regione,denominazione_regione,lat,long,totale_attualmente_positivi,nuovi_attualmente_positivi
+2020-03-30T17:00:00,13,Abruzzo,42.35122196,13.39843823,1169,0
+2020-03-30T17:00:00,17,Basilicata,40.63947052,15.80514834,208,11
+2020-03-30T17:00:00,04,P.A. Bolzano,46.49933453,11.35662422,1098,64

@@ -1,4 +1,4 @@
-import type {ScenariosResponse, ValidationResult} from "./types";
+import type {RunReceipt, RunStatus, ScenariosResponse} from "./types";
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init);
@@ -12,9 +12,10 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 export const getScenarios = () => request<ScenariosResponse>("/api/scenarios");
 
 export const runScenario = (scenarioId: string) =>
-  request<ValidationResult>(`/api/scenarios/${encodeURIComponent(scenarioId)}/run`, {
+  request<RunReceipt>(`/api/scenarios/${encodeURIComponent(scenarioId)}/run`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
   });
 
-export const getRuns = () => request<{items: ValidationResult[]}>("/api/runs");
+export const getRun = (scenarioId: string) =>
+  request<RunStatus>(`/api/scenarios/${encodeURIComponent(scenarioId)}/run`);

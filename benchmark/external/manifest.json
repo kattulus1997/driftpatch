@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "frozen_at": "2026-08-12T16:23:00Z",
+  "method": "Expected decisions and selectors were frozen before agent evaluation. Each fixture is a deterministic slice of an immutable upstream revision.",
+  "cases": [
+    {
+      "id": "italy-compatible-notes",
+      "split": "holdout",
+      "publisher": "Italian Civil Protection Department",
+      "dataset": "National COVID-19 trend",
+      "transition": "historical_observed",
+      "license": "CC-BY-4.0",
+      "license_url": "https://raw.githubusercontent.com/pcm-dpc/COVID-19/7b951d4e5c01ac533239c1455ac7e9a94010fcc5/LICENSE",
+      "before": "fixtures/italy-compatible-notes-before.csv",
+      "after": "fixtures/italy-compatible-notes-after.csv",
+      "sources": {
+        "before": {"url": "https://raw.githubusercontent.com/pcm-dpc/COVID-19/0168d9670acc3bba8441c28e1bed011f54986fbf/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-20200324.csv", "sha256": "a721fd3fbaa3ade67e4efa01d88dd77a9d72f4cb1de53f8a5e019f22cf49f3bf"},
+        "after": {"url": "https://raw.githubusercontent.com/pcm-dpc/COVID-19/2ce0369fbb7c5354ffbe3171fb4cb4a8e51e65ac/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-20200325.csv", "sha256": "3c0205aad1285053d53e2ec16025167860fbdef5cdb5efc3b9a97a8e3122c21e"}
+      },
+      "selectors": {
+        "before": {"fields": ["data", "stato", "totale_attualmente_positivi"], "limit": 1},
+        "after": {"fields": ["data", "stato", "totale_attualmente_positivi", "note_it", "note_en"], "limit": 1}
+      },
+      "pipeline": {"format": "csv", "fields": {"date": "data", "country": "stato", "active": "totale_attualmente_positivi"}, "casts": {"active": "integer"}},
+      "contract": {"required": ["date", "country", "active"], "types": {"date": "string", "country": "string", "active": "integer"}, "unique_key": "date", "min_rows": 1},
+      "expected_status": "unchanged",
+      "expected_plan": {"operation": "no_change", "confidence": 1.0, "evidence": ["the two added note columns do not affect any contracted output field"], "rationale": "Every existing output contract still passes, so no patch is justified."}
+    },
+    {
+      "id": "italy-documented-rename",
+      "split": "holdout",
+      "publisher": "Italian Civil Protection Department",
+      "dataset": "Regional COVID-19 trend",
+      "transition": "historical_observed",
+      "license": "CC-BY-4.0",
+      "license_url": "https://raw.githubusercontent.com/pcm-dpc/COVID-19/7b951d4e5c01ac533239c1455ac7e9a94010fcc5/LICENSE",
+      "before": "fixtures/italy-documented-rename-before.csv",
+      "after": "fixtures/italy-documented-rename-after.csv",
+      "sources": {
+        "before": {"url": "https://raw.githubusercontent.com/pcm-dpc/COVID-19/d10c06ee965ab975de771feafd60b9938a178cd1/dati-regioni/dpc-covid19-ita-regioni-20200330.csv", "sha256": "464ae3a1d99208b4bfa6fdf4cee0ea9df4fa15d879b6b3bc7032f127f61cd4c3"},
+        "after": {"url": "https://raw.githubusercontent.com/pcm-dpc/COVID-19/7b951d4e5c01ac533239c1455ac7e9a94010fcc5/dati-regioni/dpc-covid19-ita-regioni-20200331.csv", "sha256": "a663db4aa46dad781f81ad78e6adc33cc093468a3320698cc87c878d18c71d04"}
+      },
+      "selectors": {
+        "before": {"fields": ["data", "codice_regione", "denominazione_regione", "lat", "long", "totale_attualmente_positivi", "nuovi_attualmente_positivi"], "limit": 3},
+        "after": {"fields": ["data", "codice_regione", "denominazione_regione", "latitudine", "longitudine", "totale_positivi", "variazione_totale_positivi"], "limit": 3}
+      },
+      "pipeline": {"format": "csv", "fields": {"date": "data", "region_id": "codice_regione", "region": "denominazione_regione", "latitude": "lat", "longitude": "long", "active": "totale_attualmente_positivi", "active_delta": "nuovi_attualmente_positivi"}, "casts": {"region_id": "integer", "latitude": "number", "longitude": "number", "active": "integer", "active_delta": "integer"}},
+      "contract": {"required": ["date", "region_id", "region", "latitude", "longitude", "active", "active_delta"], "types": {"date": "string", "region_id": "integer", "region": "string", "latitude": "number", "longitude": "number", "active": "integer", "active_delta": "integer"}, "unique_key": "region_id", "min_rows": 3, "source_aliases": {"latitude": ["lat", "latitudine"], "longitude": ["long", "longitudine"], "active": ["totale_attualmente_positivi", "totale_positivi"], "active_delta": ["nuovi_attualmente_positivi", "variazione_totale_positivi"]}, "preserve_values": ["region", "latitude", "longitude"]},
+      "expected_status": "repaired",
+      "expected_plan": {"operation": "update_field_sources", "field_sources": [{"output_field": "latitude", "source_field": "latitudine"}, {"output_field": "longitude", "source_field": "longitudine"}, {"output_field": "active", "source_field": "totale_positivi"}, {"output_field": "active_delta", "source_field": "variazione_totale_positivi"}], "confidence": 1.0, "evidence": ["the publisher documented four same-semantics renames in this revision"], "rationale": "Retarget the existing outputs to the publisher-documented source names."}
+    },
+    {
+      "id": "jhu-granularity-shift",
+      "split": "holdout",
+      "publisher": "Johns Hopkins University CSSE",
+      "dataset": "COVID-19 daily reports",
+      "transition": "historical_observed",
+      "license": "CC-BY-4.0",
+      "license_url": "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/4360e50239b4eb6b22f3a1759323748f36752177/README.md#terms-of-use",
+      "before": "fixtures/jhu-granularity-shift-before.csv",
+      "after": "fixtures/jhu-granularity-shift-after.csv",
+      "sources": {
+        "before": {"url": "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/4360e50239b4eb6b22f3a1759323748f36752177/csse_covid_19_data/csse_covid_19_daily_reports/03-21-2020.csv", "sha256": "5e01ceee7da2f00946ccf880de384257b11994f65d200f2ed1b4472aba55afe4"},
+        "after": {"url": "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/4360e50239b4eb6b22f3a1759323748f36752177/csse_covid_19_data/csse_covid_19_daily_reports/03-22-2020.csv", "sha256": "ffda8de28815b407b58a0684ceb28ed7a6dfbc4addc91456834baabd8f56621a"}
+      },
+      "selectors": {
+        "before": {"fields": ["Province/State", "Country/Region", "Last Update", "Confirmed", "Deaths", "Recovered", "Latitude", "Longitude"], "filters": {"Country/Region": "US"}, "limit": 3},
+        "after": {"fields": ["FIPS", "Admin2", "Province_State", "Country_Region", "Last_Update", "Lat", "Long_", "Confirmed", "Deaths", "Recovered", "Active", "Combined_Key"], "filters": {"Country_Region": "US"}, "limit": 3}
+      },
+      "pipeline": {"format": "csv", "fields": {"region": "Province/State", "country": "Country/Region", "confirmed": "Confirmed"}, "casts": {"confirmed": "integer"}},
+      "contract": {"required": ["region", "country", "confirmed"], "types": {"region": "string", "country": "string", "confirmed": "integer"}, "unique_key": "region", "min_rows": 3},
+      "expected_status": "escalated",
+      "expected_plan": {"operation": "escalate", "confidence": 1.0, "evidence": ["the report changed from state rows to county rows while renaming multiple location fields"], "rationale": "A field retarget alone would silently change the dataset grain and uniqueness contract."}
+    },
+    {
+      "id": "swiss-null-column-removal",
+      "split": "calibration",
+      "publisher": "openZH association",
+      "dataset": "Swiss COVID-19 totals",
+      "transition": "historical_observed",
+      "license": "CC-BY-4.0",
+      "license_url": "https://raw.githubusercontent.com/openZH/covid_19/427be25d75361ddab2855a8c10e83607248b4487/LICENSE",
+      "before": "fixtures/swiss-null-column-removal-before.csv",
+      "after": "fixtures/swiss-null-column-removal-after.csv",
+      "sources": {
+        "before": {"url": "https://raw.githubusercontent.com/openZH/covid_19/9aa56f0647a7c20297c5998493236a8cceef7864/COVID19_Fallzahlen_CH_total.csv", "sha256": "ad1e550fd8bf89c3078e418e39a6208efeb9d3eb6f7289c22617c507d505b4f2"},
+        "after": {"url": "https://raw.githubusercontent.com/openZH/covid_19/427be25d75361ddab2855a8c10e83607248b4487/COVID19_Fallzahlen_CH_total.csv", "sha256": "eaeb70598d96d04e7559f1262165c21a7afb23f4476aec0c79f9c9fd09162208"}
+      },
+      "selectors": {
+        "before": {"fields": ["date", "abbreviation_canton_and_fl", "ncumul_conf", "current_quarantined_total"], "limit": 3},
+        "after": {"fields": ["date", "abbreviation_canton_and_fl", "ncumul_conf"], "limit": 3}
+      },
+      "pipeline": {"format": "csv", "fields": {"date": "date", "canton": "abbreviation_canton_and_fl", "confirmed": "ncumul_conf"}, "casts": {"confirmed": "integer"}},
+      "contract": {"required": ["date", "canton", "confirmed"], "source_fields": ["current_quarantined_total"], "types": {"date": "string", "canton": "string", "confirmed": "integer"}, "unique_key": "date", "min_rows": 3},
+      "expected_status": "escalated",
+      "expected_plan": {"operation": "escalate", "confidence": 1.0, "evidence": ["the required upstream header disappeared and no replacement field exists"], "rationale": "Header presence is contractual even when sampled historical values are null; it cannot be fabricated."}
+    },
+    {
+      "id": "nz-service-to-residence",
+      "split": "calibration",
+      "publisher": "New Zealand Ministry of Health",
+      "dataset": "Vaccination doses by group and district",
+      "transition": "historical_observed",
+      "license": "CC-BY-SA-4.0",
+      "license_url": "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/827d1e1ba55161d571492ecae734182e987ae4d1/LICENSE",
+      "before": "fixtures/nz-service-to-residence-before.csv",
+      "after": "fixtures/nz-service-to-residence-after.csv",
+      "sources": {
+        "before": {"url": "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/827d1e1ba55161d571492ecae734182e987ae4d1/vaccine-data/2021-10-19/doses_group_and_dhb_service.csv", "sha256": "49e9e65981412003b6849dc5a6eee26acf279cc900e1289633f1029cbfafb830"},
+        "after": {"url": "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/827d1e1ba55161d571492ecae734182e987ae4d1/vaccine-data/2021-10-26/doses_group_and_dhb_residence.csv", "sha256": "e3d2209a534927d4e23a7d693f45afff149aefcb9347efbf6feeb554f59e3883"}
+      },
+      "selectors": {
+        "before": {"fields": ["Week ending", "Group", "DHB of service", "Dose number", "# doses administered"], "filters": {"Group": "Group 1", "DHB of service": "Auckland Metro", "Dose number": "1"}, "limit": 3},
+        "after": {"fields": ["Week ending", "Group", "DHB of residence", "Dose number", "# doses administered"], "filters": {"Group": "Group 1", "DHB of residence": "Auckland Metro", "Dose number": "1"}, "limit": 3}
+      },
+      "pipeline": {"format": "csv", "fields": {"week": "Week ending", "group": "Group", "district": "DHB of service", "dose": "Dose number", "administered": "# doses administered"}, "casts": {"dose": "integer", "administered": "integer"}},
+      "contract": {"required": ["week", "group", "district", "dose", "administered"], "types": {"week": "string", "group": "string", "district": "string", "dose": "integer", "administered": "integer"}, "unique_key": "week", "min_rows": 3},
+      "expected_status": "escalated",
+      "expected_plan": {"operation": "escalate", "confidence": 1.0, "evidence": ["DHB of service became DHB of residence and the same district-week counts changed"], "rationale": "The new field represents a different population assignment, not a safe rename."}
+    },
+    {
+      "id": "nz-masking-policy",
+      "split": "holdout",
+      "publisher": "New Zealand Ministry of Health",
+      "dataset": "Vaccination uptake by territorial authority",
+      "transition": "historical_observed",
+      "license": "CC-BY-SA-4.0",
+      "license_url": "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/827d1e1ba55161d571492ecae734182e987ae4d1/LICENSE",
+      "before": "fixtures/nz-masking-policy-before.csv",
+      "after": "fixtures/nz-masking-policy-after.csv",
+      "sources": {
+        "before": {"url": "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/827d1e1ba55161d571492ecae734182e987ae4d1/vaccine-data/2021-12-01/tla.csv", "sha256": "92d78f187eb1f02d7b638804cab9cf2ec7206e05a50b9c9e3fd0c82bdb21a04b"},
+        "after": {"url": "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/827d1e1ba55161d571492ecae734182e987ae4d1/vaccine-data/2021-12-08/tla_uptake.csv", "sha256": "3d08b62c9e21d69c1610258c005fc084cd229579b18350f41bfcf7b91082f4e4"}
+      },
+      "selectors": {
+        "before": {"fields": ["Territorial Authority", "Population", "Partially or Fully Vaccinated", "Fully Vaccinated"], "filters": {"Territorial Authority": "Christchurch City"}, "limit": 1},
+        "after": {"fields": ["Territorial Authority", "Population", "Partially or Fully Vaccinated", "Fully Vaccinated"], "filters": {"Territorial Authority": "Christchurch City"}, "limit": 1}
+      },
+      "pipeline": {"format": "csv", "fields": {"district": "Territorial Authority", "population": "Population", "partial_or_full": "Partially or Fully Vaccinated", "fully_vaccinated": "Fully Vaccinated"}, "casts": {"population": "integer_grouped", "partial_or_full": "integer_grouped", "fully_vaccinated": "integer_grouped"}},
+      "contract": {"required": ["district", "population", "partial_or_full", "fully_vaccinated"], "types": {"district": "string", "population": "integer", "partial_or_full": "integer", "fully_vaccinated": "integer"}, "unique_key": "district", "min_rows": 1},
+      "expected_status": "escalated",
+      "expected_plan": {"operation": "escalate", "confidence": 1.0, "evidence": ["the contracted partially-or-fully-vaccinated count is now masked for the selected district"], "rationale": "The required count is suppressed and cannot be recovered safely."}
+    }
+  ]
+}

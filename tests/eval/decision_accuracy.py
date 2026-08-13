@@ -2,8 +2,8 @@
 
 import json
 
-
 EXPECTED = {
+    "compatible-addition": ("no_change", "unchanged"),
     "column-rename": ("update_field_sources", "repaired"),
     "delimiter-change": ("set_delimiter", "repaired"),
     "integer-decimal": ("set_cast", "repaired"),
@@ -14,6 +14,12 @@ EXPECTED = {
     "split-coordinates": ("set_split_source", "repaired"),
     "missing-identifier": ("escalate", "escalated"),
     "duplicate-identifier": ("escalate", "escalated"),
+    "italy-compatible-notes": ("no_change", "unchanged"),
+    "italy-documented-rename": ("update_field_sources", "repaired"),
+    "jhu-granularity-shift": ("escalate", "escalated"),
+    "swiss-null-column-removal": ("escalate", "escalated"),
+    "nz-service-to-residence": ("escalate", "escalated"),
+    "nz-masking-policy": ("escalate", "escalated"),
 }
 
 
@@ -24,6 +30,17 @@ def _content_text(content):
         part.get("text", "")
         for part in content.get("parts", [])
         if isinstance(part, dict) and part.get("text")
+    )
+
+
+def _final_response_text(instance):
+    direct = _content_text(instance.get("response"))
+    if direct:
+        return direct
+    return "\n".join(
+        _content_text(item.get("response"))
+        for item in instance.get("responses", [])
+        if isinstance(item, dict)
     )
 
 
@@ -54,8 +71,12 @@ def evaluate(instance):
     if not decision:
         return {"score": 0, "explanation": "Planner decision missing from trace."}
 
-    response = _content_text(instance.get("response"))
-    expected_gate = "contract gate passed" if expected_status == "repaired" else "contract gate failed"
+    response = _final_response_text(instance)
+    expected_gate = (
+        "contract gate passed"
+        if expected_status in {"unchanged", "repaired"}
+        else "contract gate failed"
+    )
     checks = {
         "operation": decision.get("operation") == expected_operation,
         "evidence": bool(decision.get("evidence")),

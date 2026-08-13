@@ -53,6 +53,7 @@ nosetests.xml
 coverage.xml
 *.cover
 *.py,cover
+artifacts/grade_results/**/*.html
 .hypothesis/
 .pytest_cache/
 
@@ -142,9 +143,10 @@ dmypy.json
 # PyCharm
 .idea
 
-# User-specific files
-.terraform*
-.Terraform*
+# Terraform provider caches; preserve the checksummed dependency lockfile.
+**/.terraform/
+*.tfstate
+*.tfstate.*
 
 
 tmp*
@@ -217,10 +219,12 @@ credentials*.json
 # Internal review and development material: keep local, never publish.
 /AGENTS.md
 /DEVELOPERS.md
+/.agents-cli-spec.md
 /docs/
 /frontend/DESIGN_SYSTEM.md
 /tests/eval/datasets/README.md
 /scripts/winner_loop.py
+/scripts/build_competition_receipts.py
 /tests/unit/test_winner_loop.py
 
 # Keep only the complete benchmark and its final deterministic grade public.

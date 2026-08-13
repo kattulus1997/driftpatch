@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import csv
+import io
 import json
+import math
 from collections.abc import Iterable
-from datetime import datetime
+from datetime import date, datetime
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
@@ -17,21 +20,126 @@ from .schemas import (
     SourceProfile,
 )
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 BENCHMARK_ROOT = PROJECT_ROOT / "benchmark"
+MAX_SOURCE_BYTES = 5 * 1024 * 1024
+MAX_RECORDS = 20_000
+MAX_FIELDS = 256
+MAX_CELL_CHARS = 100_000
+MAX_JSON_DEPTH = 32
 
 
-def load_scenarios() -> list[Scenario]:
-    payload = json.loads((BENCHMARK_ROOT / "scenarios.json").read_text())
-    return [Scenario.model_validate(item) for item in payload["scenarios"]]
+def _read_text(path: Path) -> str:
+    if path.stat().st_size > MAX_SOURCE_BYTES:
+        raise ValueError(f"{path.name} exceeds the {MAX_SOURCE_BYTES}-byte source limit")
+    return path.read_text(encoding="utf-8")
+
+
+def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON key: {key}")
+        result[key] = value
+    return result
+
+
+def _reject_nonfinite_json(value: str) -> None:
+    raise ValueError(f"non-finite JSON number: {value}")
+
+
+def _json_payload(path: Path) -> Any:
+    payload = json.loads(
+        _read_text(path),
+        object_pairs_hook=_reject_duplicate_keys,
+        parse_constant=_reject_nonfinite_json,
+    )
+
+    def validate(value: Any, depth: int = 0) -> None:
+        if depth > MAX_JSON_DEPTH:
+            raise ValueError(f"JSON exceeds the {MAX_JSON_DEPTH}-level depth limit")
+        if isinstance(value, dict):
+            if len(value) > MAX_FIELDS:
+                raise ValueError(f"JSON object exceeds the {MAX_FIELDS}-field limit")
+            for child in value.values():
+                validate(child, depth + 1)
+        elif isinstance(value, list):
+            if len(value) > MAX_RECORDS:
+                raise ValueError(f"JSON array exceeds the {MAX_RECORDS}-record limit")
+            for child in value:
+                validate(child, depth + 1)
+        elif isinstance(value, str) and len(value) > MAX_CELL_CHARS:
+            raise ValueError(f"JSON string exceeds the {MAX_CELL_CHARS}-character limit")
+
+    validate(payload)
+    return payload
+
+
+def _csv_records(path: Path, delimiter: str | None = None) -> tuple[list[dict[str, str]], str]:
+    text = _read_text(path)
+    if delimiter is None:
+        try:
+            delimiter = csv.Sniffer().sniff(text[:4096], delimiters=",;|\t").delimiter
+        except csv.Error:
+            delimiter = ","
+    reader = csv.reader(io.StringIO(text, newline=""), delimiter=delimiter)
+    try:
+        headers = next(reader)
+    except StopIteration:
+        raise ValueError(f"{path.name} has no header row") from None
+    if not headers or any(not header for header in headers):
+        raise ValueError(f"{path.name} has an empty CSV header")
+    if len(headers) > MAX_FIELDS:
+        raise ValueError(f"CSV exceeds the {MAX_FIELDS}-field limit")
+    duplicates = sorted({header for header in headers if headers.count(header) > 1})
+    if duplicates:
+        raise ValueError(f"duplicate CSV header: {', '.join(duplicates)}")
+
+    records = []
+    for index, row in enumerate(reader, start=2):
+        if index - 1 > MAX_RECORDS:
+            raise ValueError(f"CSV exceeds the {MAX_RECORDS}-record limit")
+        if len(row) != len(headers):
+            raise ValueError(f"CSV row {index} has {len(row)} cells; expected {len(headers)}")
+        if any(len(cell) > MAX_CELL_CHARS for cell in row):
+            raise ValueError(f"CSV row {index} exceeds the cell-size limit")
+        records.append(dict(zip(headers, row, strict=True)))
+    return records, delimiter
+
+
+def load_scenarios(*, suite: str = "demo") -> list[Scenario]:
+    if suite == "demo":
+        path = BENCHMARK_ROOT / "scenarios.json"
+    elif suite == "external":
+        path = BENCHMARK_ROOT / "external" / "manifest.json"
+    else:
+        raise ValueError("suite must be demo or external")
+    payload = _json_payload(path)
+    key = "scenarios" if suite == "demo" else "cases"
+    items = payload[key]
+    if suite == "external":
+        items = [
+            {
+                "id": item["id"],
+                "title": f"{item['publisher']}: {item['dataset']}",
+                "before": f"external/{item['before']}",
+                "after": f"external/{item['after']}",
+                "pipeline": item["pipeline"],
+                "contract": item["contract"],
+                "expected_status": item["expected_status"],
+                "expected_plan": item["expected_plan"],
+            }
+            for item in items
+        ]
+    return [Scenario.model_validate(item) for item in items]
 
 
 def load_scenario(scenario_id: str) -> Scenario:
-    try:
-        return next(item for item in load_scenarios() if item.id == scenario_id)
-    except StopIteration as exc:
-        raise ValueError(f"Unknown scenario: {scenario_id}") from exc
+    for suite in ("demo", "external"):
+        for item in load_scenarios(suite=suite):
+            if item.id == scenario_id:
+                return item
+    raise ValueError(f"Unknown scenario: {scenario_id}")
 
 
 def scenario_source(scenario: Scenario, version: str) -> Path:
@@ -55,15 +163,10 @@ def _list_paths(value: Any, prefix: str = "") -> Iterable[tuple[str, list[dict[s
 
 def _raw_records(path: Path) -> tuple[list[dict[str, Any]], str | None, str | None]:
     if path.suffix == ".csv":
-        sample = path.read_text()[:4096]
-        try:
-            delimiter = csv.Sniffer().sniff(sample, delimiters=",;|\t").delimiter
-        except csv.Error:
-            delimiter = ","
-        with path.open(newline="") as handle:
-            return list(csv.DictReader(handle, delimiter=delimiter)), delimiter, None
+        records, delimiter = _csv_records(path)
+        return records, delimiter, None
     if path.suffix == ".json":
-        payload = json.loads(path.read_text())
+        payload = _json_payload(path)
         candidates = list(_list_paths(payload))
         if not candidates:
             raise ValueError(f"No record list found in {path.name}")
@@ -121,9 +224,9 @@ def _select_path(payload: Any, record_path: str | None) -> list[dict[str, Any]]:
 
 def read_records(path: Path, config: PipelineConfig) -> list[dict[str, Any]]:
     if config.format == "csv":
-        with path.open(newline="") as handle:
-            return list(csv.DictReader(handle, delimiter=config.delimiter))
-    return _select_path(json.loads(path.read_text()), config.record_path)
+        records, _ = _csv_records(path, config.delimiter)
+        return records
+    return _select_path(_json_payload(path), config.record_path)
 
 
 def _source_value(record: dict[str, Any], source: str) -> Any:
@@ -169,10 +272,30 @@ def _transform_value(field: str, record: dict[str, Any], config: PipelineConfig)
         value = str(value)
     elif strategy == "integer" and value not in (None, ""):
         value = int(str(value))
+    elif strategy == "integer_grouped" and value not in (None, ""):
+        normalized = str(value).replace(",", "")
+        if not normalized.isascii() or not normalized.isdecimal():
+            raise ValueError(f"{field} has invalid grouped integer value {value!r}")
+        value = int(normalized)
     elif strategy == "integer_from_float" and value not in (None, ""):
-        value = int(float(str(value)))
+        original = value
+        try:
+            decimal = Decimal(str(value))
+        except InvalidOperation as exc:
+            raise ValueError(f"{field} has invalid numeric value {original!r}") from exc
+        if not decimal.is_finite() or decimal != decimal.to_integral_value():
+            raise ValueError(
+                f"{field} cannot losslessly convert {original!r} to integer"
+            )
+        value = int(decimal)
     elif strategy == "number" and value not in (None, ""):
-        value = float(str(value))
+        try:
+            decimal = Decimal(str(value))
+        except InvalidOperation as exc:
+            raise ValueError(f"{field} has invalid numeric value {value!r}") from exc
+        if not decimal.is_finite():
+            raise ValueError(f"{field} has non-finite numeric value {value!r}")
+        value = float(decimal)
     return value
 
 
@@ -187,18 +310,31 @@ def transform(path: Path, config: PipelineConfig) -> list[dict[str, Any]]:
 def run_contracts(
     path: Path, config: PipelineConfig, contract: Contract
 ) -> tuple[list[dict[str, Any]], list[CheckResult]]:
+    source_records, _, _ = _raw_records(path)
+    source_names = {key for record in source_records for key in record}
+    checks = [
+        CheckResult(
+            name=f"source:{field}",
+            passed=field in source_names,
+            detail=f"present={str(field in source_names).lower()}",
+        )
+        for field in contract.source_fields
+    ]
     try:
         records = transform(path, config)
     except (TypeError, ValueError, KeyError, IndexError) as exc:
-        return [], [CheckResult(name="transform", passed=False, detail=str(exc))]
+        return [], [
+            *checks,
+            CheckResult(name="transform", passed=False, detail=str(exc))
+        ]
 
-    checks = [
+    checks.append(
         CheckResult(
             name="minimum_rows",
             passed=len(records) >= contract.min_rows,
             detail=f"observed={len(records)} expected>={contract.min_rows}",
         )
-    ]
+    )
     for field in contract.required:
         missing = sum(record.get(field) in (None, "") for record in records)
         checks.append(
@@ -209,16 +345,23 @@ def run_contracts(
             )
         )
 
+    def is_date(value: Any) -> bool:
+        if not isinstance(value, str):
+            return False
+        try:
+            return date.fromisoformat(value).isoformat() == value
+        except ValueError:
+            return False
+
     validators = {
         "string": lambda value: isinstance(value, str),
         "integer": lambda value: isinstance(value, int) and not isinstance(value, bool),
-        "number": lambda value: isinstance(value, (int, float))
-        and not isinstance(value, bool),
+        "number": lambda value: (
+            isinstance(value, int) and not isinstance(value, bool)
+        )
+        or (isinstance(value, float) and math.isfinite(value)),
         "boolean": lambda value: isinstance(value, bool),
-        "date": lambda value: isinstance(value, str)
-        and len(value) == 10
-        and value[4] == "-"
-        and value[7] == "-",
+        "date": is_date,
     }
     for field, expected_type in contract.types.items():
         invalid = sum(
@@ -233,11 +376,19 @@ def run_contracts(
         )
 
     keys = [record.get(contract.unique_key) for record in records]
+    invalid_keys = sum(
+        key is None or not isinstance(key, (str, int, float, bool)) for key in keys
+    )
+    distinct_keys = len(set(keys)) if invalid_keys == 0 else 0
     checks.append(
         CheckResult(
             name=f"unique:{contract.unique_key}",
-            passed=len(keys) == len(set(keys)) and None not in keys and bool(records),
-            detail=f"rows={len(keys)} distinct={len(set(keys))}",
+            passed=(
+                invalid_keys == 0 and len(keys) == distinct_keys and bool(records)
+            ),
+            detail=(
+                f"rows={len(keys)} distinct={distinct_keys} invalid={invalid_keys}"
+            ),
         )
     )
     return records, checks

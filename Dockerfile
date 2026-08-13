@@ -1,32 +1,32 @@
-# Copyright 2026 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+FROM node:22-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 AS frontend
 
-FROM python:3.12-slim
+WORKDIR /build/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+ARG PUBLIC_URL=https://driftpatch.guillermozubikarai.dev
+ENV VITE_PUBLIC_URL=${PUBLIC_URL}
+RUN npm run build
 
-RUN pip install --no-cache-dir uv==0.8.13
+FROM ghcr.io/astral-sh/uv:0.8.13@sha256:4de5495181a281bc744845b9579acf7b221d6791f99bcc211b9ec13f417c2853 AS uv
+
+FROM python:3.12-slim@sha256:229a2c5bfa27522db7815ea81f9bed70af17ccb9de9fc7ad142b1877b5830d36 AS runtime
 
 WORKDIR /code
+COPY --from=uv /uv /uvx /bin/
+COPY pyproject.toml uv.lock README.md ./
+RUN uv sync --frozen --no-dev --no-install-project
 
-COPY ./pyproject.toml ./README.md ./uv.lock* ./
-
-COPY ./app ./app
-
-RUN uv sync --frozen
+COPY app/ ./app/
+COPY benchmark/ ./benchmark/
+COPY --from=frontend /build/frontend/dist ./frontend/dist
 
 ARG AGENT_VERSION=0.0.0
-ENV AGENT_VERSION=${AGENT_VERSION}
+ENV AGENT_VERSION=${AGENT_VERSION} \
+    PORT=8080 \
+    PYTHONUNBUFFERED=1
 
+USER 65532:65532
 EXPOSE 8080
 
-CMD ["uv", "run", "uvicorn", "app.fast_api_app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD [".venv/bin/uvicorn", "app.fast_api_app:app", "--host", "0.0.0.0", "--port", "8080", "--no-access-log"]

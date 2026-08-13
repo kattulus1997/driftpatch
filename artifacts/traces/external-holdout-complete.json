@@ -1,0 +1,396 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"italy-compatible-notes\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Italian Civil Protection Department: National COVID-19 trend: unchanged with no_change; 8/8 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "Italian Civil Protection Department: National COVID-19 trend: unchanged with no_change."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "italy-compatible-notes",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected italy-compatible-notes."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"no_change\",\n  \"field_sources\": [],\n  \"delimiter\": null,\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"Current failure is 'No contract failure observed'\",\n    \"Required fields 'data', 'stato', and 'totale_attualmente_positivi' are still present in the after schema\"\n  ],\n  \"rationale\": \"The upstream change only added two new fields ('note_en' and 'note_it') while keeping all existing fields intact. The current pipeline configuration remains fully compatible and satisfies all contract requirements.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied no_change in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Deterministic contract gate completed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Italian Civil Protection Department: National COVID-19 trend: unchanged with no_change; 8/8 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"italy-documented-rename\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Italian Civil Protection Department: Regional COVID-19 trend: repaired with update_field_sources; 16/16 validation checks passed; contract gate passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "Italian Civil Protection Department: Regional COVID-19 trend: repaired with update_field_sources."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "italy-documented-rename",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected italy-documented-rename."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"update_field_sources\",\n  \"field_sources\": [\n    {\n      \"output_field\": \"latitude\",\n      \"source_field\": \"latitudine\"\n    },\n    {\n      \"output_field\": \"longitude\",\n      \"source_field\": \"longitudine\"\n    },\n    {\n      \"output_field\": \"active\",\n      \"source_field\": \"totale_positivi\"\n    },\n    {\n      \"output_field\": \"active_delta\",\n      \"source_field\": \"variazione_totale_positivi\"\n    }\n  ],\n  \"confidence\": 1.0,\n  \"evidence\": [\n    \"Removed fields: 'lat', 'long', 'nuovi_attualmente_positivi', 'totale_attualmente_positivi'\",\n    \"Added fields: 'latitudine', 'longitudine', 'totale_positivi', 'variazione_totale_positivi'\",\n    \"Failure: required:latitude: missing=3 rows=3; required:longitude: missing=3 rows=3; required:active: missing=3 rows=3; required:active_delta: missing=3 rows=3\"\n  ],\n  \"rationale\": \"The upstream source renamed several fields: 'lat' to 'latitudine', 'long' to 'longitudine', 'totale_attualmente_positivi' to 'totale_positivi', and 'nuovi_attualmente_positivi' to 'variazione_totale_positivi'. Updating the field sources to map to these new names resolves the missing field errors.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied update_field_sources in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Deterministic contract gate completed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Italian Civil Protection Department: Regional COVID-19 trend: repaired with update_field_sources; 16/16 validation checks passed; contract gate passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"jhu-granularity-shift\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Johns Hopkins University CSSE: COVID-19 daily reports: escalated with escalate; 3/8 validation checks passed; contract gate failed. Reason: The upstream data source has undergone a granularity shift to the county level (indicated by the new 'Admin2' field). Consequently, 'Province_State' (the successor to 'Province/State') is no longer unique across rows. Mapping 'region' to 'Province_State' would violate the contract's unique key constraint on 'region' (since there are 3 rows but only 1 distinct state value). A lossless repair is not possible without changing the contract or aggregating the data, so we must escalate."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "Johns Hopkins University CSSE: COVID-19 daily reports: escalated with escalate."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "jhu-granularity-shift",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected jhu-granularity-shift."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"escalate\",\n  \"field_sources\": [],\n  \"delimiter\": null,\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 0.95,\n  \"evidence\": [\n    \"Removed fields: 'Province/State', 'Country/Region'\",\n    \"Added fields: 'Province_State', 'Country_Region', 'Admin2'\",\n    \"Province_State has distinct_count of 1 for 3 rows\",\n    \"Contract requires 'region' to be a unique_key\"\n  ],\n  \"rationale\": \"The upstream data source has undergone a granularity shift to the county level (indicated by the new 'Admin2' field). Consequently, 'Province_State' (the successor to 'Province/State') is no longer unique across rows. Mapping 'region' to 'Province_State' would violate the contract's unique key constraint on 'region' (since there are 3 rows but only 1 distinct state value). A lossless repair is not possible without changing the contract or aggregating the data, so we must escalate.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied escalate in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Deterministic contract gate completed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Johns Hopkins University CSSE: COVID-19 daily reports: escalated with escalate; 3/8 validation checks passed; contract gate failed. Reason: The upstream data source has undergone a granularity shift to the county level (indicated by the new 'Admin2' field). Consequently, 'Province_State' (the successor to 'Province/State') is no longer unique across rows. Mapping 'region' to 'Province_State' would violate the contract's unique key constraint on 'region' (since there are 3 rows but only 1 distinct state value). A lossless repair is not possible without changing the contract or aggregating the data, so we must escalate."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"nz-masking-policy\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "New Zealand Ministry of Health: Vaccination uptake by territorial authority: escalated with escalate; 0/1 validation checks passed; contract gate failed. Reason: The upstream data source has introduced masked values ('Masked') in the 'Partially or Fully Vaccinated' column. This string value cannot be losslessly converted to an integer as required by the contract, necessitating an escalation for manual intervention or policy adjustment."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "New Zealand Ministry of Health: Vaccination uptake by territorial authority: escalated with escalate."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "nz-masking-policy",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected nz-masking-policy."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"operation\": \"escalate\",\n  \"field_sources\": [],\n  \"delimiter\": null,\n  \"field\": null,\n  \"strategy\": null,\n  \"input_format\": null,\n  \"true_values\": [],\n  \"false_values\": [],\n  \"path\": null,\n  \"sources\": [],\n  \"source\": null,\n  \"split_fields\": [],\n  \"separator\": null,\n  \"confidence\": 0.95,\n  \"evidence\": [\n    \"The field 'Partially or Fully Vaccinated' now contains the value 'Masked' in the upstream source.\",\n    \"The current failure is 'transform: partial_or_full has invalid grouped integer value 'Masked''.\"\n  ],\n  \"rationale\": \"The upstream data source has introduced masked values ('Masked') in the 'Partially or Fully Vaccinated' column. This string value cannot be losslessly converted to an integer as required by the contract, necessitating an escalation for manual intervention or policy adjustment.\"\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Applied escalate in memory."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Deterministic contract gate completed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "New Zealand Ministry of Health: Vaccination uptake by territorial authority: escalated with escalate; 0/1 validation checks passed; contract gate failed. Reason: The upstream data source has introduced masked values ('Masked') in the 'Partially or Fully Vaccinated' column. This string value cannot be losslessly converted to an integer as required by the contract, necessitating an escalation for manual intervention or policy adjustment."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

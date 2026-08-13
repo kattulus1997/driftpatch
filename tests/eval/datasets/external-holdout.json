@@ -1,0 +1,88 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "italy-compatible-notes",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"italy-compatible-notes\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Italian Civil Protection Department: National COVID-19 trend: unchanged with no_change."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "italy-documented-rename",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"italy-documented-rename\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Italian Civil Protection Department: Regional COVID-19 trend: repaired with update_field_sources."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "jhu-granularity-shift",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"jhu-granularity-shift\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Johns Hopkins University CSSE: COVID-19 daily reports: escalated with escalate."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "nz-masking-policy",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\": \"nz-masking-policy\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "New Zealand Ministry of Health: Vaccination uptake by territorial authority: escalated with escalate."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

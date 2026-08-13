@@ -1,8 +1,25 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, model_validator
+
+ShortText = Annotated[str, Field(min_length=1, max_length=128)]
+EvidenceText = Annotated[str, Field(min_length=1, max_length=512)]
+EventIdentifier = Annotated[
+    str, Field(min_length=1, max_length=120, pattern=r"^[A-Za-z0-9_-]+$")
+]
+AttemptIdentifier = Annotated[
+    str,
+    Field(
+        min_length=36,
+        max_length=36,
+        pattern=r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+    ),
+]
+IssuedDay = Annotated[
+    str, Field(min_length=10, max_length=10, pattern=r"^\d{4}-\d{2}-\d{2}$")
+]
 
 
 class IncidentData(BaseModel):
@@ -11,6 +28,7 @@ class IncidentData(BaseModel):
 
 class IncidentAttributes(BaseModel):
     event_id: str | None = None
+    issued_day: str | None = None
     trigger: str | None = None
 
 
@@ -18,9 +36,7 @@ class IncidentInput(BaseModel):
     scenario_id: str | None = Field(
         default=None, description="Benchmark incident identifier"
     )
-    data: IncidentData | None = Field(
-        default=None, description="Pub/Sub-compatible incident payload"
-    )
+    data: IncidentData | None = None
     attributes: IncidentAttributes | None = None
 
     @model_validator(mode="after")
@@ -55,7 +71,10 @@ class PipelineConfig(BaseModel):
     delimiter: str = ","
     record_path: str | None = None
     fields: dict[str, str]
-    casts: dict[str, Literal["string", "integer", "integer_from_float", "number"]] = Field(default_factory=dict)
+    casts: dict[
+        str,
+        Literal["string", "integer", "integer_grouped", "integer_from_float", "number"],
+    ] = Field(default_factory=dict)
     date_formats: dict[str, str] = Field(default_factory=dict)
     booleans: dict[str, BooleanSpec] = Field(default_factory=dict)
     joins: dict[str, JoinSpec] = Field(default_factory=dict)
@@ -64,9 +83,12 @@ class PipelineConfig(BaseModel):
 
 class Contract(BaseModel):
     required: list[str]
+    source_fields: list[str] = Field(default_factory=list)
     types: dict[str, Literal["string", "integer", "number", "boolean", "date"]]
     unique_key: str
     min_rows: int = 1
+    source_aliases: dict[str, list[str]] = Field(default_factory=dict)
+    preserve_values: list[str] = Field(default_factory=list)
 
 
 class FieldProfile(BaseModel):
@@ -99,6 +121,7 @@ class DriftReport(BaseModel):
 
 
 RepairOperation = Literal[
+    "no_change",
     "update_field_sources",
     "set_delimiter",
     "set_cast",
@@ -112,32 +135,34 @@ RepairOperation = Literal[
 
 
 class FieldSourceUpdate(BaseModel):
-    output_field: str
-    source_field: str
+    output_field: ShortText
+    source_field: ShortText
 
 
 class SplitField(BaseModel):
-    output_field: str
-    index: int = Field(ge=0)
+    output_field: ShortText
+    index: int = Field(ge=0, le=15)
 
 
 class RepairPlan(BaseModel):
     operation: RepairOperation
-    field_sources: list[FieldSourceUpdate] = Field(default_factory=list)
+    field_sources: list[FieldSourceUpdate] = Field(default_factory=list, max_length=16)
     delimiter: Literal[",", ";", "|", "\t"] | None = None
-    field: str | None = None
-    strategy: Literal["string", "integer", "integer_from_float", "number"] | None = None
-    input_format: str | None = None
-    true_values: list[str] = Field(default_factory=list)
-    false_values: list[str] = Field(default_factory=list)
-    path: str | None = None
-    sources: list[str] = Field(default_factory=list)
-    source: str | None = None
-    split_fields: list[SplitField] = Field(default_factory=list)
-    separator: str | None = None
+    field: ShortText | None = None
+    strategy: Literal[
+        "string", "integer", "integer_grouped", "integer_from_float", "number"
+    ] | None = None
+    input_format: Annotated[str, Field(min_length=1, max_length=64)] | None = None
+    true_values: list[ShortText] = Field(default_factory=list, max_length=32)
+    false_values: list[ShortText] = Field(default_factory=list, max_length=32)
+    path: Annotated[str, Field(min_length=1, max_length=256)] | None = None
+    sources: list[ShortText] = Field(default_factory=list, max_length=16)
+    source: ShortText | None = None
+    split_fields: list[SplitField] = Field(default_factory=list, max_length=16)
+    separator: Annotated[str, Field(min_length=1, max_length=8)] | None = None
     confidence: float = Field(ge=0, le=1)
-    evidence: list[str] = Field(min_length=1)
-    rationale: str
+    evidence: list[EvidenceText] = Field(min_length=1, max_length=16)
+    rationale: Annotated[str, Field(min_length=1, max_length=1024)]
 
 
 class ApplyResult(BaseModel):
@@ -145,6 +170,7 @@ class ApplyResult(BaseModel):
     plan: RepairPlan
     patched_pipeline: PipelineConfig
     changed: bool
+    application_error: str | None = None
 
 
 class CheckResult(BaseModel):
@@ -155,12 +181,40 @@ class CheckResult(BaseModel):
 
 class ValidationResult(BaseModel):
     scenario_id: str
-    status: Literal["repaired", "escalated", "failed"]
+    status: Literal["unchanged", "repaired", "escalated", "failed"]
     plan: RepairPlan
     checks: list[CheckResult]
     transformed_rows: int
     evidence_complete: bool
     summary: str
+
+
+class RunReceipt(BaseModel):
+    id: str
+    scenario_id: str
+    status: Literal["queued"]
+
+
+class TaskRequest(BaseModel):
+    scenario_id: ShortText
+    event_id: EventIdentifier
+    issued_day: IssuedDay
+    attempt_id: AttemptIdentifier
+    attempt_token: AttemptIdentifier
+
+
+class AttemptLease(BaseModel):
+    disposition: Literal["run", "terminal", "busy", "stale"]
+    execution_token: AttemptIdentifier | None = None
+
+
+class WorkerProposal(BaseModel):
+    scenario_id: ShortText
+    event_id: EventIdentifier
+    issued_day: IssuedDay
+    attempt_id: AttemptIdentifier
+    execution_token: AttemptIdentifier
+    plan: RepairPlan
 
 
 class Scenario(BaseModel):
@@ -170,5 +224,5 @@ class Scenario(BaseModel):
     after: str
     pipeline: PipelineConfig
     contract: Contract
-    expected_status: Literal["repaired", "escalated"]
+    expected_status: Literal["unchanged", "repaired", "escalated"]
     expected_plan: RepairPlan

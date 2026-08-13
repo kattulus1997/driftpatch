@@ -1,6 +1,30 @@
 {
   "scenarios": [
     {
+      "id": "compatible-addition",
+      "title": "A publisher added an unused metadata column",
+      "before": "fixtures/compatible-addition-before.csv",
+      "after": "fixtures/compatible-addition-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "min_rows": 3
+      },
+      "expected_status": "unchanged",
+      "expected_plan": {
+        "operation": "no_change",
+        "confidence": 1.0,
+        "evidence": ["all current pipeline contracts still pass after the added metadata field"],
+        "rationale": "The new field is outside the pipeline contract, so no patch is justified."
+      }
+    },
+    {
       "id": "column-rename",
       "title": "A municipality renamed name to full_name",
       "before": "fixtures/column-rename-before.csv",
@@ -14,7 +38,8 @@
         "required": ["id", "name"],
         "types": {"id": "integer", "name": "string"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["name"]
       },
       "expected_status": "repaired",
       "expected_plan": {
@@ -40,7 +65,8 @@
         "required": ["id", "city", "population"],
         "types": {"id": "integer", "city": "string", "population": "integer"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["city", "population"]
       },
       "expected_status": "repaired",
       "expected_plan": {
@@ -65,7 +91,8 @@
         "required": ["id", "units"],
         "types": {"id": "integer", "units": "integer"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["units"]
       },
       "expected_status": "repaired",
       "expected_plan": {
@@ -92,7 +119,8 @@
         "required": ["id", "published_on"],
         "types": {"id": "integer", "published_on": "date"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["published_on"]
       },
       "expected_status": "repaired",
       "expected_plan": {
@@ -119,7 +147,8 @@
         "required": ["id", "active"],
         "types": {"id": "integer", "active": "boolean"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["active"]
       },
       "expected_status": "repaired",
       "expected_plan": {
@@ -147,7 +176,8 @@
         "required": ["id", "name"],
         "types": {"id": "integer", "name": "string"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["name"]
       },
       "expected_status": "repaired",
       "expected_plan": {
@@ -172,7 +202,8 @@
         "required": ["id", "name"],
         "types": {"id": "integer", "name": "string"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["name"]
       },
       "expected_status": "repaired",
       "expected_plan": {
@@ -199,7 +230,8 @@
         "required": ["id", "latitude", "longitude"],
         "types": {"id": "integer", "latitude": "number", "longitude": "number"},
         "unique_key": "id",
-        "min_rows": 3
+        "min_rows": 3,
+        "preserve_values": ["latitude", "longitude"]
       },
       "expected_status": "repaired",
       "expected_plan": {

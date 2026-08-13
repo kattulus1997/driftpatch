@@ -7,13 +7,12 @@ authors = [
 ]
 
 dependencies = [
-    "google-adk[gcp,otel-gcp]>=2.5.0,<3.0.0",
-    "opentelemetry-resourcedetector-gcp<=1.12.0a0",
-    "gcsfs>=2024.11.0",
-    "a2a-sdk[http-server]>=1.0,<2",
-    "aiohttp>=3.13.4",
-    "google-cloud-logging>=3.12.0,<4.0.0",
+    "google-adk>=2.5.0,<3.0.0",
     "google-cloud-firestore>=2.21.0,<3.0.0",
+    "google-cloud-tasks>=2.19.0,<3.0.0",
+    "google-auth>=2.40.0,<3.0.0",
+    "httpx>=0.28.0,<1.0.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.42.1,<2.0.0",
 ]
 requires-python = ">=3.11,<3.14"
 
@@ -89,6 +88,10 @@ build-backend = "hatchling.build"
 [tool.pytest.ini_options]
 pythonpath = "."
 asyncio_default_fixture_loop_scope = "session"
+markers = [
+    "integration: exercises more than one application boundary",
+    "live: requires an explicitly enabled external model service",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["app","frontend"]
