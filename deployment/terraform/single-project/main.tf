@@ -534,7 +534,7 @@ resource "google_cloud_scheduler_job" "live_source_watch" {
     retry_count          = 1
     min_backoff_duration = "10s"
     max_backoff_duration = "30s"
-    max_doublings        = 0
+    max_doublings        = 5
   }
 
   http_target {
