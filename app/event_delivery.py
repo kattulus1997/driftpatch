@@ -9,7 +9,7 @@ from typing import Protocol
 
 from .event_identity import task_id
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger("uvicorn.error")
 
 
 class EventDeliveryError(RuntimeError):
@@ -54,8 +54,8 @@ class CloudTasksEventPublisher:
     ) -> None:
         from google.cloud import tasks_v2
 
-        self._client = tasks_v2.CloudTasksClient()
-        self._parent = self._client.queue_path(project, location, queue)
+        self._client = None
+        self._parent = tasks_v2.CloudTasksClient.queue_path(project, location, queue)
         self._worker_url = worker_url.rstrip("/")
         self._invoker_service_account = invoker_service_account
 
@@ -95,11 +95,15 @@ class CloudTasksEventPublisher:
             ),
         )
         try:
-            await asyncio.to_thread(
-                self._client.create_task,
-                parent=self._parent,
-                task=task,
-            )
+            def create_task() -> None:
+                client = self._client or tasks_v2.CloudTasksClient(transport="rest")
+                try:
+                    client.create_task(parent=self._parent, task=task)
+                finally:
+                    if self._client is None:
+                        client.transport.close()
+
+            await asyncio.to_thread(create_task)
         except AlreadyExists:
             return
         except Exception as exc:
