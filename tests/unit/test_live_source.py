@@ -9,6 +9,7 @@ import pytest
 from app.fast_api_app import create_admission_app
 from app.ledger import InMemoryEventStore
 from app.live_source import BASELINE_SHA256, DRIFT_SHA256, LiveSourceWatcher
+from scripts.set_live_source import PROJECT_ID
 
 BASELINE = b"id,name\n1,Central Library\n2,Riverside Clinic\n3,North School\n"
 DRIFT = b"id,full_name\n1,Central Library\n2,Riverside Clinic\n3,North School\n"
@@ -58,6 +59,12 @@ def test_live_source_digests_are_bound_to_the_packaged_evidence() -> None:
 
     assert hashlib.sha256(before).hexdigest() == BASELINE_SHA256
     assert hashlib.sha256(after).hexdigest() == DRIFT_SHA256
+
+
+def test_live_source_accepts_created_or_adopted_google_project_ids() -> None:
+    assert PROJECT_ID.fullmatch("driftpatch-agentic26")
+    assert PROJECT_ID.fullmatch("burnished-ether-486218-e6")
+    assert not PROJECT_ID.fullmatch("shared/project")
 
 
 @pytest.mark.asyncio

@@ -159,7 +159,7 @@ The release module initializes a private live source with the compatible
 baseline. After deployment, advance that source without calling the agent:
 
 ```bash
-uv run python scripts/set_live_source.py drift --project driftpatch-<release-id>
+uv run python scripts/set_live_source.py drift --project <dedicated-project-id>
 ```
 
 Within five minutes, Cloud Scheduler invokes the authenticated watcher. The

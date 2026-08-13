@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PROJECT_ID = re.compile(r"^driftpatch-[a-z0-9-]{6,20}$")
+PROJECT_ID = re.compile(r"^[a-z][a-z0-9-]{4,28}[a-z0-9]$")
 
 
 def main() -> None:
@@ -17,7 +17,7 @@ def main() -> None:
     parser.add_argument("--project", required=True)
     args = parser.parse_args()
     if not PROJECT_ID.fullmatch(args.project):
-        parser.error("--project must be a dedicated driftpatch-* project ID")
+        parser.error("--project must be a valid dedicated Google Cloud project ID")
 
     suffix = "before" if args.state == "baseline" else "after"
     source = ROOT / "benchmark" / "fixtures" / f"column-rename-{suffix}.csv"
