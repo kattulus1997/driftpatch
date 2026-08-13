@@ -191,3 +191,13 @@ def test_public_scenarios_reveal_neither_expected_decisions_nor_static_proof() -
     assert set(payload) == {"items"}
     assert payload["items"]
     assert all("expected_status" not in item for item in payload["items"])
+
+
+def test_public_service_serves_both_declared_and_legacy_favicon_paths() -> None:
+    client = TestClient(create_public_app(admission=RecordingAdmission()))
+
+    declared = client.get("/favicon.svg")
+    legacy = client.get("/favicon.ico")
+
+    assert declared.status_code == legacy.status_code == 200
+    assert declared.content == legacy.content

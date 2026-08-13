@@ -9,7 +9,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-test("renders the proof path from the real API shape", async () => {
+test("renders incident evidence without redundant phase scaffolding", async () => {
   vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
     const url = String(input);
     return new Response(JSON.stringify({
@@ -32,11 +32,14 @@ test("renders the proof path from the real API shape", async () => {
   }));
 
   render(<App />);
-  await waitFor(() => expect(screen.getByText("Evidence")).toBeInTheDocument());
-  expect(screen.getByText("Decision")).toBeInTheDocument();
-  expect(screen.getByText("Verify")).toBeInTheDocument();
-  expect(screen.getByText(/one execution per incident/i)).toBeInTheDocument();
-  expect(screen.getByRole("button", {name: /run today’s proof/i})).toBeEnabled();
+  await waitFor(() => expect(screen.getByRole("heading", {name: "Source change"})).toBeInTheDocument());
+  expect(screen.getByRole("heading", {name: "Repair"})).toBeInTheDocument();
+  expect(screen.getByRole("heading", {name: "Contract checks"})).toBeInTheDocument();
+  expect(screen.queryByText("Evidence captured")).not.toBeInTheDocument();
+  expect(screen.queryByText("operation maximum")).not.toBeInTheDocument();
+  expect(screen.queryByText("Schema delta")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", {name: /run today’s proof/i}))
+    .toHaveAttribute("title", "One execution per incident and UTC day");
 });
 
 test("queues an incident, polls its receipt, and renders terminal evidence", async () => {
@@ -106,7 +109,7 @@ test("queues an incident, polls its receipt, and renders terminal evidence", asy
 
   await waitFor(() => expect(screen.getByText("update_field_sources")).toBeInTheDocument());
   expect(screen.getByText("required:name")).toBeInTheDocument();
-  expect(screen.getByText("Gate open")).toBeInTheDocument();
+  expect(screen.getByText("Every contract passed. The proposal is safe to review.")).toBeInTheDocument();
   expect(screen.getByText("Cloud Scheduler")).toBeInTheDocument();
   expect(fetchMock).toHaveBeenCalledWith(
     "/api/scenarios/column-rename/run",
@@ -143,7 +146,7 @@ test("offers a retry when the incident index cannot load", async () => {
   render(<App />);
   expect(await screen.findByRole("alert")).toHaveTextContent("Index unavailable");
   fireEvent.click(screen.getByRole("button", {name: /retry incident index/i}));
-  expect(await screen.findByText("Observed source change")).toBeInTheDocument();
+  expect(await screen.findByText("Source change")).toBeInTheDocument();
   expect(fetchMock).toHaveBeenCalledTimes(2);
 });
 

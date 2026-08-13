@@ -40,13 +40,13 @@ function SystemHeader({running, onRun}: {running: boolean; onRun: () => void}) {
         <span>DRIFT</span><span>PATCH</span>
       </a>
       <span className="product-class">Public-source repair agent</span>
-      <div className="runtime-stack" aria-label="Execution stack">
-        <span>Gemini 3.5 Flash</span>
-        <span>Google ADK 2</span>
-      </div>
       <div className="run-control">
-        <small>One execution per incident / UTC day</small>
-        <button type="button" onClick={onRun} disabled={running}>
+        <button
+          type="button"
+          onClick={onRun}
+          disabled={running}
+          title="One execution per incident and UTC day"
+        >
           {running ? "Running proof…" : "Run today’s proof"}
         </button>
       </div>
@@ -69,12 +69,9 @@ function IncidentIndex({
 }) {
   return (
     <nav className="incident-index" aria-label="Benchmark incidents">
-      <header>
-        <span>Incident index</span>
-        <strong>{String(items.length).padStart(2, "0")}</strong>
-      </header>
+      <header>Incidents</header>
       <ol>
-        {items.map((item, index) => {
+        {items.map((item) => {
           const result = results[item.id];
           const selected = item.id === selectedId;
           return (
@@ -85,14 +82,12 @@ function IncidentIndex({
                 aria-current={selected ? "true" : undefined}
                 disabled={running}
               >
-                <span className="incident-sequence">{String(index + 1).padStart(2, "0")}</span>
                 <span className="incident-name">
                   <strong>{words(item.id)}</strong>
-                  <small>{item.title}</small>
                 </span>
-                <span className={`incident-state ${result?.status ?? "ready"}`}>
-                  {result?.status ?? "ready"}
-                </span>
+                {result ? (
+                  <span className={`incident-state ${result.status}`}>{result.status}</span>
+                ) : null}
               </button>
             </li>
           );
@@ -103,45 +98,10 @@ function IncidentIndex({
 }
 
 function CaseHeader({report}: {report: DriftReport}) {
-  const delta = report.added_fields.length + report.removed_fields.length + Object.keys(report.type_changes).length;
   return (
     <header className="case-header">
-      <div className="case-title">
-        <span className="case-id">INCIDENT / {report.scenario_id}</span>
-        <h1>{report.title}</h1>
-      </div>
-      <dl className="case-facts">
-        <div><dt>Schema delta</dt><dd>{delta}</dd></div>
-        <div><dt>Observed rows</dt><dd>{report.after.row_count}</dd></div>
-        <div><dt>Required fields</dt><dd>{report.contract.required.length}</dd></div>
-        <div><dt>Minimum rows</dt><dd>{report.contract.min_rows}</dd></div>
-      </dl>
+      <h1>{report.title}</h1>
     </header>
-  );
-}
-
-type PathState = "complete" | "active" | "pending" | "passed" | "review";
-
-function ProofPath({running, result}: {running: boolean; result?: ValidationResult}) {
-  const decisionState: PathState = result ? "complete" : running ? "active" : "pending";
-  const gateState: PathState = result
-    ? result.status === "repaired" || result.status === "unchanged" ? "passed" : "review"
-    : "pending";
-  const steps: {name: string; detail: string; state: PathState}[] = [
-    {name: "Evidence captured", detail: "Two source profiles", state: "complete"},
-    {name: "Decision bounded", detail: "One typed operation", state: decisionState},
-    {name: "Contract gate", detail: "Every check required", state: gateState},
-  ];
-  return (
-    <ol className="proof-path" aria-label="Repair proof path">
-      {steps.map((step, index) => (
-        <li key={step.name} className={step.state}>
-          <span className="path-index">{index + 1}</span>
-          <span><strong>{step.name}</strong><small>{step.detail}</small></span>
-          <em>{step.state}</em>
-        </li>
-      ))}
-    </ol>
   );
 }
 
@@ -155,20 +115,19 @@ function fieldChange(report: DriftReport, field: string, side: "before" | "after
 }
 
 function SourceSnapshot({
-  label,
   profile,
   report,
   side,
 }: {
-  label: string;
   profile: SourceProfile;
   report: DriftReport;
   side: "before" | "after";
 }) {
+  const name = side === "before" ? "Baseline" : "Observed";
   return (
-    <section className={`source-snapshot ${side}`} aria-label={`${label} source profile`}>
+    <section className={`source-snapshot ${side}`} aria-label={`${name} source profile`}>
       <header>
-        <div><span>{label}</span><strong>{side === "before" ? "Baseline" : "Observed"}</strong></div>
+        <strong>{name}</strong>
         <dl>
           <div><dt>Format</dt><dd>{profile.format}</dd></div>
           <div><dt>Delimiter</dt><dd>{delimiterName(profile.delimiter)}</dd></div>
@@ -210,11 +169,7 @@ function DeltaSpine({report}: {report: DriftReport}) {
   const changes = report.added_fields.length + report.removed_fields.length + Object.keys(report.type_changes).length;
   return (
     <div className="delta-spine" aria-label={`${changes} observed schema changes`}>
-      <span className="delta-minus">−{report.removed_fields.length}</span>
-      <span className="delta-rule" aria-hidden="true"><i /></span>
-      <strong>{changes}<small>schema<br />changes</small></strong>
-      <span className="delta-rule" aria-hidden="true"><i /></span>
-      <span className="delta-plus">+{report.added_fields.length}</span>
+      <span aria-hidden="true">→</span>
     </div>
   );
 }
@@ -223,14 +178,12 @@ function EvidencePlane({report}: {report: DriftReport}) {
   return (
     <section className="evidence-plane">
       <header className="section-title">
-        <span>Evidence</span>
-        <h2>Observed source change</h2>
-        <small>Profiles are measured before any decision is permitted.</small>
+        <h2>Source change</h2>
       </header>
       <div className="schema-comparison">
-        <SourceSnapshot label="Source A" profile={report.before} report={report} side="before" />
+        <SourceSnapshot profile={report.before} report={report} side="before" />
         <DeltaSpine report={report} />
-        <SourceSnapshot label="Source B" profile={report.after} report={report} side="after" />
+        <SourceSnapshot profile={report.after} report={report} side="after" />
       </div>
       <div className="failure-trace">
         <span>Failed contract</span>
@@ -263,27 +216,16 @@ function DecisionStage({result, running}: {result?: ValidationResult; running: b
   return (
     <section className={`decision-stage ${running ? "running" : ""}`} aria-busy={running}>
       <header className="section-title">
-        <span>Decision</span>
-        <h2>Bounded repair candidate</h2>
-        <small>The agent can choose one allowlisted operation or escalate.</small>
+        <h2>Repair</h2>
       </header>
       {!plan ? (
         <div className="decision-pending" aria-live="polite">
-          <div className="decision-aperture">
-            <span>{running ? "Evaluating evidence" : "No decision yet"}</span>
-            <strong>{running ? "A typed candidate is being resolved." : "Run today’s proof to resolve this incident."}</strong>
-            {running && <i className="activity-line" aria-hidden="true" />}
-          </div>
-          <ul className="boundary-list" aria-label="Enforced boundaries">
-            <li><strong>1</strong><span>operation maximum</span></li>
-            <li><strong>0</strong><span>arbitrary commands</span></li>
-            <li><strong>0</strong><span>automatic merges</span></li>
-          </ul>
+          <p>{running ? "Evaluating evidence…" : "Awaiting proof."}</p>
+          {running && <i className="activity-line" aria-hidden="true" />}
         </div>
       ) : (
         <div className="decision-result enter" aria-live="polite">
           <div className="operation-lockup">
-            <span>Selected operation</span>
             <strong>{plan.operation}</strong>
           </div>
           <div className="decision-detail">
@@ -299,7 +241,7 @@ function DecisionStage({result, running}: {result?: ValidationResult; running: b
               </dl>
             ) : null}
             <div className="evidence-block">
-              <span>Decision evidence</span>
+              <span>Evidence</span>
               <ul>{plan.evidence.map((evidence) => <li key={evidence}>{evidence}</li>)}</ul>
             </div>
           </div>
@@ -310,19 +252,7 @@ function DecisionStage({result, running}: {result?: ValidationResult; running: b
   );
 }
 
-function ContractSpec({report}: {report: DriftReport}) {
-  return (
-    <dl className="contract-spec">
-      <div><dt>Required</dt><dd>{report.contract.required.join(", ")}</dd></div>
-      <div><dt>Unique key</dt><dd>{report.contract.unique_key}</dd></div>
-      <div><dt>Minimum rows</dt><dd>{report.contract.min_rows}</dd></div>
-      <div><dt>Typed fields</dt><dd>{Object.keys(report.contract.types).length}</dd></div>
-    </dl>
-  );
-}
-
-function GateStage({result, report}: {result?: ValidationResult; report: DriftReport}) {
-  const safe = result?.status === "repaired" || result?.status === "unchanged";
+function GateStage({result}: {result?: ValidationResult}) {
   const outcomeCopy = result?.status === "repaired"
     ? "Every contract passed. The proposal is safe to review."
     : result?.status === "unchanged"
@@ -333,11 +263,8 @@ function GateStage({result, report}: {result?: ValidationResult; report: DriftRe
   return (
     <section className="gate-stage">
       <header className="section-title">
-        <span>Verify</span>
-        <h2>Deterministic contract gate</h2>
-        <small>A fluent decision cannot override a failed check.</small>
+        <h2>Contract checks</h2>
       </header>
-      <ContractSpec report={report} />
       {result ? (
         <div className="gate-result enter" aria-live="polite">
           <table className="check-table">
@@ -357,29 +284,12 @@ function GateStage({result, report}: {result?: ValidationResult; report: DriftRe
               <code>{result.source_sha256}</code>
             </div>
           ) : null}
-          <div className={`gate-outcome ${result.status}`}>
-            <span>{safe ? "Gate open" : "Gate closed"}</span>
-            <strong>{result.status}</strong>
-            <p>{outcomeCopy}</p>
-          </div>
+          <p className={`gate-outcome ${result.status}`}>{outcomeCopy}</p>
         </div>
       ) : (
-        <div className="gate-locked">
-          <span>Gate locked</span><p>{outcomeCopy}</p>
-        </div>
+        <div className="gate-locked"><p>Waiting for repair.</p></div>
       )}
     </section>
-  );
-}
-
-function ProofFooter() {
-  return (
-    <footer className="proof-footer">
-      <span><strong>≤1</strong> operation candidate</span>
-      <span><strong>All</strong> checks required</span>
-      <span><strong>0</strong> automatic merges</span>
-      <span><strong>90s</strong> execution budget</span>
-    </footer>
   );
 }
 
@@ -451,14 +361,12 @@ export default function App() {
         />
         <article className="proof-canvas" id="incident-proof" tabIndex={-1} key={selected.id}>
           <CaseHeader report={selected.report} />
-          <ProofPath running={running} result={result} />
           {error && <div className="error-banner" role="alert"><strong>Run failed</strong><span>{error}</span></div>}
           <EvidencePlane report={selected.report} />
           <div className="proof-resolution">
             <DecisionStage result={result} running={running} />
-            <GateStage result={result} report={selected.report} />
+            <GateStage result={result} />
           </div>
-          <ProofFooter />
         </article>
       </div>
     </main>

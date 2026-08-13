@@ -85,6 +85,10 @@ def create_public_app(
     def favicon() -> FileResponse:
         return _frontend_file("favicon.svg")
 
+    @application.get("/favicon.ico", include_in_schema=False)
+    def legacy_favicon() -> FileResponse:
+        return _frontend_file("favicon.svg")
+
     return application
 
 
