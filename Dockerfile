@@ -17,10 +17,10 @@ COPY --from=uv /uv /uvx /bin/
 COPY pyproject.toml uv.lock README.md ./
 RUN uv sync --frozen --no-dev --no-install-project
 
-FROM python:3.12-alpine3.22@sha256:a190708a2dec1bd18b1decb539f8e8f5407abaa9bf39cacda583f7f8c11db322 AS runtime
+FROM alpine:3.22@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce AS runtime
 
 USER root
-RUN apk upgrade --no-cache && python -m pip uninstall --yes pip
+RUN apk upgrade --no-cache && apk add --no-cache ca-certificates libstdc++ python3
 WORKDIR /code
 COPY --from=python --chown=65532:65532 /code/.venv /code/.venv
 COPY app/ ./app/
@@ -36,5 +36,5 @@ ENV AGENT_VERSION=${AGENT_VERSION} \
 USER 65532:65532
 EXPOSE 8080
 
-ENTRYPOINT ["python"]
+ENTRYPOINT ["python3"]
 CMD ["-m", "uvicorn", "app.fast_api_app:app", "--host", "0.0.0.0", "--port", "8080", "--no-access-log"]

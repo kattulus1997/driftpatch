@@ -260,11 +260,13 @@ def test_release_container_builds_the_interface_and_runs_without_root() -> None:
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
 
     assert "FROM node:22-slim@sha256:" in dockerfile
-    assert dockerfile.count("FROM python:3.12-alpine3.22@sha256:") == 2
+    assert dockerfile.count("FROM python:3.12-alpine3.22@sha256:") == 1
     assert "RUN apk upgrade --no-cache" in dockerfile
     assert "FROM ghcr.io/astral-sh/uv:0.8.13@sha256:" in dockerfile
     assert "pip install" not in dockerfile
-    assert "python -m pip uninstall --yes pip" in dockerfile
+    assert "FROM alpine:3.22@sha256:" in dockerfile
+    assert "apk add --no-cache ca-certificates libstdc++ python3" in dockerfile
+    assert 'ENTRYPOINT ["python3"]' in dockerfile
     assert "RUN npm run build" in dockerfile
     assert "COPY benchmark/ ./benchmark/" in dockerfile
     assert "COPY --from=frontend /build/frontend/dist ./frontend/dist" in dockerfile
