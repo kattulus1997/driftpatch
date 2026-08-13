@@ -80,6 +80,7 @@ def test_cloud_tasks_is_named_rate_limited_and_uses_oidc() -> None:
     assert "google_service_account.public.email" not in enqueuer
     assert "google_service_account.admission.email" in act_as
     assert "google_service_account.public.email" not in act_as
+    assert 'resource "google_project_iam_member" "admission_service_usage_consumer"' in source
 
 
 def test_live_source_watch_is_private_scheduled_and_digest_bounded() -> None:

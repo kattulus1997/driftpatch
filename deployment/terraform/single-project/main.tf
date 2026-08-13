@@ -594,6 +594,12 @@ resource "google_project_iam_member" "worker_service_usage_consumer" {
   member  = "serviceAccount:${google_service_account.worker.email}"
 }
 
+resource "google_project_iam_member" "admission_service_usage_consumer" {
+  project = google_project.release.project_id
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = "serviceAccount:${google_service_account.admission.email}"
+}
+
 resource "google_project_iam_custom_role" "admission_ledger_controller" {
   project     = google_project.release.project_id
   role_id     = "driftpatchAdmissionController"

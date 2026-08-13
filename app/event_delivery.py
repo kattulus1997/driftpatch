@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 from functools import cache
 from typing import Protocol
 
 from .event_identity import task_id
+
+LOGGER = logging.getLogger(__name__)
 
 
 class EventDeliveryError(RuntimeError):
@@ -95,6 +98,10 @@ class CloudTasksEventPublisher:
         except AlreadyExists:
             return
         except Exception as exc:
+            LOGGER.error(
+                "Cloud Tasks enqueue failed: %s",
+                type(exc).__name__,
+            )
             raise EventDeliveryError("Cloud Tasks enqueue failed") from exc
 
 

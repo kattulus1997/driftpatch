@@ -87,7 +87,7 @@ async def test_concurrent_replay_has_one_canonical_queue_identity() -> None:
 
 
 @pytest.mark.asyncio
-async def test_queue_failure_is_redacted_at_the_public_boundary() -> None:
+async def test_queue_failure_is_redacted_at_the_public_boundary(caplog) -> None:
     publisher = _publisher(Client(error=RuntimeError("private detail")))
 
     with pytest.raises(EventDeliveryError, match="Cloud Tasks enqueue failed"):
@@ -98,3 +98,6 @@ async def test_queue_failure_is_redacted_at_the_public_boundary() -> None:
             attempt_id=ATTEMPT_ID,
             attempt_token=ATTEMPT_TOKEN,
         )
+
+    assert "Cloud Tasks enqueue failed: RuntimeError" in caplog.text
+    assert "private detail" not in caplog.text
