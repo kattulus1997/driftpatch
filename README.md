@@ -107,7 +107,7 @@ cd frontend && npm test -- --run && npm run build
 
 ## Deploy
 
-The release module owns a dedicated `driftpatch-*` project, immutable Artifact
+The release module owns a dedicated project, immutable Artifact
 Registry repository, four Cloud Run services, Firestore database, Cloud Tasks
 queue, scheduled private source and a project-scoped €10 gross-usage alert
 budget. The budget excludes credits so alerts track actual consumption; it is
@@ -121,6 +121,8 @@ export TF_VAR_billing_account_id=<billing-account-id>
 export TF_VAR_image=example.invalid/driftpatch@sha256:0000000000000000000000000000000000000000000000000000000000000000
 
 terraform -chdir=deployment/terraform/single-project init
+# Only when adopting an existing, verified-empty project:
+# terraform -chdir=deployment/terraform/single-project import google_project.release "$TF_VAR_project_id"
 terraform -chdir=deployment/terraform/single-project apply \
   -target=google_project.release \
   -target=google_project_service.required \
@@ -200,7 +202,7 @@ service has no trace-writer authority.
 Cloud Tasks is not available in Madrid;
 Belgium is the nearest supported region and keeps the release co-located.
 These resources remain deployment-ready code, not a claim of current public
-availability. The Terraform module creates and owns a dedicated `driftpatch-*`
+availability. The Terraform module creates or explicitly adopts one dedicated
 Google Cloud project with no default network and deletion prevention; it does
 not attach these runtime identities to a shared project. Conditional IAM further
 limits both ledger controllers to the named Firestore database.

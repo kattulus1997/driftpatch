@@ -1,10 +1,10 @@
 variable "project_id" {
-  description = "Globally unique ID for the dedicated project created by this module."
+  description = "ID of the dedicated project created or explicitly imported into this module."
   type        = string
 
   validation {
-    condition     = can(regex("^driftpatch-[a-z0-9-]{6,20}$", var.project_id))
-    error_message = "project_id must identify a new dedicated driftpatch-* project."
+    condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project_id))
+    error_message = "project_id must be a valid 6-30 character Google Cloud project ID."
   }
 }
 

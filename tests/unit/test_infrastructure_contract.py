@@ -242,7 +242,8 @@ def test_only_control_services_receive_ledger_permissions() -> None:
     assert 'auto_create_network = false' in source
     assert 'deletion_policy     = "PREVENT"' in source
     assert 'boundary = "dedicated"' in source
-    assert 'condition     = can(regex("^driftpatch-' in source
+    assert 'condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$"' in source
+    assert "created or explicitly imported into this module" in source
     database_condition = (
         'resource.name == \\"projects/${google_project.release.project_id}'
         '/databases/${google_firestore_database.ledger.name}\\"'
