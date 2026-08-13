@@ -1,0 +1,16 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --network=cloudbuild
+      - --no-cache
+      - --build-arg
+      - AGENT_VERSION=${_AGENT_VERSION}
+      - --tag
+      - ${_IMAGE}
+      - .
+images:
+  - ${_IMAGE}
+serviceAccount: projects/$PROJECT_ID/serviceAccounts/driftpatch-build@$PROJECT_ID.iam.gserviceaccount.com
+options:
+  logging: CLOUD_LOGGING_ONLY

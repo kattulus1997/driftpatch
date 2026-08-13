@@ -156,6 +156,18 @@ resource "google_service_account" "scheduler_invoker" {
   display_name = "DriftPatch scheduled source watcher"
 }
 
+resource "google_service_account" "build" {
+  project      = google_project.release.project_id
+  account_id   = "driftpatch-build"
+  display_name = "DriftPatch release builder"
+}
+
+resource "google_project_iam_member" "build" {
+  project = google_project.release.project_id
+  role    = "roles/cloudbuild.builds.builder"
+  member  = "serviceAccount:${google_service_account.build.email}"
+}
+
 resource "google_storage_bucket" "live_source" {
   project                     = google_project.release.project_id
   name                        = "${google_project.release.project_id}-live-source"

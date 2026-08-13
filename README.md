@@ -135,7 +135,9 @@ plan with that immutable reference:
 ```bash
 COMMIT=$(git rev-parse HEAD)
 REPOSITORY=europe-west1-docker.pkg.dev/${TF_VAR_project_id}/driftpatch/app
-gcloud builds submit --project "${TF_VAR_project_id}" --tag "${REPOSITORY}:${COMMIT}" .
+gcloud builds submit --project "${TF_VAR_project_id}" --region europe-west1 \
+  --config cloudbuild.yaml \
+  --substitutions "_IMAGE=${REPOSITORY}:${COMMIT},_AGENT_VERSION=${COMMIT}" .
 gcloud artifacts docker images list "${REPOSITORY}" \
   --project "${TF_VAR_project_id}" --include-tags \
   --filter="tags:${COMMIT}" --format='value(version)'

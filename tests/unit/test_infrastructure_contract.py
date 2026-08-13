@@ -259,7 +259,8 @@ def test_release_container_builds_the_interface_and_runs_without_root() -> None:
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
 
     assert "FROM node:22-slim@sha256:" in dockerfile
-    assert "FROM python:3.12-slim@sha256:" in dockerfile
+    assert "FROM python:3.11-slim-bookworm@sha256:" in dockerfile
+    assert "FROM gcr.io/distroless/python3-debian12:nonroot@sha256:" in dockerfile
     assert "FROM ghcr.io/astral-sh/uv:0.8.13@sha256:" in dockerfile
     assert "pip install" not in dockerfile
     assert "RUN npm run build" in dockerfile
@@ -267,3 +268,14 @@ def test_release_container_builds_the_interface_and_runs_without_root() -> None:
     assert "COPY --from=frontend /build/frontend/dist ./frontend/dist" in dockerfile
     assert "USER 65532:65532" in dockerfile
     assert "uv sync --frozen --no-dev --no-install-project" in dockerfile
+
+
+def test_cloud_build_uses_a_dedicated_identity_and_commit_version() -> None:
+    source = _source()
+    build = (ROOT / "cloudbuild.yaml").read_text(encoding="utf-8")
+
+    assert 'resource "google_service_account" "build"' in source
+    assert 'role    = "roles/cloudbuild.builds.builder"' in source
+    assert "driftpatch-build@$PROJECT_ID.iam.gserviceaccount.com" in build
+    assert "AGENT_VERSION=${_AGENT_VERSION}" in build
+    assert "logging: CLOUD_LOGGING_ONLY" in build
