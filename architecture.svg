@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">DriftPatch production architecture</title>
+  <desc id="desc">A judge or scheduled source reaches a private admission controller. Cloud Tasks invokes the model worker, which submits a typed proposal to a deterministic result controller. Only that controller atomically writes the active configuration, rollback history, and terminal receipt to Firestore.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#D94F1E"/>
+    </marker>
+    <style>
+      .label { font: 600 13px "IBM Plex Sans", Arial, sans-serif; fill: #1D1D1F; }
+      .meta { font: 400 11px "IBM Plex Sans", Arial, sans-serif; fill: #656260; }
+      .code { font: 600 11px "Source Code Pro", monospace; fill: #A93712; }
+      .node { fill: #FFFFFF; stroke: #CFCBC6; stroke-width: 1.5; }
+      .control { fill: #FFF1E8; stroke: #D94F1E; stroke-width: 2; }
+      .line { fill: none; stroke: #D94F1E; stroke-width: 2; marker-end: url(#arrow); }
+      .read { fill: none; stroke: #6E6A67; stroke-width: 1.5; stroke-dasharray: 6 5; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1200" height="700" fill="#FBFAF8"/>
+  <text x="40" y="52" font-family="IBM Plex Sans, Arial, sans-serif" font-size="28" font-weight="700" fill="#1D1D1F">DriftPatch</text>
+  <text x="40" y="78" class="meta">One semantic planner. Deterministic control of admission, action, and evidence.</text>
+  <line x1="40" y1="96" x2="1160" y2="96" stroke="#CFCBC6"/>
+
+  <rect class="node" x="40" y="140" width="170" height="112" rx="6"/>
+  <text class="label" x="60" y="172">Judge browser</text>
+  <text class="meta" x="60" y="197">Public interface</text>
+  <text class="meta" x="60" y="218">No Cloud authority</text>
+
+  <rect class="node" x="260" y="140" width="190" height="112" rx="6"/>
+  <text class="label" x="280" y="172">Public service</text>
+  <text class="code" x="280" y="197">Cloud Run</text>
+  <text class="meta" x="280" y="218">Invoke admission only</text>
+
+  <rect class="control" x="500" y="140" width="190" height="112" rx="6"/>
+  <text class="label" x="520" y="172">Admission</text>
+  <text class="code" x="520" y="197">claim + enqueue</text>
+  <text class="meta" x="520" y="218">Daily identity · digest</text>
+
+  <rect class="node" x="740" y="140" width="170" height="112" rx="6"/>
+  <text class="label" x="760" y="172">Cloud Tasks</text>
+  <text class="code" x="760" y="197">named attempt</text>
+  <text class="meta" x="760" y="218">OIDC · bounded retry</text>
+
+  <rect class="control" x="960" y="140" width="200" height="112" rx="6"/>
+  <text class="label" x="980" y="172">Model worker</text>
+  <text class="code" x="980" y="197">ADK + Gemini 3.5</text>
+  <text class="meta" x="980" y="218">Typed proposal only</text>
+
+  <path class="line" d="M 210 196 H 260"/>
+  <path class="line" d="M 450 196 H 500"/>
+  <path class="line" d="M 690 196 H 740"/>
+  <path class="line" d="M 910 196 H 960"/>
+
+  <rect class="node" x="40" y="350" width="190" height="112" rx="6"/>
+  <text class="label" x="60" y="382">Versioned source</text>
+  <text class="code" x="60" y="407">Cloud Storage</text>
+  <text class="meta" x="60" y="428">Known content digests</text>
+
+  <rect class="node" x="280" y="350" width="170" height="112" rx="6"/>
+  <text class="label" x="300" y="382">Scheduler</text>
+  <text class="code" x="300" y="407">every 5 minutes</text>
+  <text class="meta" x="300" y="428">OIDC watcher call</text>
+
+  <rect class="node" x="500" y="350" width="190" height="134" rx="6"/>
+  <text class="label" x="520" y="382">Firestore</text>
+  <text class="code" x="520" y="407">atomic transaction</text>
+  <text class="meta" x="520" y="430">Active configuration</text>
+  <text class="meta" x="520" y="450">Rollback history · receipt</text>
+
+  <rect class="control" x="740" y="350" width="190" height="134" rx="6"/>
+  <text class="label" x="760" y="382">Result controller</text>
+  <text class="code" x="760" y="407">authorize + validate</text>
+  <text class="meta" x="760" y="430">Stale baseline fails closed</text>
+  <text class="meta" x="760" y="450">Sole configuration writer</text>
+
+  <rect class="node" x="980" y="350" width="180" height="112" rx="6"/>
+  <text class="label" x="1000" y="382">Telemetry API</text>
+  <text class="code" x="1000" y="407">authenticated OTLP</text>
+  <text class="meta" x="1000" y="428">No model content</text>
+
+  <path class="line" d="M 365 350 V 300 H 595 V 252"/>
+  <path class="read" d="M 230 406 H 475 Q 500 406 500 381 V 270 Q 500 252 518 252"/>
+  <path class="line" d="M 1060 252 V 300 H 835 V 350"/>
+  <path class="line" d="M 740 417 H 690"/>
+  <path class="read" d="M 595 350 V 300 H 610 Q 630 300 630 252"/>
+  <path class="read" d="M 1060 252 V 320 H 1070 V 350"/>
+
+  <text class="meta" x="440" y="289">watch</text>
+  <text class="meta" x="716" y="333">typed proposal</text>
+  <text class="meta" x="700" y="407">write</text>
+  <text class="meta" x="614" y="289">status</text>
+  <text class="meta" x="1078" y="307">traces</text>
+
+  <rect x="40" y="548" width="1120" height="112" rx="6" fill="#F2F0ED" stroke="#CFCBC6"/>
+  <text class="label" x="64" y="581">Security boundary</text>
+  <text class="meta" x="64" y="608">The model cannot read or write the ledger. Attempt capabilities never enter model content.</text>
+  <text class="meta" x="64" y="633">A repair becomes active only when causal fit, value preservation, schema, types, rows, and uniqueness all pass.</text>
+</svg>

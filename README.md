@@ -5,8 +5,8 @@
 Public datasets change without warning: a column is renamed, a delimiter moves,
 or a JSON collection is nested one level deeper. DriftPatch turns that breakage
 into a proof-carrying repair proposal. It inspects the change, asks Gemini 3.5
-Flash to select one typed operation, applies it in memory, and lets deterministic
-data contracts decide whether the result is safe to propose.
+Flash to select one typed operation, and lets deterministic data contracts decide
+whether a versioned configuration can be activated.
 
 ![DriftPatch social preview](frontend/public/og-driftpatch.png)
 
@@ -20,11 +20,19 @@ incident event
     -> submit only the typed proposal to an isolated result service
     -> independently prove baseline failure, causal fit and value preservation
     -> run deterministic schema, type, row and uniqueness contracts
-    -> record sanitized evidence and the terminal state
+    -> atomically activate a versioned configuration and record its receipt
 ```
 
 The model proposes; code authorizes. A fluent answer can never make a failing
 contract pass.
+
+![DriftPatch production architecture](architecture.svg)
+
+A source rename illustrates the product boundary: DriftPatch can retarget
+`name <- full_name` while preserving `name` for downstream consumers. The
+receipt identifies the affected output, previous and applied configuration
+hashes, version and rollback snapshot. It repairs the contract without silently
+turning the new source field into a new downstream API.
 
 ## Enforced boundaries
 
@@ -41,6 +49,10 @@ contract pass.
   remain outside model content and state.
 - The result controller checks terminal state and acquires an execution lease
   before inference, so completed or concurrent retries cannot repeat paid work.
+- Only the deterministic result controller can activate configuration. It writes
+  the new version, previous configuration, rollback snapshot and terminal receipt
+  in one transaction; a stale baseline fails closed and an already-active repair
+  does not create another version.
 - A schema-valid proposal that fails the deterministic gate is retried; only five
   independently rejected proposals produce a bounded terminal failure.
 - The production worker accepts only the controlled demo suite. The external
@@ -123,7 +135,8 @@ Terraform define four separately identified Cloud Run services in
 3. an internal model worker that can invoke Vertex AI and submit only a typed
    proposal; and
 4. a private deterministic result controller that re-applies authorization and
-   contracts before it alone commits terminal evidence.
+   contracts before it alone commits the versioned configuration, rollback
+   snapshot and terminal evidence.
 
 Cloud Tasks invokes the worker through OIDC and limits dispatch rate and
 concurrency. The result controller binds every commit to the active execution
@@ -134,8 +147,9 @@ identity. The source bucket prevents public access, retains object versions and
 grants read access only to admission; the public and model services cannot read
 it. A stable digest costs no model call, while an unrecognized digest fails
 closed.
-Firestore capabilities are never sent to
-the model, and model prose or confidence is not trusted as public evidence.
+The active configuration, its per-event history and the terminal result are
+committed atomically in Firestore. Firestore capabilities are never sent to the
+model, and model prose or confidence is not trusted as public evidence.
 The bounded worker exports authenticated OpenTelemetry spans directly to the
 Google Cloud Telemetry API with model-content capture disabled; the public
 service has no trace-writer authority.

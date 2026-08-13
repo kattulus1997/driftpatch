@@ -541,9 +541,10 @@ resource "google_project_iam_custom_role" "result_ledger_committer" {
   project     = google_project.release.project_id
   role_id     = "driftpatchResultCommitter"
   title       = "DriftPatch result committer"
-  description = "Reads an admitted document and replaces it with deterministic terminal evidence."
+  description = "Atomically commits deterministic terminal evidence and versioned configuration."
   permissions = [
     "datastore.databases.get",
+    "datastore.entities.create",
     "datastore.entities.get",
     "datastore.entities.update",
   ]

@@ -61,6 +61,14 @@ export type ValidationResult = {
   transformed_rows: number;
   evidence_complete: boolean;
   summary: string;
+  application: {
+    state: "applied" | "already_active";
+    version: number;
+    affected_outputs: string[];
+    previous_sha256: string;
+    applied_sha256: string;
+    rollback_ready: boolean;
+  } | null;
 };
 
 export type RunReceipt = {

@@ -179,6 +179,15 @@ class CheckResult(BaseModel):
     detail: str
 
 
+class ConfigurationReceipt(BaseModel):
+    state: Literal["applied", "already_active"]
+    version: int = Field(ge=1)
+    affected_outputs: list[ShortText] = Field(min_length=1, max_length=16)
+    previous_sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
+    applied_sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
+    rollback_ready: Literal[True] = True
+
+
 class ValidationResult(BaseModel):
     scenario_id: str
     status: Literal["unchanged", "repaired", "escalated", "failed"]
@@ -187,6 +196,7 @@ class ValidationResult(BaseModel):
     transformed_rows: int
     evidence_complete: bool
     summary: str
+    application: ConfigurationReceipt | None = None
 
 
 class RunReceipt(BaseModel):

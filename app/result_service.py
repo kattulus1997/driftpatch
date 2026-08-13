@@ -4,9 +4,11 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from .admission import DEMO_SCENARIO_IDS
+from .benchmark import load_scenario
 from .event_identity import daily_event_id, parse_issued_day
-from .gate import decide_plan
+from .gate import apply_plan_deterministically, validate_plan_deterministically
 from .ledger import EventStore
+from .repairs import affected_output_fields
 from .schemas import AttemptLease, TaskRequest, WorkerProposal
 
 EXECUTION_LEASE = timedelta(minutes=11)
@@ -65,7 +67,9 @@ class ResultService:
             issued_day=proposal.issued_day,
             now=current,
         )
-        result = decide_plan(proposal.scenario_id, proposal.plan)
+        scenario = load_scenario(proposal.scenario_id)
+        applied = apply_plan_deterministically(proposal.scenario_id, proposal.plan)
+        result = validate_plan_deterministically(applied)
         if result.status == "failed":
             terminal = await self._store.reject_proposal(
                 result=result,
@@ -87,6 +91,16 @@ class ResultService:
             execution_token=proposal.execution_token,
             trigger="cloud-tasks",
             now=current,
+            base_configuration=scenario.pipeline,
+            candidate_configuration=applied.patched_pipeline,
+            affected_outputs=tuple(
+                sorted(
+                    affected_output_fields(
+                        scenario.pipeline,
+                        result.plan,
+                    )
+                )
+            ),
         )
 
 

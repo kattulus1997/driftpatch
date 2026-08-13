@@ -245,7 +245,24 @@ function DecisionStage({result, running}: {result?: ValidationResult; running: b
               <ul>{plan.evidence.map((evidence) => <li key={evidence}>{evidence}</li>)}</ul>
             </div>
           </div>
-          <div className="boundary-stamp">Allowlist enforced · write path closed · merge disabled</div>
+          {result.application ? (
+            <dl className="application-receipt">
+              <div>
+                <dt>{result.application.state === "applied" ? "Applied" : "Already active"}</dt>
+                <dd>v{result.application.version} · {result.application.affected_outputs.join(", ")}</dd>
+              </div>
+              <div>
+                <dt>Config</dt>
+                <dd title={`${result.application.previous_sha256} → ${result.application.applied_sha256}`}>
+                  <code>{result.application.previous_sha256.slice(0, 10)} → {result.application.applied_sha256.slice(0, 10)}</code>
+                </dd>
+              </div>
+              <div>
+                <dt>Rollback</dt>
+                <dd>{result.application.rollback_ready ? "snapshot stored" : "unavailable"}</dd>
+              </div>
+            </dl>
+          ) : null}
         </div>
       )}
     </section>
@@ -253,42 +270,37 @@ function DecisionStage({result, running}: {result?: ValidationResult; running: b
 }
 
 function GateStage({result}: {result?: ValidationResult}) {
-  const outcomeCopy = result?.status === "repaired"
-    ? "Every contract passed. The proposal is safe to review."
-    : result?.status === "unchanged"
+  if (!result) return null;
+  const outcomeCopy = result.status === "unchanged"
       ? "The source remains compatible. No repair is justified."
-      : result
-        ? "No repair was authorized. Human review is required."
-        : "Success is unavailable until every contract passes.";
+      : result.status === "repaired"
+        ? null
+        : "No repair was authorized. Human review is required.";
   return (
     <section className="gate-stage">
       <header className="section-title">
         <h2>Contract checks</h2>
       </header>
-      {result ? (
-        <div className="gate-result enter" aria-live="polite">
-          <table className="check-table">
-            <thead><tr><th>Contract</th><th>Evidence</th><th>State</th></tr></thead>
-            <tbody>
-              {result.checks.map((check) => (
-                <tr key={check.name} className={check.passed ? "pass" : "fail"}>
-                  <td>{check.name}</td><td>{check.detail}</td><td>{check.passed ? "pass" : "fail"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {result.trigger === "cloud-scheduler" && result.source_sha256 ? (
-            <div className="source-receipt">
-              <span>Ambient receipt</span>
-              <strong>Cloud Scheduler</strong>
-              <code>{result.source_sha256}</code>
-            </div>
-          ) : null}
-          <p className={`gate-outcome ${result.status}`}>{outcomeCopy}</p>
-        </div>
-      ) : (
-        <div className="gate-locked"><p>Waiting for repair.</p></div>
-      )}
+      <div className="gate-result enter" aria-live="polite">
+        <table className="check-table">
+          <thead><tr><th>Contract</th><th>Evidence</th><th>State</th></tr></thead>
+          <tbody>
+            {result.checks.map((check) => (
+              <tr key={check.name} className={check.passed ? "pass" : "fail"}>
+                <td>{check.name.replaceAll("_", " ")}</td><td>{check.detail}</td><td>{check.passed ? "pass" : "fail"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {result.trigger === "cloud-scheduler" && result.source_sha256 ? (
+          <div className="source-receipt">
+            <span>Ambient receipt</span>
+            <strong>Cloud Scheduler</strong>
+            <code>{result.source_sha256}</code>
+          </div>
+        ) : null}
+        {outcomeCopy ? <p className={`gate-outcome ${result.status}`}>{outcomeCopy}</p> : null}
+      </div>
     </section>
   );
 }
@@ -363,10 +375,12 @@ export default function App() {
           <CaseHeader report={selected.report} />
           {error && <div className="error-banner" role="alert"><strong>Run failed</strong><span>{error}</span></div>}
           <EvidencePlane report={selected.report} />
-          <div className="proof-resolution">
-            <DecisionStage result={result} running={running} />
-            <GateStage result={result} />
-          </div>
+          {running || result ? (
+            <div className={`proof-resolution ${result ? "resolved" : ""}`}>
+              <DecisionStage result={result} running={running} />
+              <GateStage result={result} />
+            </div>
+          ) : null}
         </article>
       </div>
     </main>

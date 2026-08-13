@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+import copy
+import hashlib
+import json
 import os
 import re
 from dataclasses import dataclass
@@ -10,7 +13,12 @@ from functools import cache
 from typing import Any, Protocol
 from uuid import uuid4
 
-from .schemas import AttemptLease, ValidationResult
+from .schemas import (
+    AttemptLease,
+    ConfigurationReceipt,
+    PipelineConfig,
+    ValidationResult,
+)
 
 TERMINAL_STATUSES = frozenset({"unchanged", "repaired", "escalated", "failed"})
 MAX_PROPOSAL_FAILURES = 5
@@ -67,6 +75,9 @@ class EventStore(Protocol):
         execution_token: str,
         trigger: str,
         now: datetime,
+        base_configuration: PipelineConfig | None = None,
+        candidate_configuration: PipelineConfig | None = None,
+        affected_outputs: tuple[str, ...] = (),
     ) -> dict[str, Any]: ...
 
     async def reject_proposal(
@@ -84,6 +95,10 @@ class EventStore(Protocol):
     async def get_record(self, event_id: str) -> dict[str, Any] | None: ...
 
     async def get_terminal(self, event_id: str) -> dict[str, Any] | None: ...
+
+    async def get_active_configuration(
+        self, scenario_id: str
+    ) -> dict[str, Any] | None: ...
 
     async def list_terminal(self, limit: int) -> list[dict[str, Any]]: ...
 
@@ -124,9 +139,84 @@ def _public_record(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _configuration_sha256(configuration: PipelineConfig) -> str:
+    encoded = json.dumps(
+        configuration.model_dump(mode="json"),
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode()
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _prepare_configuration_application(
+    *,
+    result: ValidationResult,
+    event_id: str,
+    now: datetime,
+    current: dict[str, Any] | None,
+    base: PipelineConfig | None,
+    candidate: PipelineConfig | None,
+    affected_outputs: tuple[str, ...],
+) -> tuple[ValidationResult, dict[str, Any] | None, dict[str, Any] | None]:
+    if result.status != "repaired":
+        return result, None, None
+    if base is None or candidate is None:
+        raise RuntimeError("repaired results require a validated configuration")
+
+    base_sha256 = _configuration_sha256(base)
+    candidate_sha256 = _configuration_sha256(candidate)
+    current_sha256 = current.get("applied_sha256") if current else base_sha256
+    if current_sha256 == candidate_sha256:
+        receipt = ConfigurationReceipt(
+            state="already_active",
+            version=int(current["version"]),
+            affected_outputs=list(affected_outputs),
+            previous_sha256=current["previous_sha256"],
+            applied_sha256=candidate_sha256,
+            rollback_ready=True,
+        )
+        return result.model_copy(update={"application": receipt}), None, None
+    if current_sha256 != base_sha256:
+        raise RuntimeError("active configuration changed after proposal evaluation")
+
+    version = int(current.get("version", 0)) + 1 if current else 1
+    previous_configuration = (
+        copy.deepcopy(current["configuration"])
+        if current
+        else base.model_dump(mode="json")
+    )
+    active = {
+        "scenario_id": result.scenario_id,
+        "version": version,
+        "configuration": candidate.model_dump(mode="json"),
+        "previous_configuration": previous_configuration,
+        "previous_sha256": current_sha256,
+        "applied_sha256": candidate_sha256,
+        "source_event_id": event_id,
+        "affected_outputs": list(affected_outputs),
+        "applied_at": now.astimezone(UTC).isoformat(),
+    }
+    history = {
+        **active,
+        "configuration": copy.deepcopy(active["configuration"]),
+        "previous_configuration": copy.deepcopy(previous_configuration),
+    }
+    receipt = ConfigurationReceipt(
+        state="applied",
+        version=version,
+        affected_outputs=list(affected_outputs),
+        previous_sha256=current_sha256,
+        applied_sha256=candidate_sha256,
+        rollback_ready=True,
+    )
+    return result.model_copy(update={"application": receipt}), active, history
+
+
 class InMemoryEventStore:
     def __init__(self) -> None:
         self._records: dict[str, dict[str, Any]] = {}
+        self._configurations: dict[str, dict[str, Any]] = {}
+        self._configuration_history: dict[str, dict[str, Any]] = {}
         self._lock = asyncio.Lock()
 
     async def claim(
@@ -243,6 +333,9 @@ class InMemoryEventStore:
         execution_token: str,
         trigger: str,
         now: datetime,
+        base_configuration: PipelineConfig | None = None,
+        candidate_configuration: PipelineConfig | None = None,
+        affected_outputs: tuple[str, ...] = (),
     ) -> dict[str, Any]:
         identifier = _document_id(event_id)
         async with self._lock:
@@ -260,6 +353,15 @@ class InMemoryEventStore:
                 raise RuntimeError("terminal commit requires the active execution")
             if result.status == "failed":
                 raise RuntimeError("failed proposals require bounded rejection handling")
+            result, active_configuration, history = _prepare_configuration_application(
+                result=result,
+                event_id=identifier,
+                now=now,
+                current=self._configurations.get(scenario_id),
+                base=base_configuration,
+                candidate=candidate_configuration,
+                affected_outputs=affected_outputs,
+            )
             payload = _terminal_payload(
                 result,
                 event_id=identifier,
@@ -267,6 +369,9 @@ class InMemoryEventStore:
                 now=now,
                 source_sha256=existing.get("source_sha256"),
             )
+            if active_configuration is not None and history is not None:
+                self._configurations[scenario_id] = active_configuration
+                self._configuration_history[identifier] = history
             self._records[identifier] = payload
             return payload.copy()
 
@@ -322,6 +427,13 @@ class InMemoryEventStore:
         record = await self.get_record(event_id)
         return record if record and record.get("status") in TERMINAL_STATUSES else None
 
+    async def get_active_configuration(
+        self, scenario_id: str
+    ) -> dict[str, Any] | None:
+        async with self._lock:
+            configuration = self._configurations.get(scenario_id)
+            return copy.deepcopy(configuration) if configuration else None
+
     async def list_terminal(self, limit: int) -> list[dict[str, Any]]:
         async with self._lock:
             records = [
@@ -342,6 +454,10 @@ class FirestoreEventStore:
     def __init__(self, client: Any) -> None:
         self._client = client
         self._collection = client.collection("driftpatch-runs")
+        self._configurations = client.collection("driftpatch-configurations")
+        self._configuration_history = client.collection(
+            "driftpatch-configuration-history"
+        )
 
     async def claim(
         self,
@@ -489,11 +605,16 @@ class FirestoreEventStore:
         execution_token: str,
         trigger: str,
         now: datetime,
+        base_configuration: PipelineConfig | None = None,
+        candidate_configuration: PipelineConfig | None = None,
+        affected_outputs: tuple[str, ...] = (),
     ) -> dict[str, Any]:
         from google.cloud import firestore
 
         identifier = _document_id(event_id)
         reference = self._collection.document(identifier)
+        configuration_reference = self._configurations.document(scenario_id)
+        history_reference = self._configuration_history.document(identifier)
         transaction = self._client.transaction(max_attempts=5)
 
         @firestore.async_transactional
@@ -513,13 +634,35 @@ class FirestoreEventStore:
                 raise RuntimeError("terminal commit requires the active execution")
             if result.status == "failed":
                 raise RuntimeError("failed proposals require bounded rejection handling")
+            configuration_snapshot = await configuration_reference.get(
+                transaction=active_transaction
+            )
+            current_configuration = (
+                configuration_snapshot.to_dict()
+                if configuration_snapshot.exists
+                else None
+            )
+            verified_result, active_configuration, history = (
+                _prepare_configuration_application(
+                    result=result,
+                    event_id=identifier,
+                    now=now,
+                    current=current_configuration,
+                    base=base_configuration,
+                    candidate=candidate_configuration,
+                    affected_outputs=affected_outputs,
+                )
+            )
             payload = _terminal_payload(
-                result,
+                verified_result,
                 event_id=identifier,
                 trigger=existing.get("trigger", trigger),
                 now=now,
                 source_sha256=existing.get("source_sha256"),
             )
+            if active_configuration is not None and history is not None:
+                active_transaction.set(configuration_reference, active_configuration)
+                active_transaction.set(history_reference, history)
             active_transaction.set(reference, payload)
             return payload
 
@@ -590,6 +733,12 @@ class FirestoreEventStore:
     async def get_terminal(self, event_id: str) -> dict[str, Any] | None:
         record = await self.get_record(event_id)
         return record if record and record.get("status") in TERMINAL_STATUSES else None
+
+    async def get_active_configuration(
+        self, scenario_id: str
+    ) -> dict[str, Any] | None:
+        snapshot = await self._configurations.document(scenario_id).get()
+        return snapshot.to_dict() if snapshot.exists else None
 
     async def list_terminal(self, limit: int) -> list[dict[str, Any]]:
         query = (

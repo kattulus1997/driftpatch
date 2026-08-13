@@ -143,7 +143,56 @@ async def test_result_service_recomputes_terminal_evidence_from_only_the_plan() 
     assert "untrusted worker prose" not in terminal["summary"]
     assert terminal["plan"]["rationale"] != "untrusted worker prose"
     assert terminal["plan"]["confidence"] == 1
+    assert terminal["application"]["state"] == "applied"
+    assert terminal["application"]["version"] == 1
+    assert terminal["application"]["affected_outputs"] == ["name"]
+    assert terminal["application"]["previous_sha256"] != terminal["application"]["applied_sha256"]
+    assert terminal["application"]["rollback_ready"] is True
+    active = await store.get_active_configuration("column-rename")
+    assert active is not None
+    assert active["version"] == 1
+    assert active["configuration"]["fields"]["name"] == "full_name"
+    assert active["previous_configuration"]["fields"]["name"] == "name"
+    assert active["source_event_id"] == receipt["id"]
     assert all(not key.startswith("_") for key in terminal)
+
+
+@pytest.mark.asyncio
+async def test_repeated_repair_records_already_active_without_new_version() -> None:
+    store = InMemoryEventStore()
+    publisher = RecordingPublisher()
+    admission = AdmissionService(store, publisher)
+    service = ResultService(store)
+    plan = load_scenario("column-rename").expected_plan
+    terminals = []
+
+    for day in (12, 13):
+        now = datetime(2026, 8, day, 15, 0, tzinfo=UTC)
+        receipt = await admission.start("column-rename", now=now)
+        call = publisher.calls[-1]
+        lease = await service.preflight(TaskRequest(**call), now=now)
+        assert lease.execution_token is not None
+        terminals.append(
+            await service.complete(
+                WorkerProposal(
+                    scenario_id="column-rename",
+                    event_id=receipt["id"],
+                    issued_day=call["issued_day"],
+                    attempt_id=call["attempt_id"],
+                    execution_token=lease.execution_token,
+                    plan=plan,
+                ),
+                now=now,
+            )
+        )
+
+    assert terminals[0]["application"]["state"] == "applied"
+    assert terminals[1]["application"]["state"] == "already_active"
+    assert terminals[1]["application"]["version"] == 1
+    active = await store.get_active_configuration("column-rename")
+    assert active is not None
+    assert active["version"] == 1
+    assert active["source_event_id"] == terminals[0]["id"]
 
 
 @pytest.mark.asyncio

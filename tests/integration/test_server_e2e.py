@@ -86,4 +86,7 @@ def test_worker_task_runs_the_real_workflow_when_credentials_are_available(
     assert result is not None
     assert result["status"] == "repaired"
     assert result["plan"]["operation"] == "update_field_sources"
+    assert result["application"]["state"] == "applied"
+    assert result["application"]["affected_outputs"] == ["name"]
+    assert result["application"]["rollback_ready"] is True
     assert all(check["passed"] for check in result["checks"])

@@ -33,8 +33,8 @@ test("renders incident evidence without redundant phase scaffolding", async () =
 
   render(<App />);
   await waitFor(() => expect(screen.getByRole("heading", {name: "Source change"})).toBeInTheDocument());
-  expect(screen.getByRole("heading", {name: "Repair"})).toBeInTheDocument();
-  expect(screen.getByRole("heading", {name: "Contract checks"})).toBeInTheDocument();
+  expect(screen.queryByRole("heading", {name: "Repair"})).not.toBeInTheDocument();
+  expect(screen.queryByRole("heading", {name: "Contract checks"})).not.toBeInTheDocument();
   expect(screen.queryByText("Evidence captured")).not.toBeInTheDocument();
   expect(screen.queryByText("operation maximum")).not.toBeInTheDocument();
   expect(screen.queryByText("Schema delta")).not.toBeInTheDocument();
@@ -79,6 +79,14 @@ test("queues an incident, polls its receipt, and renders terminal evidence", asy
         transformed_rows: 3,
         evidence_complete: true,
         summary: "repaired",
+        application: {
+          state: "applied",
+          version: 1,
+          affected_outputs: ["name"],
+          previous_sha256: "1111111111111111111111111111111111111111111111111111111111111111",
+          applied_sha256: "2222222222222222222222222222222222222222222222222222222222222222",
+          rollback_ready: true,
+        },
         trigger: "cloud-scheduler",
         source_sha256: "da3e209b6e97103c43bc5045fce139503d266cf7fc3041b6132c652ac376f196",
       }), {status: 200, headers: {"Content-Type": "application/json"}});
@@ -109,7 +117,10 @@ test("queues an incident, polls its receipt, and renders terminal evidence", asy
 
   await waitFor(() => expect(screen.getByText("update_field_sources")).toBeInTheDocument());
   expect(screen.getByText("required:name")).toBeInTheDocument();
-  expect(screen.getByText("Every contract passed. The proposal is safe to review.")).toBeInTheDocument();
+  expect(screen.getByText("v1 · name")).toBeInTheDocument();
+  expect(screen.getByText("1111111111 → 2222222222")).toBeInTheDocument();
+  expect(screen.getByText("snapshot stored")).toBeInTheDocument();
+  expect(screen.queryByText("Every contract passed. The proposal is safe to review.")).not.toBeInTheDocument();
   expect(screen.getByText("Cloud Scheduler")).toBeInTheDocument();
   expect(fetchMock).toHaveBeenCalledWith(
     "/api/scenarios/column-rename/run",
