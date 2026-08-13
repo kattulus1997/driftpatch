@@ -2,6 +2,14 @@ output "region" {
   value = var.region
 }
 
+output "artifact_repository" {
+  value = google_artifact_registry_repository.images.name
+}
+
+output "gross_usage_budget" {
+  value = google_billing_budget.release.name
+}
+
 output "public_url" {
   value = google_cloud_run_v2_service.public.uri
 }

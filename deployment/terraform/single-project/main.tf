@@ -2,9 +2,11 @@ locals {
   required_apis = toset([
     "aiplatform.googleapis.com",
     "artifactregistry.googleapis.com",
+    "billingbudgets.googleapis.com",
     "cloudbuild.googleapis.com",
     "cloudscheduler.googleapis.com",
     "cloudtrace.googleapis.com",
+    "containerscanning.googleapis.com",
     "firestore.googleapis.com",
     "iam.googleapis.com",
     "cloudtasks.googleapis.com",
@@ -12,8 +14,7 @@ locals {
     "storage.googleapis.com",
     "telemetry.googleapis.com",
   ])
-  tasks_service_agent = "service-${google_project.release.number}@gcp-sa-cloudtasks.iam.gserviceaccount.com"
-  worker_queue_name   = "driftpatch-worker"
+  worker_queue_name = "driftpatch-worker"
 }
 
 resource "google_project" "release" {
@@ -35,6 +36,76 @@ resource "google_project_service" "required" {
   project            = google_project.release.project_id
   service            = each.value
   disable_on_destroy = false
+}
+
+resource "google_artifact_registry_repository" "images" {
+  project         = google_project.release.project_id
+  location        = var.region
+  repository_id   = "driftpatch"
+  description     = "Immutable DriftPatch release images"
+  format          = "DOCKER"
+  mode            = "STANDARD_REPOSITORY"
+  deletion_policy = "PREVENT"
+
+  docker_config {
+    immutable_tags = true
+  }
+
+  vulnerability_scanning_config {
+    enablement_config = "INHERITED"
+  }
+
+  cleanup_policy_dry_run = false
+  cleanup_policies {
+    id     = "delete-untagged"
+    action = "DELETE"
+    condition {
+      tag_state  = "UNTAGGED"
+      older_than = "86400s"
+    }
+  }
+  cleanup_policies {
+    id     = "keep-recent"
+    action = "KEEP"
+    most_recent_versions {
+      keep_count = 3
+    }
+  }
+
+  depends_on = [google_project_service.required]
+}
+
+resource "google_billing_budget" "release" {
+  provider        = google.billing
+  billing_account = var.billing_account_id
+  display_name    = "DriftPatch gross usage"
+
+  budget_filter {
+    projects               = ["projects/${google_project.release.number}"]
+    credit_types_treatment = "EXCLUDE_ALL_CREDITS"
+  }
+
+  amount {
+    specified_amount {
+      currency_code = "EUR"
+      units         = "10"
+    }
+  }
+
+  threshold_rules {
+    threshold_percent = 0.25
+  }
+  threshold_rules {
+    threshold_percent = 0.5
+  }
+  threshold_rules {
+    threshold_percent = 0.8
+  }
+  threshold_rules {
+    threshold_percent = 1.0
+  }
+
+  depends_on = [google_project_service.required]
 }
 
 resource "google_firestore_database" "ledger" {
@@ -137,7 +208,7 @@ resource "google_cloud_run_v2_service" "public" {
 
     scaling {
       min_instance_count = 0
-      max_instance_count = 2
+      max_instance_count = 1
     }
 
     containers {
@@ -276,7 +347,7 @@ resource "google_cloud_run_v2_service" "worker" {
 
     scaling {
       min_instance_count = 0
-      max_instance_count = 2
+      max_instance_count = 1
     }
 
     containers {

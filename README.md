@@ -105,6 +105,50 @@ uv run pytest tests/unit tests/integration -q
 cd frontend && npm test -- --run && npm run build
 ```
 
+## Deploy
+
+The release module owns a dedicated `driftpatch-*` project, immutable Artifact
+Registry repository, four Cloud Run services, Firestore database, Cloud Tasks
+queue, scheduled private source and a project-scoped €10 gross-usage alert
+budget. The budget excludes credits so alerts track actual consumption; it is
+not represented as a hard spending cap.
+
+Bootstrap the project, APIs and image repository before the first image exists:
+
+```bash
+export TF_VAR_project_id=driftpatch-<release-id>
+export TF_VAR_billing_account_id=<billing-account-id>
+export TF_VAR_image=example.invalid/driftpatch@sha256:0000000000000000000000000000000000000000000000000000000000000000
+
+terraform -chdir=deployment/terraform/single-project init
+terraform -chdir=deployment/terraform/single-project apply \
+  -target=google_project.release \
+  -target=google_project_service.required \
+  -target=google_artifact_registry_repository.images
+```
+
+Build once in Cloud Build, resolve the uploaded digest and apply the complete
+plan with that immutable reference:
+
+```bash
+COMMIT=$(git rev-parse HEAD)
+REPOSITORY=europe-west1-docker.pkg.dev/${TF_VAR_project_id}/driftpatch/app
+gcloud builds submit --project "${TF_VAR_project_id}" --tag "${REPOSITORY}:${COMMIT}" .
+gcloud artifacts docker images list "${REPOSITORY}" \
+  --project "${TF_VAR_project_id}" --include-tags \
+  --filter="tags:${COMMIT}" --format='value(version)'
+
+export TF_VAR_image=${REPOSITORY}@sha256:<reported-digest>
+terraform -chdir=deployment/terraform/single-project plan \
+  -out=/tmp/driftpatch-release.tfplan
+terraform -chdir=deployment/terraform/single-project apply \
+  /tmp/driftpatch-release.tfplan
+```
+
+Do not commit the billing identifier, Terraform state or plan. A release is not
+complete until the public route, private IAM denials, scheduled OIDC event,
+idempotent duplicate, Firestore receipt and Cloud Trace span are observed.
+
 ## Scheduled source proof
 
 The release module initializes a private live source with the compatible

@@ -133,11 +133,36 @@ def test_release_is_bounded_and_co_located_in_the_supported_european_region() ->
 
     assert 'default     = "europe-west1"' in source
     assert "location_id                 = var.region" in source
-    assert source.count("max_instance_count = 2") == 2
-    assert source.count("max_instance_count = 1") == 2
+    assert source.count("min_instance_count = 0") == 4
+    assert source.count("max_instance_count = 1") == 4
     assert 'max_attempts       = 5' in source
     assert 'min_backoff        = "10s"' in source
     assert 'max_backoff        = "600s"' in source
+
+
+def test_release_images_are_immutable_scanned_and_retained_by_policy() -> None:
+    source = _source()
+
+    assert 'resource "google_artifact_registry_repository" "images"' in source
+    assert 'repository_id   = "driftpatch"' in source
+    assert 'format          = "DOCKER"' in source
+    assert 'deletion_policy = "PREVENT"' in source
+    assert "immutable_tags = true" in source
+    assert 'enablement_config = "INHERITED"' in source
+    assert 'id     = "delete-untagged"' in source
+    assert 'id     = "keep-recent"' in source
+
+
+def test_gross_usage_budget_tracks_spend_before_credits() -> None:
+    source = _source()
+
+    assert 'resource "google_billing_budget" "release"' in source
+    assert 'display_name    = "DriftPatch gross usage"' in source
+    assert 'credit_types_treatment = "EXCLUDE_ALL_CREDITS"' in source
+    assert 'currency_code = "EUR"' in source
+    assert 'units         = "10"' in source
+    for threshold in ("0.25", "0.5", "0.8", "1.0"):
+        assert f"threshold_percent = {threshold}" in source
 
 
 def test_public_identity_cannot_invoke_the_model() -> None:

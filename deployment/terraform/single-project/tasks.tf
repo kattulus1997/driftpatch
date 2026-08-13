@@ -32,9 +32,3 @@ resource "google_service_account_iam_member" "admission_uses_task_invoker" {
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${google_service_account.admission.email}"
 }
-
-resource "google_service_account_iam_member" "tasks_uses_task_invoker" {
-  service_account_id = google_service_account.task_invoker.name
-  role               = "roles/iam.serviceAccountUser"
-  member             = "serviceAccount:${local.tasks_service_agent}"
-}
