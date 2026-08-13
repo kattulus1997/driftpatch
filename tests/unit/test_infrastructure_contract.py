@@ -260,6 +260,7 @@ def test_release_container_builds_the_interface_and_runs_without_root() -> None:
 
     assert "FROM node:22-slim@sha256:" in dockerfile
     assert dockerfile.count("FROM python:3.12-alpine3.22@sha256:") == 2
+    assert "RUN apk upgrade --no-cache" in dockerfile
     assert "FROM ghcr.io/astral-sh/uv:0.8.13@sha256:" in dockerfile
     assert "pip install" not in dockerfile
     assert "RUN npm run build" in dockerfile
