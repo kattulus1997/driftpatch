@@ -4,11 +4,25 @@ from .benchmark import (
     inspect_scenario,
     load_scenario,
     run_contracts,
+    scenario_case,
     scenario_source,
     transform,
 )
-from .repairs import affected_output_fields, apply_repair_plan, authorize_repair_plan
-from .schemas import ApplyResult, CheckResult, RepairPlan, ValidationResult
+from .case_data import inspect_case
+from .repairs import (
+    affected_output_fields,
+    apply_repair_plan,
+    authorize_repair_plan,
+    build_candidate_catalogue,
+)
+from .schemas import (
+    ApplyResult,
+    CheckResult,
+    RepairPlan,
+    RepairProgram,
+    ValidationResult,
+)
+from .synthesis import search_catalogue, verify_program
 
 
 def apply_plan_deterministically(scenario_id: str, plan: RepairPlan) -> ApplyResult:
@@ -186,3 +200,17 @@ def decide_plan(scenario_id: str, plan: RepairPlan) -> ValidationResult:
     return validate_plan_deterministically(
         apply_plan_deterministically(scenario_id, plan)
     )
+
+
+def verify_scenario_program(
+    scenario_id: str, program: RepairProgram
+) -> ValidationResult:
+    case = scenario_case(load_scenario(scenario_id))
+    catalogue = build_candidate_catalogue(case, inspect_case(case))
+    return verify_program(case, program, catalogue)
+
+
+def search_scenario(scenario_id: str) -> ValidationResult:
+    case = scenario_case(load_scenario(scenario_id))
+    catalogue = build_candidate_catalogue(case, inspect_case(case))
+    return verify_program(case, search_catalogue(case, catalogue), catalogue)

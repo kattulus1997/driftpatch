@@ -1,0 +1,9 @@
+{
+  "required": ["id", "total"],
+  "types": {
+    "id": "integer",
+    "total": "integer"
+  },
+  "unique_key": "id",
+  "preserve_values": ["total"]
+}

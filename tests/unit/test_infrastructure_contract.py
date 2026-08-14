@@ -29,9 +29,9 @@ def test_worker_has_no_public_invoker_binding() -> None:
     assert "google_service_account.task_invoker.email" in worker_binding
     assert "allUsers" not in worker_binding
     assert source.count('member   = "allUsers"') == 1
-    worker_service = source.split(
-        'resource "google_cloud_run_v2_service" "worker"', 1
-    )[1].split("resource ", 1)[0]
+    worker_service = source.split('resource "google_cloud_run_v2_service" "worker"', 1)[
+        1
+    ].split("resource ", 1)[0]
     assert 'ingress             = "INGRESS_TRAFFIC_INTERNAL_ONLY"' in worker_service
     assert "FIRESTORE_ENABLED" not in worker_service
     assert 'name  = "RESULT_URL"' in worker_service
@@ -39,9 +39,9 @@ def test_worker_has_no_public_invoker_binding() -> None:
 
 def test_public_can_only_invoke_admission_and_worker_can_only_invoke_result() -> None:
     source = _source()
-    public_service = source.split(
-        'resource "google_cloud_run_v2_service" "public"', 1
-    )[1].split("resource ", 1)[0]
+    public_service = source.split('resource "google_cloud_run_v2_service" "public"', 1)[
+        1
+    ].split("resource ", 1)[0]
     public_binding = source.split(
         'resource "google_cloud_run_v2_service_iam_member" "public_admission_invoker"',
         1,
@@ -80,7 +80,10 @@ def test_cloud_tasks_is_named_rate_limited_and_uses_oidc() -> None:
     assert "google_service_account.public.email" not in enqueuer
     assert "google_service_account.admission.email" in act_as
     assert "google_service_account.public.email" not in act_as
-    assert 'resource "google_project_iam_member" "admission_service_usage_consumer"' in source
+    assert (
+        'resource "google_project_iam_member" "admission_service_usage_consumer"'
+        in source
+    )
 
 
 def test_live_source_watch_is_private_scheduled_and_digest_bounded() -> None:
@@ -92,11 +95,17 @@ def test_live_source_watch_is_private_scheduled_and_digest_bounded() -> None:
     assert 'schedule         = "*/5 * * * *"' in source
     assert 'time_zone        = "Etc/UTC"' in source
     assert 'http_method = "POST"' in source
-    assert 'uri         = "${google_cloud_run_v2_service.admission.uri}/internal/watch"' in source
-    assert "service_account_email = google_service_account.scheduler_invoker.email" in source
+    assert (
+        'uri         = "${google_cloud_run_v2_service.admission.uri}/internal/watch"'
+        in source
+    )
+    assert (
+        "service_account_email = google_service_account.scheduler_invoker.email"
+        in source
+    )
     assert "audience              = google_cloud_run_v2_service.admission.uri" in source
     assert 'public_access_prevention    = "enforced"' in source
-    assert 'uniform_bucket_level_access = true' in source
+    assert "uniform_bucket_level_access = true" in source
     assert "num_newer_versions = 10" in source
     assert 'role   = "roles/storage.objectViewer"' in source
     assert "google_service_account.admission.email" in source
@@ -136,7 +145,7 @@ def test_release_is_bounded_and_co_located_in_the_supported_european_region() ->
     assert "location_id                 = var.region" in source
     assert source.count("min_instance_count = 0") == 4
     assert source.count("max_instance_count = 1") == 4
-    assert 'max_attempts       = 5' in source
+    assert "max_attempts       = 5" in source
     assert 'min_backoff        = "10s"' in source
     assert 'max_backoff        = "600s"' in source
 
@@ -166,6 +175,141 @@ def test_gross_usage_budget_tracks_spend_before_credits() -> None:
         assert f"threshold_percent = {threshold}" in source
 
 
+def test_custom_bundles_are_private_ephemeral_and_not_soft_deleted() -> None:
+    source = _source()
+    bucket = source.split('resource "google_storage_bucket" "custom_bundles"', 1)[
+        1
+    ].split("resource ", 1)[0]
+
+    assert (
+        'name                        = "${google_project.release.project_id}-custom-bundles"'
+        in bucket
+    )
+    assert "uniform_bucket_level_access = true" in bucket
+    assert 'public_access_prevention    = "enforced"' in bucket
+    assert "force_destroy               = false" in bucket
+    assert "retention_duration_seconds = 0" in bucket
+    assert "age = 1" in bucket
+    assert 'type = "Delete"' in bucket
+    assert 'role   = "roles/storage.objectAdmin"' not in source
+    assert 'role   = "roles/storage.admin"' not in source
+    assert 'member = "allUsers"' not in source
+
+
+def test_custom_bundle_identities_receive_only_their_object_operations() -> None:
+    source = _source()
+    expected = {
+        "admission_bundle_writer": (
+            '"storage.objects.create"',
+            '"storage.objects.delete"',
+        ),
+        "worker_bundle_reader": ('"storage.objects.get"',),
+        "result_bundle_controller": (
+            '"storage.objects.get"',
+            '"storage.objects.delete"',
+        ),
+    }
+
+    for role_name, permissions in expected.items():
+        role = source.split(
+            f'resource "google_project_iam_custom_role" "{role_name}"', 1
+        )[1].split("resource ", 1)[0]
+        assert role.count("storage.objects.") == len(permissions)
+        for permission in permissions:
+            assert permission in role
+        assert "storage.objects.list" not in role
+        assert "storage.buckets." not in role
+
+    bindings = {
+        "admission_bundle_writer": "google_service_account.admission.email",
+        "worker_bundle_reader": "google_service_account.worker.email",
+        "result_bundle_controller": "google_service_account.result.email",
+    }
+    for binding_name, identity in bindings.items():
+        binding = source.split(
+            f'resource "google_storage_bucket_iam_member" "{binding_name}"', 1
+        )[1].split("resource ", 1)[0]
+        assert "google_storage_bucket.custom_bundles.name" in binding
+        assert identity in binding
+        assert "allUsers" not in binding
+
+
+def test_model_armor_is_regional_blocking_current_and_worker_only() -> None:
+    source = _source()
+    template = source.split('resource "google_model_armor_template" "worker"', 1)[
+        1
+    ].split("resource ", 1)[0]
+
+    assert '"modelarmor.googleapis.com"' in source
+    assert "location        = var.region" in template
+    assert 'template_id     = "driftpatch-worker"' in template
+    assert 'filter_enforcement = "ENABLED"' in template
+    assert 'confidence_level   = "MEDIUM_AND_ABOVE"' in template
+    assert "basic_config" in template
+    assert 'enforcement_type                   = "INSPECT_AND_BLOCK"' in template
+    assert "ignore_partial_invocation_failures = false" in template
+    assert "log_sanitize_operations            = false" in template
+    assert 'alias = "FILTER_VERSION_ALIAS_LATEST"' in template
+
+    worker = source.split('resource "google_cloud_run_v2_service" "worker"', 1)[
+        1
+    ].split("resource ", 1)[0]
+    assert 'name  = "MODEL_ARMOR_TEMPLATE"' in worker
+    assert "google_model_armor_template.worker.name" in worker
+    for role in ("roles/modelarmor.user", "roles/modelarmor.viewer"):
+        binding = source.split(f'role    = "{role}"', 1)[1].split("resource ", 1)[0]
+        assert "google_service_account.worker.email" in binding
+        assert "google_service_account.public.email" not in binding
+
+
+def test_custom_execution_has_explicit_quota_and_bundle_configuration() -> None:
+    source = _source()
+    admission = source.split('resource "google_cloud_run_v2_service" "admission"', 1)[
+        1
+    ].split("resource ", 1)[0]
+    worker = source.split('resource "google_cloud_run_v2_service" "worker"', 1)[
+        1
+    ].split("resource ", 1)[0]
+    result = source.split('resource "google_cloud_run_v2_service" "result"', 1)[
+        1
+    ].split("resource ", 1)[0]
+
+    for service in (admission, worker, result):
+        assert 'name  = "CUSTOM_BUNDLE_BUCKET"' in service
+        assert "google_storage_bucket.custom_bundles.name" in service
+    assert 'name  = "CUSTOM_DAILY_LIMIT"' in admission
+    assert 'value = "24"' in admission
+    assert 'name  = "CUSTOM_TOTAL_DAILY_LIMIT"' in admission
+    assert 'value = "48"' in admission
+    assert worker.count('name  = "GOOGLE_GENAI_USE_ENTERPRISE"') == 1
+    assert worker.count('name  = "GOOGLE_CLOUD_LOCATION"') == 1
+
+
+def test_stale_custom_runs_are_reconciled_by_a_distinct_oidc_identity() -> None:
+    source = _source()
+    job = source.split('resource "google_cloud_scheduler_job" "custom_reconciler"', 1)[
+        1
+    ].split("resource ", 1)[0]
+    binding = source.split(
+        'resource "google_cloud_run_v2_service_iam_member" "reconciler_result_invoker"',
+        1,
+    )[1].split("resource ", 1)[0]
+
+    assert 'schedule         = "*/10 * * * *"' in job
+    assert (
+        'uri         = "${google_cloud_run_v2_service.result.uri}/internal/reconcile"'
+        in job
+    )
+    assert (
+        "service_account_email = google_service_account.reconciler_invoker.email" in job
+    )
+    assert "audience              = google_cloud_run_v2_service.result.uri" in job
+    assert "google_cloud_run_v2_service.result.name" in binding
+    assert "google_service_account.reconciler_invoker.email" in binding
+    assert "google_cloud_run_v2_service.admission.name" not in binding
+    assert "allUsers" not in binding
+
+
 def test_public_identity_cannot_invoke_the_model() -> None:
     source = _source()
     vertex_role = source.split(
@@ -183,21 +327,22 @@ def test_public_identity_cannot_invoke_the_model() -> None:
 
 def test_only_the_bounded_worker_exports_cloud_traces() -> None:
     source = _source()
-    worker_service = source.split(
-        'resource "google_cloud_run_v2_service" "worker"', 1
-    )[1].split("resource ", 1)[0]
+    worker_service = source.split('resource "google_cloud_run_v2_service" "worker"', 1)[
+        1
+    ].split("resource ", 1)[0]
 
     assert '"telemetry.googleapis.com"' in source
     assert '"cloudtrace.googleapis.com"' in source
     assert worker_service.count('name  = "CLOUD_TELEMETRY_ENABLED"') == 1
     assert 'value = "true"' in worker_service
     assert source.count('name  = "CLOUD_TELEMETRY_ENABLED"') == 1
-    assert worker_service.count(
-        'name  = "ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS"'
-    ) == 1
-    assert worker_service.count(
-        'name  = "OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT"'
-    ) == 1
+    assert worker_service.count('name  = "ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS"') == 1
+    assert (
+        worker_service.count(
+            'name  = "OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT"'
+        )
+        == 1
+    )
     assert 'value = "false"' in worker_service
     assert 'value = "NO_CONTENT"' in worker_service
     assert 'role    = "roles/telemetry.tracesWriter"' in source
@@ -240,7 +385,7 @@ def test_only_control_services_receive_ledger_permissions() -> None:
     assert 'resource "google_project" "release"' in source
     assert "project = google_project.release.project_id" in admission_binding
     assert "project = google_project.release.project_id" in result_binding
-    assert 'auto_create_network = false' in source
+    assert "auto_create_network = false" in source
     assert 'deletion_policy     = "PREVENT"' in source
     assert 'boundary = "dedicated"' in source
     assert 'condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$"' in source
@@ -251,8 +396,12 @@ def test_only_control_services_receive_ledger_permissions() -> None:
     )
     assert database_condition in admission_binding
     assert database_condition in result_binding
-    assert "google_service_account.public.email" not in admission_binding + result_binding
-    assert "google_service_account.worker.email" not in admission_binding + result_binding
+    assert (
+        "google_service_account.public.email" not in admission_binding + result_binding
+    )
+    assert (
+        "google_service_account.worker.email" not in admission_binding + result_binding
+    )
     assert 'role    = "roles/datastore.user"' not in source
 
 

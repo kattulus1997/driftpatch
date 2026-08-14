@@ -10,6 +10,7 @@ locals {
     "firestore.googleapis.com",
     "iam.googleapis.com",
     "cloudtasks.googleapis.com",
+    "modelarmor.googleapis.com",
     "run.googleapis.com",
     "storage.googleapis.com",
     "telemetry.googleapis.com",
@@ -156,6 +157,12 @@ resource "google_service_account" "scheduler_invoker" {
   display_name = "DriftPatch scheduled source watcher"
 }
 
+resource "google_service_account" "reconciler_invoker" {
+  project      = google_project.release.project_id
+  account_id   = "driftpatch-reconciler"
+  display_name = "DriftPatch stale-run reconciler"
+}
+
 resource "google_service_account" "build" {
   project      = google_project.release.project_id
   account_id   = "driftpatch-build"
@@ -204,6 +211,129 @@ resource "google_storage_bucket_iam_member" "admission_source_reader" {
   bucket = google_storage_bucket.live_source.name
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.admission.email}"
+}
+
+resource "google_storage_bucket" "custom_bundles" {
+  project                     = google_project.release.project_id
+  name                        = "${google_project.release.project_id}-custom-bundles"
+  location                    = var.region
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
+  force_destroy               = false
+
+  soft_delete_policy {
+    retention_duration_seconds = 0
+  }
+
+  lifecycle_rule {
+    condition {
+      age = 1
+    }
+    action {
+      type = "Delete"
+    }
+  }
+
+  depends_on = [google_project_service.required]
+}
+
+resource "google_project_iam_custom_role" "admission_bundle_writer" {
+  project     = google_project.release.project_id
+  role_id     = "driftpatchBundleWriter"
+  title       = "DriftPatch bundle writer"
+  description = "Creates immutable custom bundles and removes failed admissions."
+  permissions = [
+    "storage.objects.create",
+    "storage.objects.delete",
+  ]
+}
+
+resource "google_storage_bucket_iam_member" "admission_bundle_writer" {
+  bucket = google_storage_bucket.custom_bundles.name
+  role   = google_project_iam_custom_role.admission_bundle_writer.id
+  member = "serviceAccount:${google_service_account.admission.email}"
+}
+
+resource "google_project_iam_custom_role" "worker_bundle_reader" {
+  project     = google_project.release.project_id
+  role_id     = "driftpatchBundleReader"
+  title       = "DriftPatch bundle reader"
+  description = "Reads only the exact immutable bundle named by an admitted task."
+  permissions = [
+    "storage.objects.get",
+  ]
+}
+
+resource "google_storage_bucket_iam_member" "worker_bundle_reader" {
+  bucket = google_storage_bucket.custom_bundles.name
+  role   = google_project_iam_custom_role.worker_bundle_reader.id
+  member = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_project_iam_custom_role" "result_bundle_controller" {
+  project     = google_project.release.project_id
+  role_id     = "driftpatchBundleController"
+  title       = "DriftPatch bundle controller"
+  description = "Re-verifies and removes the exact bundle for a terminal run."
+  permissions = [
+    "storage.objects.get",
+    "storage.objects.delete",
+  ]
+}
+
+resource "google_storage_bucket_iam_member" "result_bundle_controller" {
+  bucket = google_storage_bucket.custom_bundles.name
+  role   = google_project_iam_custom_role.result_bundle_controller.id
+  member = "serviceAccount:${google_service_account.result.email}"
+}
+
+resource "google_model_armor_template" "worker" {
+  project         = google_project.release.project_id
+  location        = var.region
+  template_id     = "driftpatch-worker"
+  deletion_policy = "PREVENT"
+
+  filter_config {
+    pi_and_jailbreak_filter_settings {
+      filter_enforcement = "ENABLED"
+      confidence_level   = "MEDIUM_AND_ABOVE"
+    }
+    sdp_settings {
+      basic_config {
+        filter_enforcement = "ENABLED"
+      }
+    }
+  }
+
+  template_metadata {
+    enforcement_type                   = "INSPECT_AND_BLOCK"
+    ignore_partial_invocation_failures = false
+    log_sanitize_operations            = false
+    log_template_operations            = false
+
+    filter_version_selector {
+      alias = "FILTER_VERSION_ALIAS_LATEST"
+    }
+
+    multi_language_detection {
+      enable_multi_language_detection = true
+    }
+  }
+
+  depends_on = [google_project_service.required]
+}
+
+resource "google_project_iam_member" "worker_model_armor_user" {
+  project = google_project.release.project_id
+  role    = "roles/modelarmor.user"
+  member  = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_project_iam_member" "worker_model_armor_viewer" {
+  project = google_project.release.project_id
+  role    = "roles/modelarmor.viewer"
+  member  = "serviceAccount:${google_service_account.worker.email}"
 }
 
 resource "google_cloud_run_v2_service" "public" {
@@ -327,6 +457,18 @@ resource "google_cloud_run_v2_service" "admission" {
         name  = "LIVE_SOURCE_OBJECT"
         value = google_storage_bucket_object.live_source.name
       }
+      env {
+        name  = "CUSTOM_BUNDLE_BUCKET"
+        value = google_storage_bucket.custom_bundles.name
+      }
+      env {
+        name  = "CUSTOM_DAILY_LIMIT"
+        value = "24"
+      }
+      env {
+        name  = "CUSTOM_TOTAL_DAILY_LIMIT"
+        value = "48"
+      }
 
       startup_probe {
         failure_threshold     = 10
@@ -396,6 +538,14 @@ resource "google_cloud_run_v2_service" "worker" {
       env {
         name  = "RESULT_URL"
         value = google_cloud_run_v2_service.result.uri
+      }
+      env {
+        name  = "CUSTOM_BUNDLE_BUCKET"
+        value = google_storage_bucket.custom_bundles.name
+      }
+      env {
+        name  = "MODEL_ARMOR_TEMPLATE"
+        value = google_model_armor_template.worker.name
       }
       env {
         name  = "CLOUD_TELEMETRY_ENABLED"
@@ -470,6 +620,10 @@ resource "google_cloud_run_v2_service" "result" {
       env {
         name  = "FIRESTORE_DATABASE"
         value = google_firestore_database.ledger.name
+      }
+      env {
+        name  = "CUSTOM_BUNDLE_BUCKET"
+        value = google_storage_bucket.custom_bundles.name
       }
 
       startup_probe {
@@ -563,6 +717,14 @@ resource "google_cloud_run_v2_service_iam_member" "worker_result_invoker" {
   name     = google_cloud_run_v2_service.result.name
   role     = "roles/run.invoker"
   member   = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_cloud_run_v2_service_iam_member" "reconciler_result_invoker" {
+  project  = google_project.release.project_id
+  location = var.region
+  name     = google_cloud_run_v2_service.result.name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.reconciler_invoker.email}"
 }
 
 resource "google_project_iam_custom_role" "worker_vertex_predictor" {

@@ -9,6 +9,7 @@ import pytest
 from app.fast_api_app import create_admission_app
 from app.ledger import InMemoryEventStore
 from app.live_source import BASELINE_SHA256, DRIFT_SHA256, LiveSourceWatcher
+from app.schemas import TaskRequest
 from scripts.set_live_source import PROJECT_ID
 
 BASELINE = b"id,name\n1,Central Library\n2,Riverside Clinic\n3,North School\n"
@@ -49,8 +50,8 @@ class RecordingPublisher:
     def __init__(self) -> None:
         self.calls: list[dict[str, str]] = []
 
-    async def publish(self, **payload: str) -> None:
-        self.calls.append(payload)
+    async def publish(self, task: TaskRequest) -> None:
+        self.calls.append(task.model_dump(mode="json"))
 
 
 def test_live_source_digests_are_bound_to_the_packaged_evidence() -> None:
@@ -103,4 +104,4 @@ async def test_authenticated_watch_endpoint_records_source_receipt() -> None:
 
     assert response.status_code == 200
     assert response.json()["status"] == "drift_detected"
-    assert publisher.calls[0]["scenario_id"] == "column-rename"
+    assert publisher.calls[0]["case_id"] == "column-rename"

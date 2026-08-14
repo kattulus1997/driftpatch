@@ -1,54 +1,109 @@
 {
   "eval_cases": [
     {
-      "eval_case_id": "column-rename",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"column-rename\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "A municipality renamed name to full_name: repaired with update_field_sources; 6/6 validation checks passed; contract gate passed."}]}}
+      "eval_case_id": "custom-program-two",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-program-two\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "CSV records moved to JSON and renamed one field: repaired; deterministic terminal verified."
+            }
+          ]
+        }
+      }
     },
     {
-      "eval_case_id": "delimiter-change",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"delimiter-change\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "A CSV publisher changed comma delimiters to semicolons: repaired with set_delimiter; 8/8 validation checks passed; contract gate passed."}]}}
+      "eval_case_id": "custom-program-four",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-program-four\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "CSV changed delimiter, field name, integer and date encodings: repaired; deterministic terminal verified."
+            }
+          ]
+        }
+      }
     },
     {
-      "eval_case_id": "integer-decimal",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"integer-decimal\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "Integer counts began arriving with a decimal suffix: repaired with set_cast; 6/6 validation checks passed; contract gate passed."}]}}
+      "eval_case_id": "custom-join-source",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-join-source\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "One name field became two ordered fields: repaired; deterministic terminal verified."
+            }
+          ]
+        }
+      }
     },
     {
-      "eval_case_id": "date-format",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"date-format\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "ISO dates changed to day-first dates: repaired with set_date_format; 6/6 validation checks passed; contract gate passed."}]}}
+      "eval_case_id": "custom-ambiguous-alias",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-ambiguous-alias\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Two new fields preserve the removed name equally: escalated; deterministic terminal verified."
+            }
+          ]
+        }
+      }
     },
     {
-      "eval_case_id": "boolean-vocabulary",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"boolean-vocabulary\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "Boolean labels changed from yes and no to si and no: repaired with set_boolean_values; 6/6 validation checks passed; contract gate passed."}]}}
-    },
-    {
-      "eval_case_id": "json-record-path",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"json-record-path\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "A JSON API nested items under result.records: repaired with set_record_path; 6/6 validation checks passed; contract gate passed."}]}}
-    },
-    {
-      "eval_case_id": "join-name",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"join-name\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "A full name was split into first and last name columns: repaired with set_join_source; 6/6 validation checks passed; contract gate passed."}]}}
-    },
-    {
-      "eval_case_id": "split-coordinates",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"split-coordinates\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "Latitude and longitude were combined into coordinates: repaired with set_split_source; 8/8 validation checks passed; contract gate passed."}]}}
-    },
-    {
-      "eval_case_id": "missing-identifier",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"missing-identifier\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "The publisher removed the required stable identifier: escalated with escalate; 3/6 validation checks passed; contract gate failed because no identifier can be fabricated safely."}]}}
-    },
-    {
-      "eval_case_id": "duplicate-identifier",
-      "prompt": {"role": "user", "parts": [{"text": "{\"scenario_id\":\"duplicate-identifier\"}"}]},
-      "reference": {"response": {"role": "model", "parts": [{"text": "The source began publishing duplicate identifiers: escalated with escalate; 5/6 validation checks passed; contract gate failed because no evidence identifies the authoritative duplicate row."}]}}
+      "eval_case_id": "custom-missing-key",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-missing-key\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "The current source removed the stable key: escalated; deterministic terminal verified."
+            }
+          ]
+        }
+      }
     }
   ]
 }

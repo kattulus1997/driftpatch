@@ -14,7 +14,11 @@ def evaluate(instance):
     reference = instance.get("reference")
     rubric = (
         "Grade the agent's final response on a 1-5 scale (1 poor, 5 excellent) for "
-        "accuracy, relevance, and clarity."
+        "accuracy, relevance, and clarity. Give 5 when it conveys every material "
+        "ground-truth fact with no concrete defect. Do not penalize different wording "
+        "or accurate trace-backed detail; those are not omissions or disagreements. "
+        "A score below 5 must identify a specific factual, relevance, or clarity defect, "
+        "not a merely stylistic difference."
     )
     if reference:
         rubric += (

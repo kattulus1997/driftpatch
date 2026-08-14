@@ -44,3 +44,15 @@ output "live_source_bucket" {
 output "live_source_watch" {
   value = google_cloud_scheduler_job.live_source_watch.id
 }
+
+output "custom_bundle_bucket" {
+  value = google_storage_bucket.custom_bundles.name
+}
+
+output "model_armor_template" {
+  value = google_model_armor_template.worker.name
+}
+
+output "custom_reconciler" {
+  value = google_cloud_scheduler_job.custom_reconciler.id
+}

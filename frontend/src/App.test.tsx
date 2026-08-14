@@ -9,197 +9,54 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-test("renders incident evidence without redundant phase scaffolding", async () => {
-  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
-    const url = String(input);
-    return new Response(JSON.stringify({
-      items: [{
-        id: "column-rename",
-        title: "A municipality renamed name to full_name",
-        report: {
-          scenario_id: "column-rename",
-          title: "A municipality renamed name to full_name",
-          before: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          after: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          added_fields: ["full_name"],
-          removed_fields: ["name"],
-          type_changes: {},
-          current_failure: "required:name: missing=3 rows=3",
-          contract: {required: ["id", "name"], types: {id: "integer", name: "string"}, unique_key: "id", min_rows: 3},
-        },
-      }],
-    }), {status: 200, headers: {"Content-Type": "application/json"}});
-  }));
+test("opens on one concise custom-chain workspace", () => {
+  vi.stubGlobal("fetch", vi.fn());
 
   render(<App />);
-  await waitFor(() => expect(screen.getByRole("heading", {name: "Source change"})).toBeInTheDocument());
-  expect(screen.queryByRole("heading", {name: "Repair"})).not.toBeInTheDocument();
+
+  expect(screen.getByRole("heading", {name: "Repair your data chain"})).toBeInTheDocument();
+  expect(screen.getByLabelText("Baseline source")).toHaveAttribute("accept", ".csv,.json");
+  expect(screen.getByLabelText("Current source")).toHaveAttribute("accept", ".csv,.json");
+  expect(screen.getByLabelText("Pipeline")).toHaveAttribute("accept", ".json");
+  expect(screen.getByLabelText("Contract")).toHaveAttribute("accept", ".json");
+  expect(screen.queryByText(/phase/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/^01|^02|^03/)).not.toBeInTheDocument();
+  expect(screen.queryByRole("heading", {name: "Source change"})).not.toBeInTheDocument();
   expect(screen.queryByRole("heading", {name: "Contract checks"})).not.toBeInTheDocument();
-  expect(screen.queryByText("Evidence captured")).not.toBeInTheDocument();
-  expect(screen.queryByText("operation maximum")).not.toBeInTheDocument();
-  expect(screen.queryByText("Schema delta")).not.toBeInTheDocument();
-  expect(screen.getByRole("button", {name: /run today’s proof/i}))
-    .toHaveAttribute("title", "One execution per incident and UTC day");
 });
 
-test("queues an incident, polls its receipt, and renders terminal evidence", async () => {
-  const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = String(input);
-    if (url.endsWith("/run") && init?.method === "POST") {
-      return new Response(JSON.stringify({
-        id: "event-1",
-        scenario_id: "column-rename",
-        status: "queued",
-      }), {status: 202, headers: {"Content-Type": "application/json"}});
-    }
-    if (url.endsWith("/api/scenarios/column-rename/run") && fetchMock.mock.calls.length > 1) {
-      return new Response(JSON.stringify({
-        id: "event-1",
-        scenario_id: "column-rename",
-        status: "repaired",
-        plan: {
-          operation: "update_field_sources",
-          field_sources: [{output_field: "name", source_field: "full_name"}],
-          delimiter: null,
-          field: null,
-          strategy: null,
-          input_format: null,
-          true_values: [],
-          false_values: [],
-          path: null,
-          sources: [],
-          source: null,
-          split_fields: [],
-          separator: null,
-          confidence: 1,
-          evidence: ["full_name observed"],
-          rationale: "Observed rename",
-        },
-        checks: [{name: "required:name", passed: true, detail: "missing=0"}],
-        transformed_rows: 3,
-        evidence_complete: true,
-        summary: "repaired",
-        application: {
-          state: "applied",
-          version: 1,
-          affected_outputs: ["name"],
-          previous_sha256: "1111111111111111111111111111111111111111111111111111111111111111",
-          applied_sha256: "2222222222222222222222222222222222222222222222222222222222222222",
-          rollback_ready: true,
-        },
-        trigger: "cloud-scheduler",
-        source_sha256: "da3e209b6e97103c43bc5045fce139503d266cf7fc3041b6132c652ac376f196",
-      }), {status: 200, headers: {"Content-Type": "application/json"}});
-    }
-    return new Response(JSON.stringify({
-      items: [{
-        id: "column-rename",
-        title: "A municipality renamed name to full_name",
-        report: {
-          scenario_id: "column-rename",
-          title: "A municipality renamed name to full_name",
-          before: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          after: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          added_fields: ["full_name"],
-          removed_fields: ["name"],
-          type_changes: {},
-          current_failure: "required:name: missing=3 rows=3",
-          contract: {required: ["id", "name"], types: {id: "integer", name: "string"}, unique_key: "id", min_rows: 3},
-        },
-      }],
-    }), {status: 200, headers: {"Content-Type": "application/json"}});
-  });
+test("loads the curated example into fields that remain replaceable", async () => {
+  const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({
+    label: "Municipal names",
+    before: {format: "csv", content: "id,name\n1,Ada\n"},
+    after: {format: "csv", content: "id,full_name\n1,Ada\n"},
+    pipeline_json: '{"format":"csv","fields":{"id":"id","name":"name"}}',
+    contract_json: '{"required":["id","name"],"types":{"id":"integer","name":"string"},"unique_key":"id"}',
+  }), {status: 200, headers: {"Content-Type": "application/json"}}));
   vi.stubGlobal("fetch", fetchMock);
 
   render(<App />);
-  const button = await screen.findByRole("button", {name: /run today’s proof/i});
-  fireEvent.click(button);
+  fireEvent.click(screen.getByRole("button", {name: "Load example"}));
 
-  await waitFor(() => expect(screen.getByText("update_field_sources")).toBeInTheDocument());
-  expect(screen.getByText("required:name")).toBeInTheDocument();
-  expect(screen.getByText("v1 · name")).toBeInTheDocument();
-  expect(screen.getByText("1111111111 → 2222222222")).toBeInTheDocument();
-  expect(screen.getByText("snapshot stored")).toBeInTheDocument();
-  expect(screen.queryByText("Every contract passed. The proposal is safe to review.")).not.toBeInTheDocument();
-  expect(screen.getByText("Cloud Scheduler")).toBeInTheDocument();
-  expect(fetchMock).toHaveBeenCalledWith(
-    "/api/scenarios/column-rename/run",
-    expect.objectContaining({method: "POST"}),
+  expect(await screen.findByDisplayValue("Municipal names")).toBeInTheDocument();
+  expect(screen.getByText("baseline.csv")).toBeInTheDocument();
+  expect(screen.getByText("current.csv")).toBeInTheDocument();
+  expect(screen.getByText("pipeline.json")).toBeInTheDocument();
+  expect(screen.getByText("contract.json")).toBeInTheDocument();
+  expect(fetchMock).toHaveBeenCalledWith("/api/examples/column-rename", undefined);
+});
+
+test("renders stable problem details returned by custom admission", async () => {
+  const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({
+    detail: {code: "invalid_baseline", message: "Baseline does not satisfy the contract."},
+  }), {status: 422, headers: {"Content-Type": "application/json"}}));
+  vi.stubGlobal("fetch", fetchMock);
+
+  render(<App />);
+  fireEvent.click(screen.getByRole("button", {name: "Load example"}));
+
+  expect(await screen.findByRole("alert")).toHaveTextContent(
+    "Baseline does not satisfy the contract.",
   );
-  expect(fetchMock).toHaveBeenCalledWith("/api/scenarios/column-rename/run", undefined);
-});
-
-test("offers a retry when the incident index cannot load", async () => {
-  const fetchMock = vi.fn()
-    .mockResolvedValueOnce(new Response(JSON.stringify({detail: "Index unavailable"}), {
-      status: 503,
-      headers: {"Content-Type": "application/json"},
-    }))
-    .mockResolvedValueOnce(new Response(JSON.stringify({
-      items: [{
-        id: "column-rename",
-        title: "A municipality renamed name to full_name",
-        report: {
-          scenario_id: "column-rename",
-          title: "A municipality renamed name to full_name",
-          before: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          after: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          added_fields: ["full_name"],
-          removed_fields: ["name"],
-          type_changes: {},
-          current_failure: "required:name: missing=3 rows=3",
-          contract: {required: ["id", "name"], types: {id: "integer", name: "string"}, unique_key: "id", min_rows: 3},
-        },
-      }],
-    }), {status: 200, headers: {"Content-Type": "application/json"}}));
-  vi.stubGlobal("fetch", fetchMock);
-
-  render(<App />);
-  expect(await screen.findByRole("alert")).toHaveTextContent("Index unavailable");
-  fireEvent.click(screen.getByRole("button", {name: /retry incident index/i}));
-  expect(await screen.findByText("Source change")).toBeInTheDocument();
-  expect(fetchMock).toHaveBeenCalledTimes(2);
-});
-
-test("fails closed when a queued proof has no admitted run", async () => {
-  const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = String(input);
-    if (url.endsWith("/run") && init?.method === "POST") {
-      return new Response(JSON.stringify({
-        id: "event-1",
-        scenario_id: "column-rename",
-        status: "queued",
-      }), {status: 202, headers: {"Content-Type": "application/json"}});
-    }
-    if (url.endsWith("/api/scenarios/column-rename/run")) {
-      return new Response(JSON.stringify({
-        id: "event-1",
-        scenario_id: "column-rename",
-        status: "not_started",
-      }), {status: 200, headers: {"Content-Type": "application/json"}});
-    }
-    return new Response(JSON.stringify({
-      items: [{
-        id: "column-rename",
-        title: "A municipality renamed name to full_name",
-        report: {
-          scenario_id: "column-rename",
-          title: "A municipality renamed name to full_name",
-          before: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          after: {format: "csv", delimiter: ",", record_path: null, row_count: 3, fields: []},
-          added_fields: ["full_name"],
-          removed_fields: ["name"],
-          type_changes: {},
-          current_failure: "required:name: missing=3 rows=3",
-          contract: {required: ["id", "name"], types: {id: "integer", name: "string"}, unique_key: "id", min_rows: 3},
-        },
-      }],
-    }), {status: 200, headers: {"Content-Type": "application/json"}});
-  });
-  vi.stubGlobal("fetch", fetchMock);
-
-  render(<App />);
-  fireEvent.click(await screen.findByRole("button", {name: /run today’s proof/i}));
-
-  expect(await screen.findByRole("alert")).toHaveTextContent("This proof run has not been admitted.");
+  expect(screen.queryByText("[object Object]")).not.toBeInTheDocument();
 });

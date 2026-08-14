@@ -3,12 +3,13 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from app.agent import apply_plan, inspect_incident, validate_plan
+from app.agent import inspect_incident
 from app.benchmark import (
     load_scenarios,
     run_contracts,
     scenario_source,
 )
+from app.gate import apply_plan_deterministically, validate_plan_deterministically
 from app.repairs import apply_repair_plan
 from app.schemas import ApplyResult, Contract, IncidentInput, PipelineConfig, RepairPlan
 
@@ -111,7 +112,7 @@ def test_inspection_propagates_only_non_secret_execution_state() -> None:
 
     event = inspect_incident(incident)
 
-    assert event.actions.state_delta["scenario_id"] == "column-rename"
+    assert event.actions.state_delta["case_id"] == "column-rename"
     assert event.actions.state_delta["event_id"] == "event-1"
     assert event.actions.state_delta["trigger"] == "cloud-tasks"
     assert "claim_token" not in event.actions.state_delta
@@ -125,14 +126,14 @@ def test_inspection_propagates_only_non_secret_execution_state() -> None:
 )
 def test_expected_decisions_pass_the_full_deterministic_gate(scenario) -> None:
     patched = apply_repair_plan(scenario.pipeline, scenario.expected_plan)
-    result = validate_plan(
+    result = validate_plan_deterministically(
         ApplyResult(
             scenario_id=scenario.id,
             plan=scenario.expected_plan,
             patched_pipeline=patched,
             changed=patched != scenario.pipeline,
         )
-    ).output
+    )
 
     assert result.status == scenario.expected_status
     assert result.evidence_complete
@@ -151,14 +152,14 @@ def test_healthy_baseline_rejects_a_redundant_mutation() -> None:
         rationale="proposal",
     )
     patched = apply_repair_plan(scenario.pipeline, plan)
-    result = validate_plan(
+    result = validate_plan_deterministically(
         ApplyResult(
             scenario_id=scenario.id,
             plan=plan,
             patched_pipeline=patched,
             changed=True,
         )
-    ).output
+    )
 
     assert result.status == "failed"
     assert not next(check for check in result.checks if check.name == "baseline_failure").passed
@@ -173,12 +174,8 @@ def test_invalid_operation_parameters_fail_closed_with_terminal_evidence() -> No
         evidence=["proposal"],
         rationale="proposal",
     )
-    context = type(
-        "ContextStub", (), {"state": {"scenario_id": "integer-decimal"}}
-    )()
-
-    applied = apply_plan(plan, context).output
-    result = validate_plan(applied).output
+    applied = apply_plan_deterministically("integer-decimal", plan)
+    result = validate_plan_deterministically(applied)
 
     assert applied.application_error.startswith("authorization rejected:")
     assert not applied.changed
@@ -197,10 +194,8 @@ def test_model_cannot_escalate_when_evidence_supports_a_bounded_repair() -> None
         evidence=["model declined"],
         rationale="model declined",
     )
-    context = type("ContextStub", (), {"state": {"scenario_id": "column-rename"}})()
-
-    applied = apply_plan(plan, context).output
-    result = validate_plan(applied).output
+    applied = apply_plan_deterministically("column-rename", plan)
+    result = validate_plan_deterministically(applied)
 
     assert applied.application_error == (
         "authorization rejected: observations support a bounded repair "

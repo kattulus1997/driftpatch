@@ -15,6 +15,7 @@ from app.benchmark import load_scenario
 from app.event_delivery import EventDeliveryError
 from app.event_identity import daily_event_id
 from app.ledger import InMemoryEventStore
+from app.repairs import program_from_legacy_plan
 from app.result_service import ProposalRejected, ResultService
 from app.schemas import RepairPlan, TaskRequest, WorkerProposal
 
@@ -23,40 +24,16 @@ class RecordingPublisher:
     def __init__(self) -> None:
         self.calls: list[dict[str, str]] = []
 
-    async def publish(
-        self,
-        *,
-        scenario_id: str,
-        event_id: str,
-        issued_day: str,
-        attempt_id: str,
-        attempt_token: str,
-    ) -> None:
-        self.calls.append(
-            {
-                "scenario_id": scenario_id,
-                "event_id": event_id,
-                "issued_day": issued_day,
-                "attempt_id": attempt_id,
-                "attempt_token": attempt_token,
-            }
-        )
+    async def publish(self, task: TaskRequest) -> None:
+        self.calls.append(task.model_dump(mode="json"))
 
 
 class FailingPublisher:
     def __init__(self) -> None:
         self.calls = 0
 
-    async def publish(
-        self,
-        *,
-        scenario_id: str,
-        event_id: str,
-        issued_day: str,
-        attempt_id: str,
-        attempt_token: str,
-    ) -> None:
-        del scenario_id, event_id, issued_day, attempt_id, attempt_token
+    async def publish(self, task: TaskRequest) -> None:
+        del task
         self.calls += 1
         raise EventDeliveryError("simulated queue outage")
 
@@ -111,7 +88,7 @@ async def test_status_read_never_admits_or_recovers_work() -> None:
 
 
 @pytest.mark.asyncio
-async def test_result_service_recomputes_terminal_evidence_from_only_the_plan() -> None:
+async def test_result_service_recomputes_terminal_evidence_from_only_the_program() -> None:
     store = InMemoryEventStore()
     publisher = RecordingPublisher()
     admission = AdmissionService(store, publisher)
@@ -130,19 +107,20 @@ async def test_result_service_recomputes_terminal_evidence_from_only_the_plan() 
 
     terminal = await ResultService(store).complete(
         WorkerProposal(
-            scenario_id="column-rename",
+            case_kind="fixture",
+            case_id="column-rename",
             event_id=receipt["id"],
             issued_day=call["issued_day"],
             attempt_id=call["attempt_id"],
             execution_token=lease.execution_token,
-            plan=plan,
+            program=program_from_legacy_plan(plan),
         )
     )
 
     assert terminal["status"] == "repaired"
     assert "untrusted worker prose" not in terminal["summary"]
-    assert terminal["plan"]["rationale"] != "untrusted worker prose"
-    assert terminal["plan"]["confidence"] == 1
+    assert terminal["program"]["rationale"] != "untrusted worker prose"
+    assert terminal["program"]["confidence"] == 1
     assert terminal["application"]["state"] == "applied"
     assert terminal["application"]["version"] == 1
     assert terminal["application"]["affected_outputs"] == ["name"]
@@ -175,12 +153,13 @@ async def test_repeated_repair_records_already_active_without_new_version() -> N
         terminals.append(
             await service.complete(
                 WorkerProposal(
-                    scenario_id="column-rename",
+                    case_kind="fixture",
+                    case_id="column-rename",
                     event_id=receipt["id"],
                     issued_day=call["issued_day"],
                     attempt_id=call["attempt_id"],
                     execution_token=lease.execution_token,
-                    plan=plan,
+                    program=program_from_legacy_plan(plan),
                 ),
                 now=now,
             )
@@ -213,12 +192,15 @@ async def test_terminal_receipt_preserves_scheduler_origin_and_source_digest() -
 
     terminal = await service.complete(
         WorkerProposal(
-            scenario_id="column-rename",
+            case_kind="fixture",
+            case_id="column-rename",
             event_id=receipt["id"],
             issued_day=call["issued_day"],
             attempt_id=call["attempt_id"],
             execution_token=lease.execution_token,
-            plan=load_scenario("column-rename").expected_plan,
+            program=program_from_legacy_plan(
+                load_scenario("column-rename").expected_plan
+            ),
         )
     )
 
@@ -236,23 +218,25 @@ async def test_result_service_rejects_unadmitted_and_external_proposals() -> Non
     with pytest.raises(RuntimeError, match="active execution"):
         await ResultService(store).complete(
             WorkerProposal(
-                scenario_id=demo.id,
+                case_kind="fixture",
+                case_id=demo.id,
                 event_id=daily_event_id(demo.id, today),
                 issued_day=today.isoformat(),
                 attempt_id="11111111-1111-4111-8111-111111111111",
                 execution_token="22222222-2222-4222-8222-222222222222",
-                plan=demo.expected_plan,
+                program=program_from_legacy_plan(demo.expected_plan),
             )
         )
     with pytest.raises(ValueError, match="Unknown incident"):
         await ResultService(store).complete(
             WorkerProposal(
-                scenario_id=external.id,
+                case_kind="fixture",
+                case_id=external.id,
                 event_id="not-authorized",
                 issued_day=today.isoformat(),
                 attempt_id="11111111-1111-4111-8111-111111111111",
                 execution_token="22222222-2222-4222-8222-222222222222",
-                plan=external.expected_plan,
+                program=program_from_legacy_plan(external.expected_plan),
             )
         )
 
@@ -306,12 +290,15 @@ async def test_stale_execution_cannot_finalize_a_reacquired_attempt() -> None:
     with pytest.raises(RuntimeError, match="active execution"):
         await result_service.complete(
             WorkerProposal(
-                scenario_id="column-rename",
+                case_kind="fixture",
+                case_id="column-rename",
                 event_id=receipt["id"],
                 issued_day=first["issued_day"],
                 attempt_id=first["attempt_id"],
                 execution_token=lease.execution_token,
-                plan=load_scenario("column-rename").expected_plan,
+                program=program_from_legacy_plan(
+                    load_scenario("column-rename").expected_plan
+                ),
             ),
             now=now + timedelta(minutes=66),
         )
@@ -338,12 +325,13 @@ async def test_rejected_model_plans_retry_before_bounded_terminal_failure() -> N
         with pytest.raises(ProposalRejected):
             await result_service.complete(
                 WorkerProposal(
-                    scenario_id=task.scenario_id,
+                    case_kind=task.case_kind,
+                    case_id=task.case_id,
                     event_id=task.event_id,
                     issued_day=task.issued_day,
                     attempt_id=task.attempt_id,
                     execution_token=lease.execution_token,
-                    plan=rejected,
+                    program=program_from_legacy_plan(rejected),
                 )
             )
 
@@ -351,12 +339,13 @@ async def test_rejected_model_plans_retry_before_bounded_terminal_failure() -> N
     assert lease.execution_token is not None
     terminal = await result_service.complete(
         WorkerProposal(
-            scenario_id=task.scenario_id,
+            case_kind=task.case_kind,
+            case_id=task.case_id,
             event_id=task.event_id,
             issued_day=task.issued_day,
             attempt_id=task.attempt_id,
             execution_token=lease.execution_token,
-            plan=rejected,
+            program=program_from_legacy_plan(rejected),
         )
     )
 

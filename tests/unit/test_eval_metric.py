@@ -54,3 +54,26 @@ def test_decision_accuracy_accepts_cli_responses_shape() -> None:
     instance = _instance("update_field_sources", "repaired", "passed")
     instance["responses"] = [{"response": instance.pop("response")}]
     assert EVALUATE(instance)["score"] == 1
+
+
+def test_decision_accuracy_requires_ordered_composed_program() -> None:
+    instance = _instance("update_field_sources", "repaired", "passed")
+    instance["prompt"]["parts"][0]["text"] = '{"scenario_id":"custom-program-two"}'
+    instance["response"]["parts"][0]["text"] = "Custom: repaired; 8/8 checks passed."
+    instance["agent_data"]["turns"][0]["events"][0]["content"]["parts"][0][
+        "text"
+    ] = (
+        '{"decision":"repair","steps":['
+        '{"operation":"update_field_sources"},'
+        '{"operation":"set_source_format"}]}'
+    )
+
+    assert EVALUATE(instance)["score"] == 1
+    instance["agent_data"]["turns"][0]["events"][0]["content"]["parts"][0][
+        "text"
+    ] = (
+        '{"decision":"repair","steps":['
+        '{"operation":"set_source_format"},'
+        '{"operation":"update_field_sources"}]}'
+    )
+    assert EVALUATE(instance)["score"] == 0

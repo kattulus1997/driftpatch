@@ -5,7 +5,9 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 
+from .case_data import RepairCase
 from .result_delivery import ResultPublisher
+from .schemas import StoredBundle
 
 
 @dataclass
@@ -15,6 +17,10 @@ class ExecutionBinding:
     attempt_id: str
     execution_token: str
     publisher: ResultPublisher
+    case_kind: str = "fixture"
+    case_id: str = ""
+    bundle: StoredBundle | None = None
+    case: RepairCase | None = None
     published: bool = False
 
 

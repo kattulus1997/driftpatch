@@ -234,6 +234,7 @@ credentials*.json
 /artifacts/grade_results/results_*.html
 /artifacts/grade_results/results_*.json
 /artifacts/grade_results/final_10_deterministic/*.html
+/artifacts/grade_results/custom-holdout/
 /artifacts/traces/candidate_2case.json
 /artifacts/traces/final_10_20260812/
 /artifacts/traces/gate_2case.json

@@ -1,0 +1,311 @@
+{
+  "frozen_at": "2026-08-13T23:40:00Z",
+  "cases": [
+    {
+      "id": "custom-program-two",
+      "title": "CSV records moved to JSON and renamed one field",
+      "split": "calibration",
+      "transition": "csv_to_json",
+      "before": "custom/fixtures/program-two-before.csv",
+      "after": "custom/fixtures/program-two-after.json",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "source_aliases": {"name": ["display_name"]},
+        "preserve_values": ["name"]
+      },
+      "expected_status": "repaired",
+      "expected_pipeline_sha256": "07ff53870ec06fa4f13d5204a738cf7be41e11803f93fdeaf6668492fcf455fe"
+    },
+    {
+      "id": "custom-program-three",
+      "title": "Nested JSON moved, renamed a field and changed integer encoding",
+      "split": "holdout",
+      "transition": "json_to_json",
+      "before": "custom/fixtures/program-three-before.json",
+      "after": "custom/fixtures/program-three-after.json",
+      "pipeline": {
+        "format": "json",
+        "record_path": "items",
+        "fields": {"id": "id", "name": "name", "units": "units"},
+        "casts": {"id": "integer", "units": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name", "units"],
+        "types": {"id": "integer", "name": "string", "units": "integer"},
+        "unique_key": "id",
+        "source_aliases": {"name": ["display_name"]},
+        "preserve_values": ["name", "units"]
+      },
+      "expected_status": "repaired",
+      "expected_pipeline_sha256": "509619bbf32a78774eb53db99cae6ab0a6059f0bfc97b696fef2fe19b22afab0"
+    },
+    {
+      "id": "custom-program-four",
+      "title": "CSV changed delimiter, field name, integer and date encodings",
+      "split": "calibration",
+      "transition": "csv_to_csv",
+      "before": "custom/fixtures/program-four-before.csv",
+      "after": "custom/fixtures/program-four-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "delimiter": ",",
+        "fields": {"id": "id", "name": "name", "units": "units", "published_on": "published_on"},
+        "casts": {"id": "integer", "units": "integer"},
+        "date_formats": {"published_on": "%Y-%m-%d"}
+      },
+      "contract": {
+        "required": ["id", "name", "units", "published_on"],
+        "types": {"id": "integer", "name": "string", "units": "integer", "published_on": "date"},
+        "unique_key": "id",
+        "source_aliases": {"name": ["display_name"]},
+        "preserve_values": ["name", "units", "published_on"]
+      },
+      "expected_status": "repaired",
+      "expected_pipeline_sha256": "4a56e51c7273422abfeb6c92de519d1a44998613570c8a5a6b9d1818a0eb58b4"
+    },
+    {
+      "id": "custom-program-five",
+      "title": "Nested JSON became semicolon CSV with three semantic shifts",
+      "split": "holdout",
+      "transition": "json_to_csv",
+      "before": "custom/fixtures/program-five-before.json",
+      "after": "custom/fixtures/program-five-after.csv",
+      "pipeline": {
+        "format": "json",
+        "record_path": "records",
+        "fields": {"id": "id", "name": "name", "units": "units", "published_on": "published_on"},
+        "casts": {"id": "integer", "units": "integer"},
+        "date_formats": {"published_on": "%Y-%m-%d"}
+      },
+      "contract": {
+        "required": ["id", "name", "units", "published_on"],
+        "types": {"id": "integer", "name": "string", "units": "integer", "published_on": "date"},
+        "unique_key": "id",
+        "source_aliases": {"name": ["display_name"]},
+        "preserve_values": ["name", "units", "published_on"]
+      },
+      "expected_status": "repaired",
+      "expected_pipeline_sha256": "d23752a3eba04ecd917bd46064a42e8ed72672233f86201545012fa91490d4ea"
+    },
+    {
+      "id": "custom-program-six",
+      "title": "CSV became nested JSON with six independent bounded shifts",
+      "split": "holdout",
+      "transition": "csv_to_json",
+      "before": "custom/fixtures/program-six-before.csv",
+      "after": "custom/fixtures/program-six-after.json",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name", "units": "units", "published_on": "published_on", "active": "active"},
+        "casts": {"id": "integer", "units": "integer"},
+        "date_formats": {"published_on": "%Y-%m-%d"},
+        "booleans": {"active": {"true_values": ["yes"], "false_values": ["no"]}}
+      },
+      "contract": {
+        "required": ["id", "name", "units", "published_on", "active"],
+        "types": {"id": "integer", "name": "string", "units": "integer", "published_on": "date", "active": "boolean"},
+        "unique_key": "id",
+        "source_aliases": {"name": ["display_name"]},
+        "preserve_values": ["name", "units", "published_on", "active"]
+      },
+      "expected_status": "repaired",
+      "expected_pipeline_sha256": "cde005fe39e8b87d6f02f06681c10e78404be74bc5f88e7451743af670574177"
+    },
+    {
+      "id": "custom-join-source",
+      "title": "One name field became two ordered fields",
+      "split": "calibration",
+      "transition": "csv_to_csv",
+      "before": "custom/fixtures/join-source-before.csv",
+      "after": "custom/fixtures/join-source-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "full_name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "preserve_values": ["name"]
+      },
+      "expected_status": "repaired",
+      "expected_pipeline_sha256": "0549e2b4bcafe68bcaba4b5c2f3a185a9020754447db0e1ffa74aeaf55c9a8d2"
+    },
+    {
+      "id": "custom-split-source",
+      "title": "Two coordinates became one ordered pair",
+      "split": "holdout",
+      "transition": "csv_to_csv",
+      "before": "custom/fixtures/split-source-before.csv",
+      "after": "custom/fixtures/split-source-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "latitude": "latitude", "longitude": "longitude"},
+        "casts": {"id": "integer", "latitude": "number", "longitude": "number"}
+      },
+      "contract": {
+        "required": ["id", "latitude", "longitude"],
+        "types": {"id": "integer", "latitude": "number", "longitude": "number"},
+        "unique_key": "id",
+        "preserve_values": ["latitude", "longitude"]
+      },
+      "expected_status": "repaired",
+      "expected_pipeline_sha256": "9a87f42c25afee0c2d9360c2b39c37e64a070e214b1ca7a5567eafc56ba7f28f"
+    },
+    {
+      "id": "custom-unchanged-json",
+      "title": "JSON added metadata outside the declared chain",
+      "split": "holdout",
+      "transition": "json_to_json",
+      "before": "custom/fixtures/unchanged-json-before.json",
+      "after": "custom/fixtures/unchanged-json-after.json",
+      "pipeline": {
+        "format": "json",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "preserve_values": ["name"]
+      },
+      "expected_status": "unchanged",
+      "expected_pipeline_sha256": "a8de66fcda1664925eb7ff3da399c1f127134a27aa01123c9c4945a87aef529c"
+    },
+    {
+      "id": "custom-ambiguous-alias",
+      "title": "Two new fields preserve the removed name equally",
+      "split": "calibration",
+      "transition": "csv_to_csv",
+      "before": "custom/fixtures/ambiguous-alias-before.csv",
+      "after": "custom/fixtures/ambiguous-alias-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "preserve_values": ["name"]
+      },
+      "expected_status": "escalated",
+      "expected_pipeline_sha256": "f6f9dce869e53aad10067bcbf1e77afebb4823e193cf0e80b54746c461487cd0"
+    },
+    {
+      "id": "custom-ambiguous-date",
+      "title": "Symmetric dates permit two equivalent parsers",
+      "split": "holdout",
+      "transition": "csv_to_csv",
+      "before": "custom/fixtures/ambiguous-date-before.csv",
+      "after": "custom/fixtures/ambiguous-date-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "published_on": "published_on"},
+        "casts": {"id": "integer"},
+        "date_formats": {"published_on": "%Y-%m-%d"}
+      },
+      "contract": {
+        "required": ["id", "published_on"],
+        "types": {"id": "integer", "published_on": "date"},
+        "unique_key": "id",
+        "preserve_values": ["published_on"]
+      },
+      "expected_status": "escalated",
+      "expected_pipeline_sha256": "90b04a84acfc56c1f0336df9e3db91ae404be0c7d76e0825e7fa67e1b6c144b7"
+    },
+    {
+      "id": "custom-ambiguous-boolean",
+      "title": "One new token contradicts two prior boolean meanings",
+      "split": "holdout",
+      "transition": "csv_to_csv",
+      "before": "custom/fixtures/ambiguous-boolean-before.csv",
+      "after": "custom/fixtures/ambiguous-boolean-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "active": "active"},
+        "casts": {"id": "integer"},
+        "booleans": {"active": {"true_values": ["yes"], "false_values": ["no"]}}
+      },
+      "contract": {
+        "required": ["id", "active"],
+        "types": {"id": "integer", "active": "boolean"},
+        "unique_key": "id",
+        "preserve_values": ["active"]
+      },
+      "expected_status": "escalated",
+      "expected_pipeline_sha256": "099369270eb571a70159813e09721de4fa3b76d449e754d3f7ab9504b08c8db0"
+    },
+    {
+      "id": "custom-missing-key",
+      "title": "The current source removed the stable key",
+      "split": "calibration",
+      "transition": "json_to_json",
+      "before": "custom/fixtures/missing-key-before.json",
+      "after": "custom/fixtures/missing-key-after.json",
+      "pipeline": {
+        "format": "json",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id"
+      },
+      "expected_status": "escalated",
+      "expected_pipeline_sha256": "a8de66fcda1664925eb7ff3da399c1f127134a27aa01123c9c4945a87aef529c"
+    },
+    {
+      "id": "custom-duplicate-key",
+      "title": "The current source duplicated the stable key",
+      "split": "holdout",
+      "transition": "json_to_json",
+      "before": "custom/fixtures/duplicate-key-before.json",
+      "after": "custom/fixtures/duplicate-key-after.json",
+      "pipeline": {
+        "format": "json",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id"
+      },
+      "expected_status": "escalated",
+      "expected_pipeline_sha256": "a8de66fcda1664925eb7ff3da399c1f127134a27aa01123c9c4945a87aef529c"
+    },
+    {
+      "id": "custom-out-of-language",
+      "title": "Values changed without a bounded structural explanation",
+      "split": "holdout",
+      "transition": "csv_to_csv",
+      "before": "custom/fixtures/out-of-language-before.csv",
+      "after": "custom/fixtures/out-of-language-after.csv",
+      "pipeline": {
+        "format": "csv",
+        "fields": {"id": "id", "name": "name"},
+        "casts": {"id": "integer"}
+      },
+      "contract": {
+        "required": ["id", "name"],
+        "types": {"id": "integer", "name": "string"},
+        "unique_key": "id",
+        "preserve_values": ["name"]
+      },
+      "expected_status": "escalated",
+      "expected_pipeline_sha256": "f6f9dce869e53aad10067bcbf1e77afebb4823e193cf0e80b54746c461487cd0"
+    }
+  ]
+}

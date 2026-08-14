@@ -71,5 +71,9 @@ async def test_agent_stream() -> None:
     assert terminal
     assert all(result == terminal[0] for result in terminal)
     assert terminal[-1].status == "repaired"
-    assert terminal[-1].plan.operation == "update_field_sources"
+    assert terminal[-1].program is not None
+    assert any(
+        step.operation == "update_field_sources"
+        for step in terminal[-1].program.steps
+    )
     assert terminal[-1].checks and all(check.passed for check in terminal[-1].checks)

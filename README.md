@@ -1,90 +1,131 @@
 # DriftPatch
 
-**A bounded repair agent for public-data pipeline drift.**
+**Proof-carrying repair for public-data pipelines.**
 
-Public datasets change without warning: a column is renamed, a delimiter moves,
-or a JSON collection is nested one level deeper. DriftPatch turns that breakage
-into a proof-carrying repair proposal. It inspects the change, asks Gemini 3.5
-Flash to select one typed operation, and lets deterministic data contracts decide
-whether a versioned configuration can be activated.
+Upload a previously working source, the current source, its pipeline
+configuration and data contract. DriftPatch either activates a typed,
+deterministically verified repair, confirms that nothing changed, or escalates
+without mutating configuration.
+
+**Try it:** [driftpatch.guillermozubikarai.dev](https://driftpatch.guillermozubikarai.dev)
 
 ![DriftPatch social preview](frontend/public/og-driftpatch.png)
 
-## The decision path
+Public feeds break consumers in small but consequential ways: CSV becomes JSON,
+a delimiter changes, records move under a nested path, a source field is renamed
+or a value vocabulary changes. DriftPatch handles those changes as constrained
+configuration repair, not open-ended code generation.
 
 ```text
-incident event
-    -> inspect before/after source profiles
-    -> choose one allowlisted repair, no change, or escalate
-    -> apply the proposal in memory
-    -> submit only the typed proposal to an isolated result service
-    -> independently prove baseline failure, causal fit and value preservation
-    -> run deterministic schema, type, row and uniqueness contracts
-    -> atomically activate a versioned configuration and record its receipt
+baseline + current source + pipeline + contract
+    -> strict admission and baseline proof
+    -> deterministic catalogue of authorized repair steps
+    -> ADK planner selects opaque candidate identifiers
+    -> bounded verifier-guided proposal loop
+    -> independent full-data replay by the result controller
+    -> atomic configuration, rollback snapshot and receipt
 ```
 
-The model proposes; code authorizes. A fluent answer can never make a failing
+The model proposes; code authorizes. Structured output cannot make a failed
 contract pass.
 
 ![DriftPatch production architecture](architecture.svg)
 
-A source rename illustrates the product boundary: DriftPatch can retarget
-`name <- full_name` while preserving `name` for downstream consumers. The
-receipt identifies the affected output, previous and applied configuration
-hashes, version and rollback snapshot. It repairs the contract without silently
-turning the new source field into a new downstream API.
+## Supported contract
 
-## Enforced boundaries
+Sources may be CSV or JSON in any baseline/current combination. The pipeline and
+contract are strict JSON documents. A program may compose up to six observed,
+typed changes:
 
-- Exactly one typed operation from an explicit allowlist, including `no_change`.
-- No arbitrary code execution, shell access or automatic merge.
-- Existing output fields may be retargeted, but new facts cannot be invented.
-- Unsafe or ambiguous incidents terminate as `escalated`.
-- Cloud Tasks names every durable attempt separately while Firestore coalesces
-  concurrent requests for the same incident and UTC day. Recovery is limited to
-  two explicit dispatch attempts; status reads never start or recover work and
-  cannot reset that daily budget.
-- The public service has neither Firestore nor Cloud Tasks permissions; the model
-  worker has no ledger permissions. Its opaque attempt and execution capabilities
-  remain outside model content and state.
-- The result controller checks terminal state and acquires an execution lease
-  before inference, so completed or concurrent retries cannot repeat paid work.
-- Only the deterministic result controller can activate configuration. It writes
-  the new version, previous configuration, rollback snapshot and terminal receipt
-  in one transaction; a stale baseline fails closed and an already-active repair
-  does not create another version.
-- A schema-valid proposal that fails the deterministic gate is retried; only five
-  independently rejected proposals produce a bounded terminal failure.
-- The production worker accepts only the controlled demo suite. The external
-  evaluation corpus cannot be dispatched through its HTTP surface.
-- A repair is successful only when the original pipeline fails, the proposed
-  operation matches the observed change, declared values are preserved and
-  every deterministic contract passes.
-- Cloud Scheduler observes a private, versioned Cloud Storage source every five
-  minutes through OIDC. The admission controller dispatches only the exact
-  content digest represented by the controlled incident; an unknown mutation is
-  reported as unsupported and never reaches the model.
+- retarget an existing output to a renamed source field;
+- switch CSV/JSON source format, CSV delimiter or JSON record path;
+- select a lossless string, integer or number cast;
+- update an allowlisted date parser or disjoint boolean vocabulary;
+- reconstruct an output by joining fields or split one field into existing
+  outputs.
+
+Every accepted run ends as `repaired`, `unchanged` or `escalated`. Malformed,
+ambiguous, unsupported or out-of-limit inputs are rejected before inference.
+The published envelope is UTF-8 text, a 5 MiB request body, at most 20,000
+records per source, 256 fields, 100,000 characters per cell and JSON depth 32.
+CSV delimiters are comma, semicolon, pipe or tab. Admission is capped at 48
+custom runs per UTC day, of which at most 24 may require inference.
+
+This is a bounded repair language, not a claim that arbitrary formats or
+transformations can be repaired safely.
+
+## Authority and data boundary
+
+- Admission first proves that the submitted baseline satisfies the submitted
+  pipeline and contract. Without a working reference, no repair is admitted.
+- Raw source bundles live briefly in a private Cloud Storage bucket. Tasks,
+  Firestore, traces and model messages carry references, hashes, profiles and
+  receipts—not source rows.
+- Deterministic inspection creates the only candidate catalogue. Gemini 3.5
+  Flash sees bounded structural evidence and opaque identifiers; it cannot
+  create a new operation, execute code or access Cloud tools.
+- Model Armor screens planner input and output in `europe-west1`. A match,
+  partial scan or unavailable screen fails closed.
+- The result controller reloads the exact object generation, verifies its
+  digest, rebuilds the catalogue and proves the unique shortest repair over the
+  complete source. Equivalent model selections are canonicalized; redundant or
+  ambiguous programs are rejected.
+- Only the result controller may commit. Firestore atomically records the active
+  configuration, previous version, rollback snapshot and terminal receipt.
+- Terminal bundles are deleted by exact generation. A lifecycle rule removes
+  abandoned objects after one day, with soft delete disabled.
+- Cloud Trace retains operational spans with prompt and response content
+  disabled.
+
+Failed proposals receive a minimal counterexample and may be retried up to three
+rounds. A bounded deterministic search over the same authorized catalogue then
+finds a verified program or escalates. No fallback weakens a contract, expands a
+limit or runs generated code.
+
+## Production architecture
+
+The public domain passes through Cloudflare to a dedicated Google Cloud project
+in `europe-west1`. Four Cloud Run services use separate identities:
+
+- the public interface can invoke admission and has no queue, ledger, storage or
+  model authority;
+- admission validates, reserves quota, stores the ephemeral bundle and creates
+  a named Cloud Task;
+- the internal worker has read-only bundle access, Model Armor use and Vertex AI
+  prediction, but no ledger access;
+- the result controller independently verifies and is the sole Firestore writer.
+
+Cloud Tasks dispatches one worker request at a time. Cloud Scheduler watches the
+curated private source every five minutes and invokes stale-run reconciliation
+every ten minutes through distinct OIDC identities. Every service scales to zero
+and is capped at one instance. Terraform preserves a €10 gross-usage alert
+budget; the alert tracks usage before credits and is not represented as a hard
+spending cap.
+
+Cloud Tasks is unavailable in Madrid, so Belgium is the nearest shared region
+for Cloud Run, Tasks, Firestore, Storage and Model Armor.
 
 ## Reproducible evidence
 
-The controlled benchmark contains eleven hand-checkable incidents: one compatible
-change, eight safe repair patterns and two cases that must escalate. The original
-ten-case trace is in
-[`artifacts/traces/full_benchmark.json`](artifacts/traces/full_benchmark.json),
-and the final deterministic grade is in
-[`artifacts/grade_results/final_10_deterministic/results_20260812_115831.json`](artifacts/grade_results/final_10_deterministic/results_20260812_115831.json).
+The custom corpus covers all four CSV/JSON transitions, unchanged input, every
+atomic repair family, one-to-six-step programs and safe rejection or escalation
+for ambiguity, duplicate keys and out-of-language changes. The untouched
+nine-case holdout scores 9/9 on the deterministic decision metric and 5.0/5.0
+on the trace-grounded response rubric:
 
-The independent corpus adds six observed historical transitions from four
-publishers. Every source is pinned by commit and SHA-256; four cases were frozen
-as a holdout before inference. The official deterministic grade is 4/4 with a
-mean of 1.0000 and zero deviation. Its JSON artifact is at
-[`artifacts/grade_results/external-holdout-round-001/results_20260812_173918.json`](artifacts/grade_results/external-holdout-round-001/results_20260812_173918.json).
-This is evidence for the bounded task, not a universal reliability claim.
+- [`custom-holdout.json`](artifacts/traces/custom-holdout.json)
+- [`decision results`](artifacts/grade_results/custom-holdout-rubric/results_20260814_010345.json)
 
-## Run locally
+The corpus and expected terminal hashes are frozen in
+[`benchmark/custom/manifest.json`](benchmark/custom/manifest.json). Property and
+security tests cover row/key-order invariance, duplicate identifiers, ambiguous
+aliases, dates and booleans, prompt-injection text, malformed UTF-8/JSON/CSV,
+lease expiry, retries, quota races and bundle integrity.
+
+## Run and verify
 
 Requirements: Python 3.11–3.13, [uv](https://docs.astral.sh/uv/), Node.js 20+
-and a Gemini API key for the local decision path.
+and a Gemini API key for local inference.
 
 ```bash
 cp .env.example .env
@@ -94,26 +135,22 @@ cd frontend && npm ci && npm run build && cd ..
 uv run uvicorn app.fast_api_app:app --host 127.0.0.1 --port 8000
 ```
 
-Open `http://127.0.0.1:8000`, choose an incident, and run the complete live
-decision path. Credentials stay in the ignored `.env` file.
-
-## Verify
+Open `http://127.0.0.1:8000` and upload four files, or load the replaceable
+example. Credentials stay in the ignored `.env` file.
 
 ```bash
-uv run ruff check app tests
-uv run pytest tests/unit tests/integration -q
+uv run pytest tests/unit tests/integration tests/property tests/security -q
+uv run ruff check app scripts tests
 cd frontend && npm test -- --run && npm run build
+terraform -chdir=deployment/terraform/single-project fmt -check
+terraform -chdir=deployment/terraform/single-project validate
 ```
 
 ## Deploy
 
-The release module owns a dedicated project, immutable Artifact
-Registry repository, four Cloud Run services, Firestore database, Cloud Tasks
-queue, scheduled private source and a project-scoped €10 gross-usage alert
-budget. The budget excludes credits so alerts track actual consumption; it is
-not represented as a hard spending cap.
-
-Bootstrap the project, APIs and image repository before the first image exists:
+The release module owns the project, immutable Artifact Registry repository,
+Cloud Run services, Firestore database, Cloud Tasks queue, schedulers, private
+Storage buckets, Model Armor template, least-privilege IAM and budget alert.
 
 ```bash
 export TF_VAR_project_id=driftpatch-<release-id>
@@ -121,16 +158,14 @@ export TF_VAR_billing_account_id=<billing-account-id>
 export TF_VAR_image=example.invalid/driftpatch@sha256:0000000000000000000000000000000000000000000000000000000000000000
 
 terraform -chdir=deployment/terraform/single-project init
-# Only when adopting an existing, verified-empty project:
-# terraform -chdir=deployment/terraform/single-project import google_project.release "$TF_VAR_project_id"
 terraform -chdir=deployment/terraform/single-project apply \
   -target=google_project.release \
   -target=google_project_service.required \
   -target=google_artifact_registry_repository.images
 ```
 
-Build once in Cloud Build, resolve the uploaded digest and apply the complete
-plan with that immutable reference:
+Build once, resolve the registry digest and apply the reviewed plan with that
+immutable reference:
 
 ```bash
 COMMIT=$(git rev-parse HEAD)
@@ -149,72 +184,17 @@ terraform -chdir=deployment/terraform/single-project apply \
   /tmp/driftpatch-release.tfplan
 ```
 
-Do not commit the billing identifier, Terraform state or plan. A release is not
-complete until the public route, private IAM denials, scheduled OIDC event,
-idempotent duplicate, Firestore receipt and Cloud Trace span are observed.
-
-## Scheduled source proof
-
-The release module initializes a private live source with the compatible
-baseline. After deployment, advance that source without calling the agent:
-
-```bash
-uv run python scripts/set_live_source.py drift --project <dedicated-project-id>
-```
-
-Within five minutes, Cloud Scheduler invokes the authenticated watcher. The
-watcher hashes the observed bytes, admits the matching incident once for the UTC
-day, and records both `trigger: cloud-scheduler` and the source SHA-256 in the
-terminal receipt. Reset the source with the same command using `baseline`.
-This scheduled path demonstrates ambient detection; the historical holdout
-remains separate evidence that the bounded decision policy generalizes beyond
-the controlled live source.
-
-## Architecture status
-
-Local development uses the Agent Development Kit, FastAPI and an in-memory
-evidence ledger behind the same bounded public routes. The production code and
-Terraform define four separately identified Cloud Run services in
-`europe-west1`:
-
-1. the public proof interface, with no database, queue or model authority;
-2. a private admission controller that coalesces one incident per UTC day,
-   reads only the dedicated source object and alone can enqueue the named task;
-3. an internal model worker that can invoke Vertex AI and submit only a typed
-   proposal; and
-4. a private deterministic result controller that re-applies authorization and
-   contracts before it alone commits the versioned configuration, rollback
-   snapshot and terminal evidence.
-
-Cloud Tasks invokes the worker through OIDC and limits dispatch rate and
-concurrency. The result controller binds every commit to the active execution
-capability; completed retries stop before inference, and expired admissions
-recover only through another idempotent run request with a new task identity.
-Cloud Scheduler invokes the admission watcher through a separate least-privilege
-identity. The source bucket prevents public access, retains object versions and
-grants read access only to admission; the public and model services cannot read
-it. A stable digest costs no model call, while an unrecognized digest fails
-closed.
-The active configuration, its per-event history and the terminal result are
-committed atomically in Firestore. Firestore capabilities are never sent to the
-model, and model prose or confidence is not trusted as public evidence.
-The bounded worker exports authenticated OpenTelemetry spans directly to the
-Google Cloud Telemetry API with model-content capture disabled; the public
-service has no trace-writer authority.
-Cloud Tasks is not available in Madrid;
-Belgium is the nearest supported region and keeps the release co-located.
-These resources remain deployment-ready code, not a claim of current public
-availability. The Terraform module creates or explicitly adopts one dedicated
-Google Cloud project with no default network and deletion prevention; it does
-not attach these runtime identities to a shared project. Conditional IAM further
-limits both ledger controllers to the named Firestore database.
+Do not commit billing identifiers, Terraform state or plans. A release is
+complete only after the public upload path, private IAM denials, queue and
+scheduler contracts, Firestore receipt, object deletion, Model Armor verdict,
+Cloud Trace span and immutable image are independently observed.
 
 ## Provenance
 
 Work on DriftPatch began on 12 August 2026 for the All Things Agentic contest.
-The initial project layout was generated with Google's Agents CLI; the agent
-workflow, bounded repair domain, benchmark, interface and evidence were created
-during the contest period. Development was AI-assisted.
+Google's Agents CLI generated the initial project layout; the workflow, bounded
+repair domain, interface, evaluation and infrastructure were created during the
+contest period. Development assistance is disclosed as permitted by the rules.
 
 ## License
 

@@ -19,37 +19,68 @@ from google.adk.apps import App
 from google.adk.events.event import Event
 from google.adk.events.event_actions import EventActions
 from google.adk.models import Gemini
-from google.adk.workflow import Workflow
+from google.adk.workflow import FunctionNode, Workflow
 from google.genai import types
 
-from .benchmark import inspect_scenario, load_scenario
+from typing import Protocol
+
+from .benchmark import load_scenario, scenario_case
+from .case_data import RepairCase, inspect_case
 from .execution import current_execution
-from .gate import apply_plan_deterministically, validate_plan_deterministically
+from .model_armor import SafetyScreen, configured_safety_screen
+from .repairs import CandidateCatalogue, build_candidate_catalogue
 from .schemas import (
-    ApplyResult,
+    CandidateOption,
+    CandidatePrompt,
+    CandidateSelection,
+    Counterexample,
+    DriftReport,
     IncidentInput,
-    RepairPlan,
+    RepairProgram,
     ValidationResult,
     WorkerProposal,
+)
+from .synthesis import (
+    minimal_counterexample,
+    search_catalogue,
+    verify_authoritative_program,
+    verify_program,
 )
 
 
 MODEL = "gemini-3.5-flash"
 
 
+def _structural_report(report: DriftReport) -> DriftReport:
+    value = report.model_copy(deep=True)
+    for profile in (value.before, value.after):
+        for field in profile.fields:
+            field.example_values = []
+    return value
+
+
+def _case_for_id(case_id: str) -> RepairCase:
+    execution = current_execution()
+    if execution is not None and execution.case is not None:
+        if execution.case.id != case_id:
+            raise RuntimeError("execution case identity mismatch")
+        return execution.case
+    return scenario_case(load_scenario(case_id))
+
+
 def inspect_incident(node_input: IncidentInput) -> Event:
-    """Load one allowlisted incident and produce an evidence-rich drift report."""
-    scenario = load_scenario(node_input.resolved_scenario_id)
-    report = inspect_scenario(scenario)
+    """Inspect a case while keeping all source rows outside session state."""
+    case = _case_for_id(node_input.resolved_scenario_id)
+    report = _structural_report(inspect_case(case))
     return Event(
         content=types.Content(
             role="model",
-            parts=[types.Part.from_text(text=f"Inspected {scenario.id}.")],
+            parts=[types.Part.from_text(text=f"Inspected {case.id}.")],
         ),
         output=report,
         actions=EventActions(
             state_delta={
-                "scenario_id": scenario.id,
+                "case_id": case.id,
                 "event_id": (
                     node_input.attributes.event_id if node_input.attributes else None
                 ),
@@ -69,62 +100,164 @@ repair_planner = LlmAgent(
         retry_options=types.HttpRetryOptions(attempts=3),
     ),
     mode="single_turn",
-    generate_content_config=types.GenerateContentConfig(temperature=0),
-    instruction="""You are DriftPatch's bounded repair planner. You receive a
-structured comparison of a public data source before and after an upstream
-change, the current pipeline configuration, its deterministic contract, and
-the exact failure produced by the new source.
-
-Choose exactly one operation. Never invent source fields or claim that a patch
-works; deterministic checks run after you. Use `escalate` when evidence does
-not justify a lossless repair.
-
-Allowed operations and arguments:
-- no_change: when the current pipeline still satisfies every contract
-- update_field_sources: field_sources [{"output_field": "name", "source_field": "full_name"}]
-- set_delimiter: delimiter, one of comma, semicolon, pipe, or tab
-- set_cast: field and strategy
-- set_date_format: field and input_format, using Python strptime syntax
-- set_boolean_values: field, true_values, and false_values
-- set_record_path: path, using dot-separated keys
-- set_join_source: field, sources, and separator
-- set_split_source: source, split_fields [{"output_field": "latitude", "index": 0}], and separator
-- escalate: no operation parameters
-
-Leave every parameter unrelated to the chosen operation empty or null.
-
-Evidence must cite concrete observed fields, formats, values or failed
-contracts from the input. Confidence reflects only whether the proposed
-operation is supported by those observations.""",
-    input_schema=None,
-    output_schema=RepairPlan,
-    output_key="repair_plan",
+    generate_content_config=types.GenerateContentConfig(
+        temperature=0,
+        max_output_tokens=2048,
+        thinking_config=types.ThinkingConfig(
+            thinking_level=types.ThinkingLevel.LOW
+        ),
+    ),
+    instruction="""Select only from the opaque candidate IDs supplied by
+DriftPatch. Return `repair` with one to six unique IDs when the structural
+evidence and prior counterexamples justify that composition. Return
+`escalate` with no IDs when evidence is insufficient. Never invent an ID,
+operation, source field or success claim. A deterministic verifier—not this
+selection—decides whether the repair is valid.""",
+    input_schema=CandidatePrompt,
+    output_schema=CandidateSelection,
+    output_key="candidate_selection",
 )
 
 
-def apply_plan(node_input: RepairPlan, ctx: Context) -> Event:
-    """Apply one validated operation to an in-memory pipeline configuration."""
-    result = apply_plan_deterministically(ctx.state["scenario_id"], node_input)
-    return Event(
-        content=types.Content(
-            role="model",
-            parts=[types.Part.from_text(text=f"Applied {node_input.operation} in memory.")],
-        ),
-        output=result,
-        actions=EventActions(state_delta={"apply_result": result.model_dump()}),
+class CandidatePlanner(Protocol):
+    async def select(self, prompt: CandidatePrompt) -> CandidateSelection: ...
+
+
+def _terminal_program(decision: str, rationale: str) -> RepairProgram:
+    return RepairProgram(
+        decision=decision,
+        steps=[],
+        confidence=1,
+        evidence=[rationale.replace("_", " ")],
+        rationale=rationale,
     )
 
 
-def validate_plan(node_input: ApplyResult) -> Event:
-    """Run deterministic contracts and choose an evidence-backed terminal state."""
-    result = validate_plan_deterministically(node_input)
+def _candidate_prompt(
+    report: DriftReport,
+    catalogue: CandidateCatalogue,
+    feedback: list[Counterexample],
+    round_number: int,
+) -> CandidatePrompt:
+    return CandidatePrompt(
+        round=round_number,
+        report=_structural_report(report),
+        candidates=[
+            CandidateOption(id=item.id, summary=item.summary) for item in catalogue
+        ],
+        counterexamples=feedback[-3:],
+    )
+
+
+def _selection_program(
+    catalogue: CandidateCatalogue, selection: CandidateSelection
+) -> RepairProgram:
+    return RepairProgram(
+        decision="repair",
+        steps=catalogue.select(selection.candidate_ids),
+        confidence=0,
+        evidence=[f"selected candidate: {item}" for item in selection.candidate_ids],
+        rationale="model_selected_candidates",
+    )
+
+
+def _safe_escalation(
+    case: RepairCase, catalogue: CandidateCatalogue, rationale: str
+) -> ValidationResult:
+    return verify_program(case, _terminal_program("escalate", rationale), catalogue)
+
+
+async def synthesize_case(
+    report: DriftReport,
+    case: RepairCase,
+    planner: CandidatePlanner,
+    safety: SafetyScreen,
+) -> ValidationResult:
+    """Run a bounded verifier-guided selection loop over authorized mutations."""
+    catalogue = build_candidate_catalogue(case, report)
+    unchanged = verify_program(
+        case,
+        _terminal_program("unchanged", "contracts_already_satisfied"),
+        catalogue,
+    )
+    if unchanged.status == "unchanged":
+        return unchanged
+
+    canonical = search_catalogue(case, catalogue)
+    feedback: list[Counterexample] = []
+    for round_number in range(1, 4):
+        prompt = _candidate_prompt(report, catalogue, feedback, round_number)
+        if not (await safety.screen_prompt(prompt.model_dump_json())).allowed:
+            return _safe_escalation(case, catalogue, "safety_screen_blocked")
+        selection = await planner.select(prompt)
+        if not (await safety.screen_response(selection.model_dump_json())).allowed:
+            return _safe_escalation(case, catalogue, "safety_screen_blocked")
+        if selection.decision == "escalate":
+            feedback.append(
+                Counterexample(
+                    invariant="selection",
+                    failing_count=1,
+                    detail="selection did not identify a verifiable candidate",
+                )
+            )
+            continue
+        try:
+            program = _selection_program(catalogue, selection)
+        except ValueError:
+            feedback.append(
+                Counterexample(
+                    invariant="catalogue_authorized",
+                    failing_count=1,
+                    detail="selection included an unknown candidate",
+                )
+            )
+            continue
+        result = verify_authoritative_program(
+            case,
+            program,
+            catalogue,
+            canonical_program=canonical,
+        )
+        if result.status != "failed":
+            return result
+        feedback.append(minimal_counterexample(result))
+    return verify_program(case, canonical, catalogue)
+
+
+class _ContextPlanner:
+    def __init__(self, ctx: Context) -> None:
+        self._ctx = ctx
+
+    async def select(self, prompt: CandidatePrompt) -> CandidateSelection:
+        output = await self._ctx.run_node(
+            repair_planner,
+            prompt,
+            run_id=f"proposal-r{prompt.round}",
+        )
+        return CandidateSelection.model_validate(output)
+
+
+async def synthesize_program(node_input: DriftReport, ctx: Context) -> Event:
+    case = _case_for_id(node_input.scenario_id)
+    result = await synthesize_case(
+        inspect_case(case),
+        case,
+        _ContextPlanner(ctx),
+        configured_safety_screen(),
+    )
     return Event(
         content=types.Content(
             role="model",
-            parts=[types.Part.from_text(text="Deterministic contract gate completed.")],
+            parts=[types.Part.from_text(text=result.program.model_dump_json())],
         ),
         output=result,
     )
+
+
+synthesis_node = FunctionNode(
+    func=synthesize_program,
+    rerun_on_resume=True,
+)
 
 
 async def record_result(node_input: ValidationResult, ctx: Context) -> Event:
@@ -134,12 +267,14 @@ async def record_result(node_input: ValidationResult, ctx: Context) -> Event:
     if execution is not None:
         await execution.publisher.publish(
             WorkerProposal(
-                scenario_id=node_input.scenario_id,
+                case_kind=execution.case_kind,
+                case_id=execution.case_id,
                 event_id=execution.event_id,
                 issued_day=execution.issued_day,
                 attempt_id=execution.attempt_id,
                 execution_token=execution.execution_token,
-                plan=node_input.plan,
+                bundle=execution.bundle,
+                program=node_input.program,
             )
         )
         execution.published = True
@@ -162,10 +297,8 @@ root_agent = Workflow(
     output_schema=ValidationResult,
     edges=[
         ("START", inspect_incident),
-        (inspect_incident, repair_planner),
-        (repair_planner, apply_plan),
-        (apply_plan, validate_plan),
-        (validate_plan, record_result),
+        (inspect_incident, synthesis_node),
+        (synthesis_node, record_result),
     ],
     timeout=300,
 )

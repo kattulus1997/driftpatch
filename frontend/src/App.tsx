@@ -1,388 +1,393 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
-import {getRun, getScenarios, runScenario} from "./api";
+import {getCustomRun, getExample, startCustomRun} from "./api";
 import type {
-  DriftReport,
-  RepairPlan,
-  ScenarioItem,
-  ScenariosResponse,
-  SourceProfile,
+  CustomRunSubmission,
+  RepairStep,
+  SourceFormat,
   ValidationResult,
 } from "./types";
 
 const POLL_INTERVAL_MS = 750;
 const RUN_TIMEOUT_MS = 90_000;
+const MAX_REQUEST_BYTES = 5 * 1024 * 1024;
+
+type LoadedFile = {
+  name: string;
+  content: string;
+  format?: SourceFormat;
+};
+
+type Files = {
+  before: LoadedFile | null;
+  after: LoadedFile | null;
+  pipeline: LoadedFile | null;
+  contract: LoadedFile | null;
+};
+
+type FileKey = keyof Files;
+
+const EMPTY_FILES: Files = {
+  before: null,
+  after: null,
+  pipeline: null,
+  contract: null,
+};
 
 const wait = (milliseconds: number) =>
   new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 
-async function waitForTerminalResult(scenarioId: string): Promise<ValidationResult> {
+async function waitForTerminalResult(runId: string): Promise<ValidationResult> {
   const deadline = Date.now() + RUN_TIMEOUT_MS;
   while (Date.now() < deadline) {
-    const current = await getRun(scenarioId);
-    if (current.status === "not_started") {
-      throw new Error("This proof run has not been admitted.");
-    }
+    const current = await getCustomRun(runId);
     if (current.status !== "queued") return current;
     await wait(POLL_INTERVAL_MS);
   }
-  throw new Error("The worker did not return terminal evidence within 90 seconds.");
+  throw new Error("The repair did not finish within 90 seconds.");
 }
 
-const words = (value: string) => value.replaceAll("-", " ");
-const delimiterName = (value: string | null) => value === "\t" ? "tab" : value ?? "n/a";
+function sourceFormat(fileName: string): SourceFormat | null {
+  const extension = fileName.toLowerCase().split(".").pop();
+  return extension === "csv" || extension === "json" ? extension : null;
+}
 
-function SystemHeader({running, onRun}: {running: boolean; onRun: () => void}) {
+function readText(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>
+      typeof reader.result === "string"
+        ? resolve(reader.result)
+        : reject(new Error(`${file.name} could not be read as text.`));
+    reader.onerror = () => reject(new Error(`${file.name} could not be read.`));
+    reader.readAsText(file, "utf-8");
+  });
+}
+
+function jsonObject(value: string, label: string): void {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(value);
+  } catch {
+    throw new Error(`${label} must contain valid JSON.`);
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error(`${label} must contain a JSON object.`);
+  }
+}
+
+function words(value: string): string {
+  return value.replaceAll("_", " ").replaceAll("-", " ");
+}
+
+function statusTitle(status: ValidationResult["status"]): string {
+  return {
+    unchanged: "No repair needed",
+    repaired: "Repair verified",
+    escalated: "Manual review required",
+    failed: "Repair rejected",
+  }[status];
+}
+
+function stepParameters(step: RepairStep): [string, string][] {
+  const values: [string, string][] = [];
+  if (step.format) values.push(["format", step.format]);
+  if (step.delimiter) values.push(["delimiter", step.delimiter === "\t" ? "tab" : step.delimiter]);
+  if (step.field_sources.length) {
+    values.push([
+      "field sources",
+      step.field_sources
+        .map((item) => `${item.output_field} ← ${item.source_field}`)
+        .join(", "),
+    ]);
+  }
+  if (step.field) values.push(["field", step.field]);
+  if (step.strategy) values.push(["strategy", step.strategy]);
+  if (step.input_format) values.push(["input format", step.input_format]);
+  if (step.path) values.push(["record path", step.path]);
+  if (step.sources.length) values.push(["sources", step.sources.join(" + ")]);
+  if (step.source) values.push(["source", step.source]);
+  if (step.split_fields.length) {
+    values.push([
+      "split fields",
+      step.split_fields
+        .map((item) => `${item.output_field}[${item.index}]`)
+        .join(", "),
+    ]);
+  }
+  if (step.true_values.length) values.push(["true values", step.true_values.join(", ")]);
+  if (step.false_values.length) values.push(["false values", step.false_values.join(", ")]);
+  if (step.separator) values.push(["separator", JSON.stringify(step.separator)]);
+  return values;
+}
+
+function FileField({
+  label,
+  hint,
+  accept,
+  value,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  hint: string;
+  accept: string;
+  value: LoadedFile | null;
+  disabled: boolean;
+  onChange: (file: File) => void;
+}) {
   return (
-    <header className="system-header">
-      <a className="skip-link" href="#incident-proof">Skip to incident proof</a>
-      <a href="/" className="wordmark" aria-label="DriftPatch home">
-        <span>DRIFT</span><span>PATCH</span>
-      </a>
-      <span className="product-class">Public-source repair agent</span>
-      <div className="run-control">
-        <button
-          type="button"
-          onClick={onRun}
-          disabled={running}
-          title="One execution per incident and UTC day"
-        >
-          {running ? "Running proof…" : "Run today’s proof"}
-        </button>
-      </div>
-    </header>
+    <label className="file-field">
+      <span className="file-label">
+        <strong>{label}</strong>
+        <small>{hint}</small>
+      </span>
+      <span className={value ? "file-name selected" : "file-name"}>
+        {value?.name ?? "Choose file"}
+      </span>
+      <input
+        className="file-input"
+        type="file"
+        aria-label={label}
+        accept={accept}
+        disabled={disabled}
+        onChange={(event) => {
+          const file = event.currentTarget.files?.[0];
+          if (file) onChange(file);
+        }}
+      />
+    </label>
   );
 }
 
-function IncidentIndex({
-  items,
-  selectedId,
-  results,
-  running,
-  onSelect,
-}: {
-  items: ScenarioItem[];
-  selectedId: string;
-  results: Record<string, ValidationResult>;
-  running: boolean;
-  onSelect: (id: string) => void;
-}) {
+function RepairResult({result}: {result: ValidationResult}) {
+  const downloadPipeline = () => {
+    if (!result.patched_pipeline) return;
+    const url = URL.createObjectURL(
+      new Blob([JSON.stringify(result.patched_pipeline, null, 2) + "\n"], {
+        type: "application/json",
+      }),
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `driftpatch-${result.id}-pipeline.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <nav className="incident-index" aria-label="Benchmark incidents">
-      <header>Incidents</header>
-      <ol>
-        {items.map((item) => {
-          const result = results[item.id];
-          const selected = item.id === selectedId;
-          return (
-            <li key={item.id} className={selected ? "selected" : ""}>
-              <button
-                type="button"
-                onClick={() => onSelect(item.id)}
-                aria-current={selected ? "true" : undefined}
-                disabled={running}
-              >
-                <span className="incident-name">
-                  <strong>{words(item.id)}</strong>
-                </span>
-                {result ? (
-                  <span className={`incident-state ${result.status}`}>{result.status}</span>
+    <section className={`result ${result.status}`} aria-live="polite">
+      <header className="result-header">
+        <div>
+          <h2>{statusTitle(result.status)}</h2>
+          <code>{result.id}</code>
+        </div>
+        {result.patched_pipeline ? (
+          <button type="button" className="download" onClick={downloadPipeline}>
+            Download patched pipeline
+          </button>
+        ) : null}
+      </header>
+
+      {result.program?.steps.length ? (
+        <div className="program" aria-label="Authorized changes">
+          {result.program.steps.map((step, index) => {
+            const parameters = stepParameters(step);
+            return (
+              <div className="program-step" key={`${step.operation}-${index}`}>
+                <strong>{words(step.operation)}</strong>
+                {parameters.length ? (
+                  <dl>
+                    {parameters.map(([label, value]) => (
+                      <div key={label}>
+                        <dt>{label}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
                 ) : null}
-              </button>
-            </li>
-          );
-        })}
-      </ol>
-    </nav>
-  );
-}
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
 
-function CaseHeader({report}: {report: DriftReport}) {
-  return (
-    <header className="case-header">
-      <h1>{report.title}</h1>
-    </header>
-  );
-}
-
-type FieldChange = "added" | "removed" | "changed" | "stable";
-
-function fieldChange(report: DriftReport, field: string, side: "before" | "after"): FieldChange {
-  if (side === "before" && report.removed_fields.includes(field)) return "removed";
-  if (side === "after" && report.added_fields.includes(field)) return "added";
-  if (field in report.type_changes) return "changed";
-  return "stable";
-}
-
-function SourceSnapshot({
-  profile,
-  report,
-  side,
-}: {
-  profile: SourceProfile;
-  report: DriftReport;
-  side: "before" | "after";
-}) {
-  const name = side === "before" ? "Baseline" : "Observed";
-  return (
-    <section className={`source-snapshot ${side}`} aria-label={`${name} source profile`}>
-      <header>
-        <strong>{name}</strong>
-        <dl>
-          <div><dt>Format</dt><dd>{profile.format}</dd></div>
-          <div><dt>Delimiter</dt><dd>{delimiterName(profile.delimiter)}</dd></div>
-          <div><dt>Rows</dt><dd>{profile.row_count}</dd></div>
+      {result.application ? (
+        <dl className="receipt" aria-label="Configuration receipt">
+          <div>
+            <dt>{result.application.state === "applied" ? "Applied" : "Already active"}</dt>
+            <dd>v{result.application.version} · {result.application.affected_outputs.join(", ")}</dd>
+          </div>
+          <div>
+            <dt>Configuration</dt>
+            <dd title={`${result.application.previous_sha256} → ${result.application.applied_sha256}`}>
+              <code>{result.application.previous_sha256.slice(0, 10)} → {result.application.applied_sha256.slice(0, 10)}</code>
+            </dd>
+          </div>
+          <div>
+            <dt>Rollback</dt>
+            <dd>{result.application.rollback_ready ? "snapshot stored" : "unavailable"}</dd>
+          </div>
         </dl>
-      </header>
-      <div className="source-table-wrap">
+      ) : null}
+
+      <div className="verification">
         <table>
-          <thead><tr><th>Field</th><th>Type</th><th>Signal</th></tr></thead>
-          <tbody>
-            {profile.fields.length === 0 ? (
-              <tr className="empty-row"><td colSpan={3}>No fields observed</td></tr>
-            ) : profile.fields.map((field) => {
-              const change = fieldChange(report, field.name, side);
-              return (
-                <tr key={field.name} className={change}>
-                  <td>
-                    <strong>{field.name}</strong>
-                    <small>{field.example_values.slice(0, 2).join(" · ") || "no sample"}</small>
-                  </td>
-                  <td>{field.inferred_type}</td>
-                  <td>
-                    {change === "stable"
-                      ? `${field.distinct_count} distinct`
-                      : change}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <footer>{profile.record_path ? `Record path ${profile.record_path}` : "Root records"}</footer>
-    </section>
-  );
-}
-
-function DeltaSpine({report}: {report: DriftReport}) {
-  const changes = report.added_fields.length + report.removed_fields.length + Object.keys(report.type_changes).length;
-  return (
-    <div className="delta-spine" aria-label={`${changes} observed schema changes`}>
-      <span aria-hidden="true">→</span>
-    </div>
-  );
-}
-
-function EvidencePlane({report}: {report: DriftReport}) {
-  return (
-    <section className="evidence-plane">
-      <header className="section-title">
-        <h2>Source change</h2>
-      </header>
-      <div className="schema-comparison">
-        <SourceSnapshot profile={report.before} report={report} side="before" />
-        <DeltaSpine report={report} />
-        <SourceSnapshot profile={report.after} report={report} side="after" />
-      </div>
-      <div className="failure-trace">
-        <span>Failed contract</span>
-        <code>{report.current_failure}</code>
-      </div>
-    </section>
-  );
-}
-
-function planParameters(plan: RepairPlan): [string, string][] {
-  const rows: [string, string][] = [];
-  if (plan.field_sources.length) rows.push(["field sources", plan.field_sources.map((item) => `${item.output_field} ← ${item.source_field}`).join(", ")]);
-  if (plan.delimiter) rows.push(["delimiter", delimiterName(plan.delimiter)]);
-  if (plan.field) rows.push(["field", plan.field]);
-  if (plan.strategy) rows.push(["strategy", plan.strategy]);
-  if (plan.input_format) rows.push(["input format", plan.input_format]);
-  if (plan.true_values.length) rows.push(["true values", plan.true_values.join(", ")]);
-  if (plan.false_values.length) rows.push(["false values", plan.false_values.join(", ")]);
-  if (plan.path) rows.push(["record path", plan.path]);
-  if (plan.sources.length) rows.push(["sources", plan.sources.join(" + ")]);
-  if (plan.source) rows.push(["source", plan.source]);
-  if (plan.split_fields.length) rows.push(["split fields", plan.split_fields.map((item) => `${item.output_field}[${item.index}]`).join(", ")]);
-  if (plan.separator) rows.push(["separator", JSON.stringify(plan.separator)]);
-  return rows;
-}
-
-function DecisionStage({result, running}: {result?: ValidationResult; running: boolean}) {
-  const plan = result?.plan;
-  const parameters = plan ? planParameters(plan) : [];
-  return (
-    <section className={`decision-stage ${running ? "running" : ""}`} aria-busy={running}>
-      <header className="section-title">
-        <h2>Repair</h2>
-      </header>
-      {!plan ? (
-        <div className="decision-pending" aria-live="polite">
-          <p>{running ? "Evaluating evidence…" : "Awaiting proof."}</p>
-          {running && <i className="activity-line" aria-hidden="true" />}
-        </div>
-      ) : (
-        <div className="decision-result enter" aria-live="polite">
-          <div className="operation-lockup">
-            <strong>{plan.operation}</strong>
-          </div>
-          <div className="decision-detail">
-            <div className="rationale-block">
-              <span>Rationale</span>
-              <p>{plan.rationale}</p>
-            </div>
-            {parameters.length > 0 ? (
-              <dl className="parameter-table">
-                {parameters.map(([label, value]) => (
-                  <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
-                ))}
-              </dl>
-            ) : null}
-            <div className="evidence-block">
-              <span>Evidence</span>
-              <ul>{plan.evidence.map((evidence) => <li key={evidence}>{evidence}</li>)}</ul>
-            </div>
-          </div>
-          {result.application ? (
-            <dl className="application-receipt">
-              <div>
-                <dt>{result.application.state === "applied" ? "Applied" : "Already active"}</dt>
-                <dd>v{result.application.version} · {result.application.affected_outputs.join(", ")}</dd>
-              </div>
-              <div>
-                <dt>Config</dt>
-                <dd title={`${result.application.previous_sha256} → ${result.application.applied_sha256}`}>
-                  <code>{result.application.previous_sha256.slice(0, 10)} → {result.application.applied_sha256.slice(0, 10)}</code>
-                </dd>
-              </div>
-              <div>
-                <dt>Rollback</dt>
-                <dd>{result.application.rollback_ready ? "snapshot stored" : "unavailable"}</dd>
-              </div>
-            </dl>
-          ) : null}
-        </div>
-      )}
-    </section>
-  );
-}
-
-function GateStage({result}: {result?: ValidationResult}) {
-  if (!result) return null;
-  const outcomeCopy = result.status === "unchanged"
-      ? "The source remains compatible. No repair is justified."
-      : result.status === "repaired"
-        ? null
-        : "No repair was authorized. Human review is required.";
-  return (
-    <section className="gate-stage">
-      <header className="section-title">
-        <h2>Contract checks</h2>
-      </header>
-      <div className="gate-result enter" aria-live="polite">
-        <table className="check-table">
-          <thead><tr><th>Contract</th><th>Evidence</th><th>State</th></tr></thead>
+          <caption>Verification</caption>
+          <thead>
+            <tr><th>Contract</th><th>Evidence</th><th>State</th></tr>
+          </thead>
           <tbody>
             {result.checks.map((check) => (
               <tr key={check.name} className={check.passed ? "pass" : "fail"}>
-                <td>{check.name.replaceAll("_", " ")}</td><td>{check.detail}</td><td>{check.passed ? "pass" : "fail"}</td>
+                <td data-label="Contract">{check.name}</td>
+                <td data-label="Evidence">{check.detail}</td>
+                <td data-label="State">{check.passed ? "pass" : "fail"}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        {result.trigger === "cloud-scheduler" && result.source_sha256 ? (
-          <div className="source-receipt">
-            <span>Ambient receipt</span>
-            <strong>Cloud Scheduler</strong>
-            <code>{result.source_sha256}</code>
-          </div>
-        ) : null}
-        {outcomeCopy ? <p className={`gate-outcome ${result.status}`}>{outcomeCopy}</p> : null}
       </div>
     </section>
   );
 }
 
 export default function App() {
-  const [data, setData] = useState<ScenariosResponse | null>(null);
-  const [selectedId, setSelectedId] = useState("column-rename");
-  const [results, setResults] = useState<Record<string, ValidationResult>>({});
+  const [label, setLabel] = useState("");
+  const [files, setFiles] = useState<Files>(EMPTY_FILES);
   const [running, setRunning] = useState(false);
+  const [loadingExample, setLoadingExample] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [result, setResult] = useState<ValidationResult | null>(null);
 
-  useEffect(() => {
-    let active = true;
-    setError(null);
-    getScenarios()
-      .then((scenarios) => {
-        if (!active) return;
-        setData(scenarios);
-        if (!scenarios.items.some((item) => item.id === selectedId)) {
-          setSelectedId(scenarios.items[0]?.id ?? "");
-        }
-      })
-      .catch((reason: Error) => active && setError(reason.message));
-    return () => { active = false; };
-  }, [loadAttempt]);
+  const setFile = async (key: FileKey, file: File) => {
+    const source = key === "before" || key === "after";
+    const format = sourceFormat(file.name);
+    if (source && !format) {
+      setError(`${key === "before" ? "Baseline" : "Current"} source must be a CSV or JSON file.`);
+      return;
+    }
+    if (!source && !file.name.toLowerCase().endsWith(".json")) {
+      setError(`${key === "pipeline" ? "Pipeline" : "Contract"} must be a JSON file.`);
+      return;
+    }
+    try {
+      const content = await readText(file);
+      setFiles((current) => ({
+        ...current,
+        [key]: {name: file.name, content, ...(format ? {format} : {})},
+      }));
+      setResult(null);
+      setError(null);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "The selected file could not be read.");
+    }
+  };
 
-  const selected = data?.items.find((item) => item.id === selectedId);
-
-  const handleRun = async () => {
-    if (!selected || running) return;
-    setRunning(true);
+  const loadExample = async () => {
+    if (running || loadingExample) return;
+    setLoadingExample(true);
     setError(null);
     try {
-      await runScenario(selected.id);
-      const result = await waitForTerminalResult(selected.id);
-      setResults((current) => ({...current, [selected.id]: result}));
+      const example = await getExample();
+      setLabel(example.label);
+      setFiles({
+        before: {name: `baseline.${example.before.format}`, ...example.before},
+        after: {name: `current.${example.after.format}`, ...example.after},
+        pipeline: {name: "pipeline.json", content: example.pipeline_json},
+        contract: {name: "contract.json", content: example.contract_json},
+      });
+      setResult(null);
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "The proof run failed.");
+      setError(reason instanceof Error ? reason.message : "The example could not be loaded.");
+    } finally {
+      setLoadingExample(false);
+    }
+  };
+
+  const run = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (running) return;
+    setError(null);
+    setResult(null);
+    try {
+      const name = label.trim();
+      if (!name) throw new Error("Enter a chain name.");
+      if (!files.before || !files.after || !files.pipeline || !files.contract) {
+        throw new Error("Select the baseline, current source, pipeline and contract files.");
+      }
+      jsonObject(files.pipeline.content, "Pipeline");
+      jsonObject(files.contract.content, "Contract");
+      const submission: CustomRunSubmission = {
+        label: name,
+        before: {format: files.before.format!, content: files.before.content},
+        after: {format: files.after.format!, content: files.after.content},
+        pipeline_json: files.pipeline.content,
+        contract_json: files.contract.content,
+      };
+      const encoded = JSON.stringify(submission);
+      if (new Blob([encoded]).size > MAX_REQUEST_BYTES) {
+        throw new Error("The complete request exceeds the 5 MiB limit.");
+      }
+      setRunning(true);
+      const receipt = await startCustomRun(submission);
+      setResult(await waitForTerminalResult(receipt.id));
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "The chain could not be repaired.");
     } finally {
       setRunning(false);
     }
   };
 
-  if (!data || !selected) {
-    return (
-      <main className={`loading-screen ${error ? "load-error" : ""}`} aria-busy={!error}>
-        <span className="loading-mark">DRIFT<br />PATCH</span>
-        <div className="loading-message" role={error ? "alert" : "status"} aria-live={error ? "assertive" : "polite"}>
-          <strong>{error ?? "Loading incident evidence"}</strong>
-          {error ? (
-            <button type="button" onClick={() => setLoadAttempt((attempt) => attempt + 1)}>Retry incident index</button>
-          ) : <i aria-hidden="true" />}
-        </div>
-      </main>
-    );
-  }
-
-  const result = results[selected.id];
   return (
     <main className="app-shell">
-      <SystemHeader running={running} onRun={handleRun} />
-      <div className="workbench">
-        <IncidentIndex
-          items={data.items}
-          selectedId={selected.id}
-          results={results}
-          running={running}
-          onSelect={(id) => {setSelectedId(id); setError(null);}}
-        />
-        <article className="proof-canvas" id="incident-proof" tabIndex={-1} key={selected.id}>
-          <CaseHeader report={selected.report} />
-          {error && <div className="error-banner" role="alert"><strong>Run failed</strong><span>{error}</span></div>}
-          <EvidencePlane report={selected.report} />
-          {running || result ? (
-            <div className={`proof-resolution ${result ? "resolved" : ""}`}>
-              <DecisionStage result={result} running={running} />
-              <GateStage result={result} />
-            </div>
-          ) : null}
-        </article>
-      </div>
+      <header className="system-header">
+        <a href="/" className="wordmark" aria-label="DriftPatch home">
+          <span>DRIFT</span><span>PATCH</span>
+        </a>
+        <button type="button" className="example" onClick={loadExample} disabled={running || loadingExample}>
+          {loadingExample ? "Loading…" : "Load example"}
+        </button>
+      </header>
+
+      <section className="workspace">
+        <header className="workspace-intro">
+          <h1>Repair your data chain</h1>
+          <p>Upload baseline and current CSV or JSON, plus the pipeline and contract JSON.</p>
+        </header>
+
+        <form onSubmit={run}>
+          <label className="chain-name">
+            <span>Chain name</span>
+            <input
+              aria-label="Chain name"
+              value={label}
+              maxLength={80}
+              disabled={running}
+              onChange={(event) => {setLabel(event.currentTarget.value); setResult(null);}}
+              placeholder="e.g. Public transport feed"
+            />
+          </label>
+
+          <div className="file-grid">
+            <FileField label="Baseline source" hint="CSV or JSON" accept=".csv,.json" value={files.before} disabled={running} onChange={(file) => setFile("before", file)} />
+            <FileField label="Current source" hint="CSV or JSON" accept=".csv,.json" value={files.after} disabled={running} onChange={(file) => setFile("after", file)} />
+            <FileField label="Pipeline" hint="JSON configuration" accept=".json" value={files.pipeline} disabled={running} onChange={(file) => setFile("pipeline", file)} />
+            <FileField label="Contract" hint="JSON invariants" accept=".json" value={files.contract} disabled={running} onChange={(file) => setFile("contract", file)} />
+          </div>
+
+          {error ? <p className="error" role="alert">{error}</p> : null}
+          {running ? <p className="running" role="status">Inspecting and verifying…</p> : null}
+
+          <div className="form-action">
+            <button type="submit" disabled={running || loadingExample}>
+              {running ? "Repairing…" : "Repair this chain"}
+            </button>
+          </div>
+        </form>
+
+        {result ? <RepairResult result={result} /> : null}
+      </section>
     </main>
   );
 }

@@ -9,6 +9,7 @@ authors = [
 dependencies = [
     "google-adk>=2.5.0,<3.0.0",
     "google-cloud-firestore>=2.21.0,<3.0.0",
+    "google-cloud-storage>=3.4.0,<4.0.0",
     "google-cloud-tasks>=2.19.0,<3.0.0",
     "google-auth>=2.40.0,<3.0.0",
     "httpx>=0.28.0,<1.0.0",
@@ -19,6 +20,7 @@ requires-python = ">=3.11,<3.14"
 
 [dependency-groups]
 dev = [
+    "hypothesis>=6.138.0,<7.0.0",
     "pytest>=9.0.2,<10.0.0",
     "pytest-asyncio>=1.0.0,<2.0.0",
     "nest-asyncio>=1.6.0,<2.0.0",

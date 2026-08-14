@@ -8,6 +8,7 @@ from functools import cache
 from typing import Protocol
 
 from .event_identity import task_id
+from .schemas import TaskRequest
 
 LOGGER = logging.getLogger("uvicorn.error")
 
@@ -17,28 +18,12 @@ class EventDeliveryError(RuntimeError):
 
 
 class EventPublisher(Protocol):
-    async def publish(
-        self,
-        *,
-        scenario_id: str,
-        event_id: str,
-        issued_day: str,
-        attempt_id: str,
-        attempt_token: str,
-    ) -> None: ...
+    async def publish(self, task: TaskRequest) -> None: ...
 
 
 class UnconfiguredPublisher:
-    async def publish(
-        self,
-        *,
-        scenario_id: str,
-        event_id: str,
-        issued_day: str,
-        attempt_id: str,
-        attempt_token: str,
-    ) -> None:
-        del scenario_id, event_id, issued_day, attempt_id, attempt_token
+    async def publish(self, task: TaskRequest) -> None:
+        del task
         raise EventDeliveryError("Cloud Tasks is not configured")
 
 
@@ -59,30 +44,16 @@ class CloudTasksEventPublisher:
         self._worker_url = worker_url.rstrip("/")
         self._invoker_service_account = invoker_service_account
 
-    async def publish(
-        self,
-        *,
-        scenario_id: str,
-        event_id: str,
-        issued_day: str,
-        attempt_id: str,
-        attempt_token: str,
-    ) -> None:
+    async def publish(self, request: TaskRequest) -> None:
         from google.api_core.exceptions import AlreadyExists
         from google.cloud import tasks_v2
 
         payload = json.dumps(
-            {
-                "scenario_id": scenario_id,
-                "event_id": event_id,
-                "issued_day": issued_day,
-                "attempt_id": attempt_id,
-                "attempt_token": attempt_token,
-            },
+            request.model_dump(mode="json"),
             separators=(",", ":"),
         ).encode()
         task = tasks_v2.Task(
-            name=f"{self._parent}/tasks/{task_id(event_id, attempt_id)}",
+            name=f"{self._parent}/tasks/{task_id(request.event_id, request.attempt_id)}",
             http_request=tasks_v2.HttpRequest(
                 http_method=tasks_v2.HttpMethod.POST,
                 url=f"{self._worker_url}/tasks/run",

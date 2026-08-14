@@ -1,0 +1,11 @@
+{
+  "format": "csv",
+  "fields": {
+    "id": "id",
+    "total": "total"
+  },
+  "casts": {
+    "id": "integer",
+    "total": "integer"
+  }
+}

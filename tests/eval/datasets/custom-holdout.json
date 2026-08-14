@@ -1,0 +1,193 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "custom-program-three",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-program-three\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Nested JSON moved, renamed a field and changed integer encoding: repaired; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-program-five",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-program-five\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Nested JSON became semicolon CSV with three semantic shifts: repaired; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-program-six",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-program-six\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "CSV became nested JSON with six independent bounded shifts: repaired; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-split-source",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-split-source\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Two coordinates became one ordered pair: repaired; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-unchanged-json",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-unchanged-json\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "JSON added metadata outside the declared chain: unchanged; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-ambiguous-date",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-ambiguous-date\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Symmetric dates permit two equivalent parsers: escalated; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-ambiguous-boolean",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-ambiguous-boolean\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "One new token contradicts two prior boolean meanings: escalated; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-duplicate-key",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-duplicate-key\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "The current source duplicated the stable key: escalated; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "custom-out-of-language",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-out-of-language\"}"
+          }
+        ]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Values changed without a bounded structural explanation: escalated; deterministic terminal verified."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

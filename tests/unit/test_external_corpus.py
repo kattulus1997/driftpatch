@@ -72,7 +72,11 @@ def test_decision_metric_covers_every_demo_and_external_case() -> None:
     demo = json.loads((ROOT / "benchmark" / "scenarios.json").read_text())["scenarios"]
     external = json.loads(MANIFEST.read_text(encoding="utf-8"))["cases"]
 
-    assert set(expected) == {case["id"] for case in [*demo, *external]}
+    custom = json.loads(
+        (ROOT / "benchmark" / "custom" / "manifest.json").read_text()
+    )["cases"]
+
+    assert set(expected) == {case["id"] for case in [*demo, *external, *custom]}
 
 
 def test_corpus_selector_rejects_duplicate_headers_and_ragged_rows() -> None:

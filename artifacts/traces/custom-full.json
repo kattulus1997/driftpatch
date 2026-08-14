@@ -1,0 +1,505 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-program-two\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "CSV records moved to JSON and renamed one field: repaired; program update_field_sources, set_source_format; 13/13 deterministic checks passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "CSV records moved to JSON and renamed one field: repaired; deterministic terminal verified."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "custom-program-two",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected custom-program-two."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_ef559138c816\",\n    \"c_c5b5ba0205e8\"\n  ]\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\"decision\":\"repair\",\"steps\":[{\"operation\":\"update_field_sources\",\"field_sources\":[{\"output_field\":\"name\",\"source_field\":\"display_name\"}],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_source_format\",\"field_sources\":[],\"delimiter\":null,\"format\":\"json\",\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null}],\"confidence\":1.0,\"evidence\":[\"source format: csv to json\",\"removed field: name\",\"added field: display_name\",\"current failure: transform\",\"authorized candidate: c_c5b5ba0205e8\",\"authorized candidate: c_ef559138c816\"],\"rationale\":\"verified_repair\"}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "CSV records moved to JSON and renamed one field: repaired; program update_field_sources, set_source_format; 13/13 deterministic checks passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-program-four\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "CSV changed delimiter, field name, integer and date encodings: repaired; program set_date_format, update_field_sources, set_cast, set_delimiter; 17/17 deterministic checks passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "CSV changed delimiter, field name, integer and date encodings: repaired; deterministic terminal verified."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "custom-program-four",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected custom-program-four."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_3f2b6a5c608f\",\n    \"c_c5b5ba0205e8\",\n    \"c_31ed9ff1cced\",\n    \"c_479bf8fa69a9\",\n    \"c_f985384cdb0e\"\n  ]\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_3f2b6a5c608f\",\n    \"c_c5b5ba0205e8\",\n    \"c_31ed9ff1cced\",\n    \"c_f985384cdb0e\",\n    \"c_479bf8fa69a9\"\n  ]\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_3f2b6a5c608f\",\n    \"c_c5b5ba0205e8\",\n    \"c_31ed9ff1cced\",\n    \"c_f985384cdb0e\",\n    \"c_479bf8fa69a9\"\n  ]\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\"decision\":\"repair\",\"steps\":[{\"operation\":\"set_date_format\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"published_on\",\"strategy\":null,\"input_format\":\"%d/%m/%Y\",\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"update_field_sources\",\"field_sources\":[{\"output_field\":\"name\",\"source_field\":\"display_name\"}],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_cast\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"units\",\"strategy\":\"integer_from_float\",\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_delimiter\",\"field_sources\":[],\"delimiter\":\";\",\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null}],\"confidence\":1.0,\"evidence\":[\"removed field: name\",\"added field: display_name\",\"current failure: required:id\",\"current failure: required:name\",\"current failure: required:units\",\"current failure: required:published_on\",\"current failure: type:id\",\"current failure: type:name\",\"current failure: type:units\",\"current failure: type:published_on\",\"current failure: unique:id\",\"current failure: row_policy\",\"authorized candidate: c_31ed9ff1cced\",\"authorized candidate: c_c5b5ba0205e8\",\"authorized candidate: c_f985384cdb0e\",\"authorized candidate: c_3f2b6a5c608f\"],\"rationale\":\"verified_repair\"}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "CSV changed delimiter, field name, integer and date encodings: repaired; program set_date_format, update_field_sources, set_cast, set_delimiter; 17/17 deterministic checks passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-join-source\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "One name field became two ordered fields: repaired; program set_join_source; 13/13 deterministic checks passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "One name field became two ordered fields: repaired; deterministic terminal verified."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "custom-join-source",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected custom-join-source."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_dbc2d332394f\"\n  ]\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\"decision\":\"repair\",\"steps\":[{\"operation\":\"set_join_source\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"name\",\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[\"first_name\",\"last_name\"],\"source\":null,\"split_fields\":[],\"separator\":\" \"}],\"confidence\":1.0,\"evidence\":[\"removed field: full_name\",\"added field: first_name\",\"added field: last_name\",\"current failure: required:name\",\"current failure: type:name\",\"current failure: preserve_values\",\"authorized candidate: c_dbc2d332394f\"],\"rationale\":\"verified_repair\"}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "One name field became two ordered fields: repaired; program set_join_source; 13/13 deterministic checks passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-ambiguous-alias\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Two new fields preserve the removed name equally: escalated; program escalate; 6/6 deterministic checks passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "Two new fields preserve the removed name equally: escalated; deterministic terminal verified."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "custom-ambiguous-alias",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected custom-ambiguous-alias."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_c5b5ba0205e8\",\n    \"c_8a893d968844\"\n  ]\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\"decision\":\"escalate\",\"steps\":[],\"confidence\":1.0,\"evidence\":[\"removed field: name\",\"added field: display_name\",\"added field: legal_name\",\"current failure: required:name\",\"current failure: type:name\",\"current failure: preserve_values\"],\"rationale\":\"ambiguous_repair\"}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Two new fields preserve the removed name equally: escalated; program escalate; 6/6 deterministic checks passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "{\"scenario_id\":\"custom-missing-key\"}"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "The current source removed the stable key: escalated; program escalate; 6/6 deterministic checks passed."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "The current source removed the stable key: escalated; deterministic terminal verified."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "custom-missing-key",
+      "agent_data": {
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Inspected custom-missing-key."
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "repair_planner",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "{\"decision\":\"escalate\",\"steps\":[],\"confidence\":1.0,\"evidence\":[\"removed field: id\",\"current failure: required:id\",\"current failure: type:id\",\"current failure: unique:id\",\"current failure: row_policy\"],\"rationale\":\"search_exhausted\"}"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "driftpatch",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "The current source removed the stable key: escalated; program escalate; 6/6 deterministic checks passed."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

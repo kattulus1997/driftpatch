@@ -32,3 +32,39 @@ resource "google_service_account_iam_member" "admission_uses_task_invoker" {
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${google_service_account.admission.email}"
 }
+
+resource "google_cloud_scheduler_job" "custom_reconciler" {
+  project          = google_project.release.project_id
+  region           = var.region
+  name             = "driftpatch-custom-reconciler"
+  description      = "Terminalizes expired custom runs and removes their ephemeral bundles."
+  schedule         = "*/10 * * * *"
+  time_zone        = "Etc/UTC"
+  attempt_deadline = "30s"
+
+  retry_config {
+    retry_count          = 1
+    min_backoff_duration = "10s"
+    max_backoff_duration = "30s"
+    max_doublings        = 1
+  }
+
+  http_target {
+    http_method = "POST"
+    uri         = "${google_cloud_run_v2_service.result.uri}/internal/reconcile"
+    body        = base64encode("{}")
+    headers = {
+      "Content-Type" = "application/json"
+    }
+
+    oidc_token {
+      service_account_email = google_service_account.reconciler_invoker.email
+      audience              = google_cloud_run_v2_service.result.uri
+    }
+  }
+
+  depends_on = [
+    google_cloud_run_v2_service_iam_member.reconciler_result_invoker,
+    google_project_service.required,
+  ]
+}
