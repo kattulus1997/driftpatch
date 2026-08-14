@@ -13,6 +13,7 @@ from app.repairs import build_candidate_catalogue
 from app.result_service import ResultService
 from app.schemas import (
     CustomRunSubmission,
+    RepairProgram,
     SourceDocument,
     TaskRequest,
     WorkerProposal,
@@ -108,6 +109,44 @@ async def test_custom_result_reloads_reverifies_commits_and_deletes_bundle() -> 
     with pytest.raises(BundleMissing):
         await bundles.get(task.bundle)
     assert await service.complete(proposal, now=NOW) == terminal
+
+
+@pytest.mark.asyncio
+async def test_custom_result_commits_a_verified_fail_closed_escalation() -> None:
+    store = InMemoryEventStore()
+    bundles = InMemoryBundleStore()
+    publisher = RecordingPublisher()
+    await AdmissionService(store, publisher, bundles).start_custom(
+        _submission(), now=NOW
+    )
+    task = publisher.calls[0]
+    service = ResultService(store, bundles)
+    lease = await service.preflight(task, now=NOW)
+    assert lease.execution_token is not None
+    proposal = WorkerProposal(
+        case_kind="custom",
+        case_id=task.case_id,
+        event_id=task.event_id,
+        issued_day=task.issued_day,
+        attempt_id=task.attempt_id,
+        execution_token=lease.execution_token,
+        bundle=task.bundle,
+        program=RepairProgram(
+            decision="escalate",
+            steps=[],
+            confidence=1,
+            evidence=["safety screen blocked"],
+            rationale="safety_screen_blocked",
+        ),
+    )
+
+    terminal = await service.complete(proposal, now=NOW)
+
+    assert terminal["status"] == "escalated"
+    assert terminal["program"]["rationale"] == "safety_screen_blocked"
+    assert terminal["application"] is None
+    with pytest.raises(BundleMissing):
+        await bundles.get(task.bundle)
 
 
 @pytest.mark.asyncio

@@ -386,10 +386,13 @@ def verify_authoritative_program(
     *,
     canonical_program: RepairProgram | None = None,
 ) -> ValidationResult:
-    """Accept only the unique shortest verified configuration and canonicalize it."""
+    """Accept fail-closed escalation or the unique shortest configuration."""
+    proposed = verify_program(case, program, catalogue)
+    if program.decision == "escalate" and proposed.status == "escalated":
+        return proposed
+
     canonical = canonical_program or search_catalogue(case, catalogue)
     expected = verify_program(case, canonical, catalogue)
-    proposed = verify_program(case, program, catalogue)
     equivalent = program.decision == canonical.decision
     if program.decision == "repair":
         equivalent = (

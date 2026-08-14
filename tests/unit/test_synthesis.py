@@ -218,6 +218,26 @@ def test_authority_canonicalizes_an_equivalent_commuting_selection() -> None:
     assert result.program.steps == canonical.steps
 
 
+def test_authority_accepts_a_verified_fail_closed_escalation() -> None:
+    case = _cross_format_case()
+    catalogue = build_candidate_catalogue(case, inspect_case(case))
+    proposed = RepairProgram(
+        decision="escalate",
+        steps=[],
+        confidence=1,
+        evidence=["safety screen blocked"],
+        rationale="safety_screen_blocked",
+    )
+
+    result = verify_authoritative_program(case, proposed, catalogue)
+
+    assert search_catalogue(case, catalogue).decision == "repair"
+    assert result.status == "escalated"
+    assert result.program.rationale == "safety_screen_blocked"
+    assert result.patched_pipeline is None
+    assert result.application is None
+
+
 def test_authority_rejects_a_valid_but_nonminimal_program() -> None:
     case = scenario_case(load_scenario("custom-program-four"))
     catalogue = build_candidate_catalogue(case, inspect_case(case))
