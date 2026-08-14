@@ -797,6 +797,7 @@ resource "google_project_iam_custom_role" "result_ledger_committer" {
     "datastore.databases.get",
     "datastore.entities.create",
     "datastore.entities.get",
+    "datastore.entities.list",
     "datastore.entities.update",
   ]
 }

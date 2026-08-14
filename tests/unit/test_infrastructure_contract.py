@@ -376,10 +376,10 @@ def test_only_control_services_receive_ledger_permissions() -> None:
         assert f'"datastore.entities.{permission}"' in admission_role
     assert '"datastore.entities.list"' not in admission_role
     assert '"datastore.entities.get"' in result_role
+    assert '"datastore.entities.list"' in result_role
     assert '"datastore.entities.update"' in result_role
     assert '"datastore.entities.create"' in result_role
     assert '"datastore.entities.delete"' not in result_role
-    assert '"datastore.entities.list"' not in result_role
     assert "google_service_account.admission.email" in admission_binding
     assert "google_service_account.result.email" in result_binding
     assert 'resource "google_project" "release"' in source
