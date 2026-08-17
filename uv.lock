@@ -382,6 +382,7 @@ dependencies = [
     { name = "google-cloud-firestore" },
     { name = "google-cloud-storage" },
     { name = "google-cloud-tasks" },
+    { name = "google-genai" },
     { name = "httpx" },
     { name = "opentelemetry-exporter-otlp-proto-http" },
 ]
@@ -413,6 +414,7 @@ requires-dist = [
     { name = "google-cloud-firestore", specifier = ">=2.21.0,<3.0.0" },
     { name = "google-cloud-storage", specifier = ">=3.4.0,<4.0.0" },
     { name = "google-cloud-tasks", specifier = ">=2.19.0,<3.0.0" },
+    { name = "google-genai", specifier = ">=2.17.0,<3.0.0" },
     { name = "httpx", specifier = ">=0.28.0,<1.0.0" },
     { name = "opentelemetry-exporter-otlp-proto-http", specifier = ">=1.42.1,<2.0.0" },
     { name = "ruff", marker = "extra == 'lint'", specifier = ">=0.4.6,<1.0.0" },

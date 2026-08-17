@@ -12,6 +12,7 @@ from .case_data import (
     inspect_case,
     run_case_contracts,
     run_document_contracts,
+    transform_failure_fields,
 )
 from .repairs import (
     CandidateCatalogue,
@@ -248,27 +249,58 @@ def verify_program(
     )
 
 
-def minimal_counterexample(result: ValidationResult) -> Counterexample:
-    failed = next((check for check in result.checks if not check.passed), None)
-    if failed is None:
+def minimal_counterexamples(
+    result: ValidationResult, *, transform_fields: Iterable[str] = ()
+) -> list[Counterexample]:
+    failed_checks = [check for check in result.checks if not check.passed]
+    fields = list(transform_fields)[:3]
+    if fields and any(check.name == "transform" for check in failed_checks):
+        return [
+            Counterexample(
+                invariant="transform",
+                output_field=field[:128],
+                failing_count=1,
+                detail=f"transform:{field[:128]} failed; affected=1",
+            )
+            for field in fields
+        ]
+    failed_checks = failed_checks[:3]
+    if not failed_checks:
         raise ValueError("a passing result has no counterexample")
-    prefix, separator, field = failed.name.partition(":")
-    counts = [
-        int(value)
-        for value in re.findall(
-            r"(?:missing|invalid|changed|added|removed|observed)=(\d+)",
-            failed.detail,
+    counterexamples: list[Counterexample] = []
+    for failed in failed_checks:
+        prefix, separator, field = failed.name.partition(":")
+        counts = [
+            int(value)
+            for value in re.findall(
+                r"(?:missing|invalid|changed|added|removed|observed)=(\d+)",
+                failed.detail,
+            )
+        ]
+        failing_count = max([value for value in counts if value > 0], default=1)
+        counterexamples.append(
+            Counterexample(
+                invariant=prefix[:128] or "verification",
+                output_field=field[:128] if separator and field else None,
+                failing_count=failing_count,
+                detail=f"{failed.name[:128]} failed; affected={failing_count}",
+            )
         )
-    ]
-    failing_count = max([value for value in counts if value > 0], default=1)
-    invariant = prefix[:128] or "verification"
-    output_field = field[:128] if separator and field else None
-    return Counterexample(
-        invariant=invariant,
-        output_field=output_field,
-        failing_count=failing_count,
-        detail=f"{failed.name[:128]} failed; affected={failing_count}",
-    )
+    return counterexamples
+
+
+def minimal_counterexample(result: ValidationResult) -> Counterexample:
+    return minimal_counterexamples(result)[0]
+
+
+def program_transform_failure_fields(
+    case: RepairCase, program: RepairProgram
+) -> list[str]:
+    try:
+        config = apply_repair_program(case.pipeline, program)
+    except (TypeError, ValueError):
+        return []
+    return transform_failure_fields(case.after, config)
 
 
 @dataclass(frozen=True)

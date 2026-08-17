@@ -359,4 +359,8 @@ def test_formula_and_instruction_values_never_enter_candidate_prompt() -> None:
     serialized = prompt.model_dump_json()
 
     assert injection not in serialized
-    assert all(set(candidate.model_dump()) == {"id", "summary"} for candidate in prompt.candidates)
+    assert all(
+        set(candidate.model_dump()) == {"id", "summary", "semantic_similarity"}
+        and candidate.semantic_similarity is None
+        for candidate in prompt.candidates
+    )

@@ -27,6 +27,7 @@ from typing import Protocol
 from .benchmark import load_scenario, scenario_case
 from .case_data import RepairCase, inspect_case
 from .execution import current_execution
+from .lineage import LineageRanker, configured_lineage_ranker
 from .model_armor import SafetyScreen, configured_safety_screen
 from .repairs import CandidateCatalogue, build_candidate_catalogue
 from .schemas import (
@@ -41,7 +42,8 @@ from .schemas import (
     WorkerProposal,
 )
 from .synthesis import (
-    minimal_counterexample,
+    minimal_counterexamples,
+    program_transform_failure_fields,
     search_catalogue,
     verify_authoritative_program,
     verify_program,
@@ -112,7 +114,10 @@ DriftPatch. Return `repair` with one to six unique IDs when the structural
 evidence and prior counterexamples justify that composition. Return
 `escalate` with no IDs when evidence is insufficient. Never invent an ID,
 operation, source field or success claim. A deterministic verifier—not this
-selection—decides whether the repair is valid.""",
+selection—decides whether the repair is valid. Each round is stateless, so
+return the complete candidate set rather than only a correction. When
+`previous_candidate_ids` is present, retain still-relevant IDs and add or
+remove IDs only as justified by the counterexamples.""",
     input_schema=CandidatePrompt,
     output_schema=CandidateSelection,
     output_key="candidate_selection",
@@ -138,13 +143,23 @@ def _candidate_prompt(
     catalogue: CandidateCatalogue,
     feedback: list[Counterexample],
     round_number: int,
+    *,
+    lineage_scores: dict[str, float] | None = None,
+    previous_candidate_ids: list[str] | None = None,
 ) -> CandidatePrompt:
+    scores = lineage_scores or {}
     return CandidatePrompt(
         round=round_number,
         report=_structural_report(report),
         candidates=[
-            CandidateOption(id=item.id, summary=item.summary) for item in catalogue
+            CandidateOption(
+                id=item.id,
+                summary=item.summary,
+                semantic_similarity=scores.get(item.id),
+            )
+            for item in catalogue
         ],
+        previous_candidate_ids=previous_candidate_ids or [],
         counterexamples=feedback[-3:],
     )
 
@@ -172,6 +187,7 @@ async def synthesize_case(
     case: RepairCase,
     planner: CandidatePlanner,
     safety: SafetyScreen,
+    lineage: LineageRanker | None = None,
 ) -> ValidationResult:
     """Run a bounded verifier-guided selection loop over authorized mutations."""
     catalogue = build_candidate_catalogue(case, report)
@@ -184,15 +200,27 @@ async def synthesize_case(
         return unchanged
 
     canonical = search_catalogue(case, catalogue)
+    lineage_scores = await lineage.score(case, catalogue) if lineage is not None else {}
     feedback: list[Counterexample] = []
+    previous_candidate_ids: list[str] = []
     for round_number in range(1, 4):
-        prompt = _candidate_prompt(report, catalogue, feedback, round_number)
+        prompt = _candidate_prompt(
+            report,
+            catalogue,
+            feedback,
+            round_number,
+            lineage_scores=lineage_scores,
+            previous_candidate_ids=previous_candidate_ids,
+        )
         if not (await safety.screen_prompt(prompt.model_dump_json())).allowed:
             return _safe_escalation(case, catalogue, "safety_screen_blocked")
         selection = await planner.select(prompt)
         if not (await safety.screen_response(selection.model_dump_json())).allowed:
             return _safe_escalation(case, catalogue, "safety_screen_blocked")
+        previous_candidate_ids = list(selection.candidate_ids)
         if selection.decision == "escalate":
+            if canonical.decision == "escalate":
+                return verify_program(case, canonical, catalogue)
             feedback.append(
                 Counterexample(
                     invariant="selection",
@@ -220,7 +248,12 @@ async def synthesize_case(
         )
         if result.status != "failed":
             return result
-        feedback.append(minimal_counterexample(result))
+        feedback.extend(
+            minimal_counterexamples(
+                result,
+                transform_fields=program_transform_failure_fields(case, program),
+            )
+        )
     return verify_program(case, canonical, catalogue)
 
 
@@ -244,6 +277,7 @@ async def synthesize_program(node_input: DriftReport, ctx: Context) -> Event:
         case,
         _ContextPlanner(ctx),
         configured_safety_screen(),
+        configured_lineage_ranker(),
     )
     return Event(
         content=types.Content(

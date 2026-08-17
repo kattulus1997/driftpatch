@@ -20,6 +20,7 @@ configuration repair, not open-ended code generation.
 baseline + current source + pipeline + contract
     -> strict admission and baseline proof
     -> deterministic catalogue of authorized repair steps
+    -> Gemini Embedding supplies abstaining field-lineage hints
     -> ADK planner selects opaque candidate identifiers
     -> bounded verifier-guided proposal loop
     -> independent full-data replay by the result controller
@@ -64,6 +65,10 @@ transformations can be repaired safely.
 - Deterministic inspection creates the only candidate catalogue. Gemini 3.5
   Flash sees bounded structural evidence and opaque identifiers; it cannot
   create a new operation, execute code or access Cloud tools.
+- `gemini-embedding-001` compares structural field labels only when multiple
+  rename candidates exist. It emits one advisory hint only above calibrated
+  similarity and margin thresholds; otherwise it abstains. It never sees rows,
+  creates candidates or authorizes a repair.
 - Model Armor screens planner input and output in `europe-west1`. A match,
   partial scan or unavailable screen fails closed.
 - The result controller reloads the exact object generation, verifies its
@@ -77,10 +82,12 @@ transformations can be repaired safely.
 - Cloud Trace retains operational spans with prompt and response content
   disabled.
 
-Failed proposals receive a minimal counterexample and may be retried up to three
-rounds. A bounded deterministic search over the same authorized catalogue then
-finds a verified program or escalates. No fallback weakens a contract, expands a
-limit or runs generated code.
+Failed proposals receive up to three field-scoped counterexamples and the prior
+candidate set, then may be retried for at most three rounds. Model and
+deterministic search may terminate an escalation immediately only when both
+agree that no unique repair exists. A bounded deterministic search over the same
+authorized catalogue remains the terminating fallback. No fallback weakens a
+contract, expands a limit or runs generated code.
 
 ## Production architecture
 
@@ -115,6 +122,20 @@ on the trace-grounded response rubric:
 
 - [`custom-holdout.json`](artifacts/traces/custom-holdout.json)
 - [`decision results`](artifacts/grade_results/custom-holdout-rubric/results_20260814_010345.json)
+
+A fresh Vertex AI run after the verifier-loop changes preserves those scores
+while reducing planner calls from 19 to 13 (31.6%) on the same nine cases:
+
+- [`credit baseline`](artifacts/grade_results/credit-baseline-20260817-enterprise/results_20260817_185602.json)
+- [`optimized run`](artifacts/grade_results/credit-final-20260817/results_20260817_191452.json)
+
+The frozen eight-case field-lineage holdout measures the additional embedding
+model independently. Raw top-1 accuracy is 6/8; the calibrated 0.01 margin gate
+emits six hints, all correct (100% precision, 75% coverage), and abstains on the
+two errors:
+
+- [`lineage holdout`](tests/eval/datasets/lineage-holdout.json)
+- [`calibrated result`](artifacts/lineage/holdout-calibrated-20260817.json)
 
 The corpus and expected terminal hashes are frozen in
 [`benchmark/custom/manifest.json`](benchmark/custom/manifest.json). Property and

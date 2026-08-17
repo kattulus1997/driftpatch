@@ -48,8 +48,9 @@
 
   <rect class="control" x="950" y="140" width="210" height="112" rx="6"/>
   <text class="label" x="970" y="172">Model worker</text>
-  <text class="code" x="970" y="197">ADK · Gemini · Model Armor</text>
-  <text class="meta" x="970" y="218">Opaque candidate IDs only</text>
+  <text class="code" x="970" y="197">Gemini 3.5 Flash</text>
+  <text class="meta" x="970" y="218">gemini-embedding-001 · Armor</text>
+  <text class="meta" x="970" y="238">Opaque IDs · advisory hints</text>
 
   <path class="line" d="M 180 196 H 210"/>
   <path class="line" d="M 350 196 H 380"/>
@@ -99,6 +100,6 @@
 
   <rect x="40" y="548" width="1120" height="112" rx="6" fill="#F2F0ED" stroke="#CFCBC6"/>
   <text class="label" x="64" y="581">Security boundary</text>
-  <text class="meta" x="64" y="608">Raw rows never enter model content or traces. The model cannot access the ledger, queue, storage tools, or configuration writer.</text>
+  <text class="meta" x="64" y="608">Raw rows never enter model content or traces. The models cannot access the ledger, queue, storage tools, or configuration writer.</text>
   <text class="meta" x="64" y="633">Only an authorized, minimal program that preserves keys, values, schema, types, rows, and uniqueness can become active.</text>
 </svg>

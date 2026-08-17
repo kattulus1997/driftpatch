@@ -322,12 +322,16 @@ CandidateIdentifier = Annotated[str, Field(pattern=r"^c_[0-9a-f]{12}$")]
 class CandidateOption(ExternalModel):
     id: CandidateIdentifier
     summary: EvidenceText
+    semantic_similarity: float | None = Field(default=None, ge=-1, le=1)
 
 
 class CandidatePrompt(ExternalModel):
     round: int = Field(ge=1, le=3)
     report: DriftReport
     candidates: list[CandidateOption] = Field(max_length=256)
+    previous_candidate_ids: list[CandidateIdentifier] = Field(
+        default_factory=list, max_length=6
+    )
     counterexamples: list[Counterexample] = Field(default_factory=list, max_length=3)
 
 

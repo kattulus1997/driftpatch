@@ -1,0 +1,85 @@
+{
+  "cases": 8,
+  "hint_correct": 6,
+  "hint_coverage": 0.75,
+  "hint_precision": 1.0,
+  "hints_emitted": 6,
+  "mean_margin": 0.030319,
+  "model": "gemini-embedding-001",
+  "results": [
+    {
+      "correct": true,
+      "expected": "customer_display_name",
+      "hint_correct": true,
+      "hinted": true,
+      "id": "customer-name",
+      "margin": 0.074603,
+      "selected": "customer_display_name"
+    },
+    {
+      "correct": true,
+      "expected": "publication_date",
+      "hint_correct": true,
+      "hinted": true,
+      "id": "publication-date",
+      "margin": 0.055406,
+      "selected": "publication_date"
+    },
+    {
+      "correct": false,
+      "expected": "lng",
+      "hint_correct": false,
+      "hinted": false,
+      "id": "longitude-abbreviation",
+      "margin": 0.000457,
+      "selected": "lat"
+    },
+    {
+      "correct": true,
+      "expected": "invoice_total",
+      "hint_correct": true,
+      "hinted": true,
+      "id": "invoice-total",
+      "margin": 0.022633,
+      "selected": "invoice_total"
+    },
+    {
+      "correct": true,
+      "expected": "er_visits",
+      "hint_correct": true,
+      "hinted": true,
+      "id": "emergency-visits",
+      "margin": 0.054593,
+      "selected": "er_visits"
+    },
+    {
+      "correct": true,
+      "expected": "denominazione_regione",
+      "hint_correct": true,
+      "hinted": true,
+      "id": "multilingual-region",
+      "margin": 0.010817,
+      "selected": "denominazione_regione"
+    },
+    {
+      "correct": true,
+      "expected": "postal_code",
+      "hint_correct": true,
+      "hinted": true,
+      "id": "postal-code",
+      "margin": 0.023183,
+      "selected": "postal_code"
+    },
+    {
+      "correct": false,
+      "expected": "residence_area",
+      "hint_correct": false,
+      "hinted": false,
+      "id": "service-residence",
+      "margin": 0.000863,
+      "selected": "provider_name"
+    }
+  ],
+  "top1_accuracy": 0.75,
+  "top1_correct": 6
+}

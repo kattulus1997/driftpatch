@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "id": "customer-name",
+      "legacy": "customer_name",
+      "candidates": ["shipping_postcode", "customer_display_name", "invoice_total"],
+      "expected": "customer_display_name"
+    },
+    {
+      "id": "publication-date",
+      "legacy": "published_on",
+      "candidates": ["employee_count", "publication_date", "district_code"],
+      "expected": "publication_date"
+    },
+    {
+      "id": "longitude-abbreviation",
+      "legacy": "longitude_degrees",
+      "candidates": ["elevation_metres", "lat", "lng"],
+      "expected": "lng"
+    },
+    {
+      "id": "invoice-total",
+      "legacy": "total_amount",
+      "candidates": ["invoice_total", "currency_code", "line_count"],
+      "expected": "invoice_total"
+    },
+    {
+      "id": "emergency-visits",
+      "legacy": "emergency_department_visits",
+      "candidates": ["facility_name", "er_visits", "inpatient_beds"],
+      "expected": "er_visits"
+    },
+    {
+      "id": "multilingual-region",
+      "legacy": "region_name",
+      "candidates": ["codice_regione", "note", "denominazione_regione"],
+      "expected": "denominazione_regione"
+    },
+    {
+      "id": "postal-code",
+      "legacy": "postcode",
+      "candidates": ["municipality", "postal_code", "street_address"],
+      "expected": "postal_code"
+    },
+    {
+      "id": "service-residence",
+      "legacy": "service_area",
+      "candidates": ["provider_name", "residence_area", "reporting_month"],
+      "expected": "residence_area"
+    }
+  ]
+}

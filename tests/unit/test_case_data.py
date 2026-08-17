@@ -12,6 +12,7 @@ from app.case_data import (
     profile_document,
     run_case_contracts,
     transform_document,
+    transform_failure_fields,
 )
 from app.schemas import CustomRunSubmission, SourceDocument
 
@@ -234,3 +235,34 @@ def test_document_transform_and_inspection_use_the_declared_source_format() -> N
     assert report.before.format == "csv"
     assert report.after.format == "json"
     assert "transform" in report.current_failure
+
+
+def test_transform_diagnostics_name_the_field_without_exposing_the_value() -> None:
+    case = parse_submission(
+        _submission("csv", "csv").model_copy(
+            update={
+                "after": SourceDocument(
+                    format="csv", content="id,total\n1,private-invalid-value\n"
+                )
+            }
+        )
+    )
+
+    fields = transform_failure_fields(case.after, case.pipeline)
+
+    assert fields == ["total"]
+
+
+def test_transform_diagnostics_report_each_failed_field_in_one_pass() -> None:
+    submission = _submission("csv", "csv").model_copy(
+        update={
+            "after": SourceDocument(
+                format="csv", content="id,total\nprivate-id,private-total\n"
+            )
+        }
+    )
+    case = parse_submission(submission)
+
+    fields = transform_failure_fields(case.after, case.pipeline)
+
+    assert fields == ["id", "total"]

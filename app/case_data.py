@@ -412,6 +412,32 @@ def transform_document(
     ]
 
 
+def _transform_records(
+    records: list[dict[str, Any]], config: PipelineConfig
+) -> tuple[list[dict[str, Any]], list[str]]:
+    transformed: list[dict[str, Any]] = []
+    failed_fields: set[str] = set()
+    for record in records:
+        row: dict[str, Any] = {}
+        for field in config.fields:
+            try:
+                row[field] = _transform_value(field, record, config)
+            except (TypeError, ValueError, KeyError, IndexError):
+                failed_fields.add(field)
+        transformed.append(row)
+    return transformed, sorted(failed_fields)
+
+
+def transform_failure_fields(
+    document: SourceDocument, config: PipelineConfig
+) -> list[str]:
+    try:
+        _, failed_fields = _transform_records(read_document_records(document, config), config)
+    except (SubmissionRejected, TypeError, ValueError, KeyError, IndexError):
+        return []
+    return failed_fields
+
+
 def run_document_contracts(
     document: SourceDocument,
     config: PipelineConfig,

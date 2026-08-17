@@ -14,6 +14,7 @@ from app.schemas import (
 from app.synthesis import (
     canonical_pipeline_hash,
     minimal_counterexample,
+    minimal_counterexamples,
     search_catalogue,
     verify_authoritative_program,
     verify_program,
@@ -175,6 +176,19 @@ def test_minimal_counterexample_contains_no_source_values() -> None:
     assert counterexample.invariant
     assert "10" not in counterexample.detail
     assert "20" not in counterexample.detail
+
+
+def test_minimal_counterexamples_preserve_multiple_safe_field_failures() -> None:
+    case = _cross_format_case()
+    catalogue = build_candidate_catalogue(case, inspect_case(case))
+    result = verify_program(case, _program_for(case, "set_source_format"), catalogue)
+
+    counterexamples = minimal_counterexamples(
+        result, transform_fields=["id", "total"]
+    )
+
+    assert [item.output_field for item in counterexamples] == ["id", "total"]
+    assert all("10" not in item.detail and "20" not in item.detail for item in counterexamples)
 
 
 def test_healthy_chain_search_returns_unchanged_without_a_patch() -> None:

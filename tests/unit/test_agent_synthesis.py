@@ -31,7 +31,8 @@ class PlannerStub:
 
 
 class AllowingSafetyScreen:
-    async def screen_prompt(self, _text: str) -> SafetyVerdict:
+    async def screen_prompt(self, text: str) -> SafetyVerdict:
+        del text
         return SafetyVerdict(allowed=True, reason="no_match")
 
     async def screen_response(self, _text: str) -> SafetyVerdict:
@@ -53,6 +54,14 @@ class CapturingSafetyScreen(AllowingSafetyScreen):
     async def screen_prompt(self, text: str) -> SafetyVerdict:
         self.prompt_texts.append(text)
         return await super().screen_prompt(text)
+
+
+class LineageStub:
+    def __init__(self, candidate_id: str) -> None:
+        self.candidate_id = candidate_id
+
+    async def score(self, _case, _catalogue) -> dict[str, float]:
+        return {self.candidate_id: 0.91}
 
 
 def _submission(*, changed: bool = True) -> CustomRunSubmission:
@@ -167,6 +176,7 @@ def test_dynamic_planner_parent_is_resumable_in_the_installed_adk_graph() -> Non
 def test_selector_reserves_output_for_complete_structured_json() -> None:
     config = repair_planner.generate_content_config
 
+    assert config.max_output_tokens is not None
     assert config.max_output_tokens >= 2048
     assert config.thinking_config.thinking_level.value == "LOW"
 
@@ -194,11 +204,75 @@ async def test_counterexample_guides_second_selection_without_raw_rows() -> None
     assert result.status == "repaired"
     assert len(planner.prompts) == 2
     assert planner.prompts[1].counterexamples
+    assert planner.prompts[1].previous_candidate_ids == [format_id]
     serialized = json.dumps(
         [prompt.model_dump(mode="json") for prompt in planner.prompts],
         sort_keys=True,
     )
     assert "secret-row-value" not in serialized
+
+
+@pytest.mark.asyncio
+async def test_semantic_lineage_hint_reaches_only_its_candidate() -> None:
+    case = parse_submission(_submission(), case_id="custom_lineage")
+    report = inspect_case(case)
+    catalogue = build_candidate_catalogue(case, report)
+    format_id = _candidate_id(catalogue, "set_source_format")
+    path_id = _candidate_id(catalogue, "set_record_path")
+    rename_id = _candidate_id(catalogue, "update_field_sources")
+    planner = PlannerStub(
+        [
+            CandidateSelection(
+                decision="repair",
+                candidate_ids=[format_id, path_id, rename_id],
+            )
+        ]
+    )
+
+    result = await synthesize_case(
+        report,
+        case,
+        planner,
+        AllowingSafetyScreen(),
+        LineageStub(rename_id),
+    )
+
+    scores = {
+        item.id: item.semantic_similarity
+        for item in planner.prompts[0].candidates
+        if item.semantic_similarity is not None
+    }
+    assert result.status == "repaired"
+    assert scores == {rename_id: 0.91}
+
+
+@pytest.mark.asyncio
+async def test_repairable_case_rejects_model_escalation_and_retries() -> None:
+    case = parse_submission(_submission(), case_id="custom_retry")
+    report = inspect_case(case)
+    catalogue = build_candidate_catalogue(case, report)
+    planner = PlannerStub(
+        [
+            CandidateSelection(decision="escalate"),
+            CandidateSelection(
+                decision="repair",
+                candidate_ids=[
+                    _candidate_id(catalogue, operation)
+                    for operation in (
+                        "set_source_format",
+                        "set_record_path",
+                        "update_field_sources",
+                    )
+                ],
+            ),
+        ]
+    )
+
+    result = await synthesize_case(report, case, planner, AllowingSafetyScreen())
+
+    assert result.status == "repaired"
+    assert len(planner.prompts) == 2
+    assert planner.prompts[1].counterexamples[0].invariant == "selection"
 
 
 @pytest.mark.asyncio
@@ -226,7 +300,7 @@ async def test_conversion_failure_values_never_reach_state_or_model_armor() -> N
     )
     report = inspect_case(case)
     planner = PlannerStub(
-        [CandidateSelection(decision="escalate") for _ in range(3)]
+        [CandidateSelection(decision="escalate")]
     )
     safety = CapturingSafetyScreen()
 
@@ -255,6 +329,7 @@ async def test_conversion_failure_values_never_reach_state_or_model_armor() -> N
     )
     assert secret not in exposed
     assert result.status == "escalated"
+    assert len(planner.prompts) == 1
 
 
 @pytest.mark.asyncio

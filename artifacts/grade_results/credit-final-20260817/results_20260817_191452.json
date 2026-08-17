@@ -1,0 +1,2318 @@
+{
+  "eval_case_results": [
+    {
+      "eval_case_index": 0,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The final response accurately conveys all material facts from the expected answer, confirming that the repair succeeded and deterministic verification passed. The extra details regarding the specific program operations (`set_record_path`, `update_field_sources`, `set_cast`) and check counts are accurate trace-backed information and do not warrant a penalty.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 1,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The final response accurately conveys all material facts from the expected answer and includes additional accurate, trace-backed details regarding the specific program operations and deterministic checks passed.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 2,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The final response accurately conveys all material facts from the ground truth answer and provides additional accurate details directly grounded in the execution trace.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 3,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The agent's response accurately conveys all material ground-truth facts, correctly indicating that the issue was repaired and verified, with additional accurate trace-backed details.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 4,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The final response accurately conveys all material facts from the expected answer and trace without any factual defects or omissions.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 5,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The agent's response accurately conveys all key information from the expected answer and includes accurate, trace-backed details without any factual or clarity defects.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 6,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The final response accurately conveys the material ground-truth facts and aligns with the expected answer. The additional detail ('program escalate; 6/6 deterministic checks passed') is accurate and trace-backed, which should not be penalized according to the instructions.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 7,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The final response accurately conveys the core ground-truth facts (the stable key was duplicated and escalated) and includes accurate trace-backed details. There are no factual, relevance, or clarity defects.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 8,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "decision_accuracy": {
+              "metric_name": "decision_accuracy",
+              "score": 1.0,
+              "explanation": "Passed deterministic decision gate.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            },
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The final response accurately conveys all key facts from the ground truth and is fully supported by the agent trace, with no factual errors or omissions.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "summary_metrics": [
+    {
+      "metric_name": "decision_accuracy",
+      "num_cases_total": 9,
+      "num_cases_valid": 9,
+      "num_cases_error": 0,
+      "mean_score": 1.0,
+      "stdev_score": 0.0,
+      "pass_rate": null
+    },
+    {
+      "metric_name": "custom_response_quality",
+      "num_cases_total": 9,
+      "num_cases_valid": 9,
+      "num_cases_error": 0,
+      "mean_score": 5.0,
+      "stdev_score": 0.0,
+      "pass_rate": null
+    }
+  ],
+  "win_rates": null,
+  "evaluation_dataset": [
+    {
+      "bigquery_source": null,
+      "gcs_source": null,
+      "eval_cases": [
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-program-three\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Nested JSON moved, renamed a field and changed integer encoding: repaired; program set_record_path, update_field_sources, set_cast; 15/15 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Nested JSON moved, renamed a field and changed integer encoding: repaired; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-program-three",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-program-three.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_33e9b9b8f249\",\n    \"c_c5b5ba0205e8\",\n    \"c_f985384cdb0e\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"repair\",\"steps\":[{\"operation\":\"set_record_path\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":\"payload.rows\",\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"update_field_sources\",\"field_sources\":[{\"output_field\":\"name\",\"source_field\":\"display_name\"}],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_cast\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"units\",\"strategy\":\"integer_from_float\",\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null}],\"confidence\":1.0,\"evidence\":[\"removed field: name\",\"added field: display_name\",\"current failure: transform\",\"authorized candidate: c_33e9b9b8f249\",\"authorized candidate: c_c5b5ba0205e8\",\"authorized candidate: c_f985384cdb0e\"],\"rationale\":\"verified_repair\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Nested JSON moved, renamed a field and changed integer encoding: repaired; program set_record_path, update_field_sources, set_cast; 15/15 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-program-five\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Nested JSON became semicolon CSV with three semantic shifts: repaired; program set_date_format, set_source_format, update_field_sources, set_cast, set_delimiter; 17/17 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Nested JSON became semicolon CSV with three semantic shifts: repaired; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-program-five",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-program-five.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_566f79f6634c\",\n    \"c_3f2b6a5c608f\",\n    \"c_c5b5ba0205e8\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_566f79f6634c\",\n    \"c_3f2b6a5c608f\",\n    \"c_c5b5ba0205e8\",\n    \"c_31ed9ff1cced\",\n    \"c_f985384cdb0e\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"repair\",\"steps\":[{\"operation\":\"set_date_format\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"published_on\",\"strategy\":null,\"input_format\":\"%d/%m/%Y\",\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_source_format\",\"field_sources\":[],\"delimiter\":null,\"format\":\"csv\",\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"update_field_sources\",\"field_sources\":[{\"output_field\":\"name\",\"source_field\":\"display_name\"}],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_cast\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"units\",\"strategy\":\"integer_from_float\",\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_delimiter\",\"field_sources\":[],\"delimiter\":\";\",\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null}],\"confidence\":1.0,\"evidence\":[\"source format: json to csv\",\"removed field: name\",\"added field: display_name\",\"current failure: transform\",\"authorized candidate: c_31ed9ff1cced\",\"authorized candidate: c_566f79f6634c\",\"authorized candidate: c_c5b5ba0205e8\",\"authorized candidate: c_f985384cdb0e\",\"authorized candidate: c_3f2b6a5c608f\"],\"rationale\":\"verified_repair\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Nested JSON became semicolon CSV with three semantic shifts: repaired; program set_date_format, set_source_format, update_field_sources, set_cast, set_delimiter; 17/17 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-program-six\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "CSV became nested JSON with six independent bounded shifts: repaired; program set_boolean_values, set_date_format, update_field_sources, set_source_format, set_record_path, set_cast; 19/19 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "CSV became nested JSON with six independent bounded shifts: repaired; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-program-six",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-program-six.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_ef559138c816\",\n    \"c_33e9b9b8f249\",\n    \"c_c5b5ba0205e8\",\n    \"c_0f65f992aa4f\",\n    \"c_31ed9ff1cced\",\n    \"c_f985384cdb0e\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"repair\",\"steps\":[{\"operation\":\"set_boolean_values\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"active\",\"strategy\":null,\"input_format\":null,\"true_values\":[\"si\"],\"false_values\":[\"no\"],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_date_format\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"published_on\",\"strategy\":null,\"input_format\":\"%d/%m/%Y\",\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"update_field_sources\",\"field_sources\":[{\"output_field\":\"name\",\"source_field\":\"display_name\"}],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_source_format\",\"field_sources\":[],\"delimiter\":null,\"format\":\"json\",\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_record_path\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":\"payload.rows\",\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null},{\"operation\":\"set_cast\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":\"units\",\"strategy\":\"integer_from_float\",\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":null,\"split_fields\":[],\"separator\":null}],\"confidence\":1.0,\"evidence\":[\"source format: csv to json\",\"removed field: name\",\"added field: display_name\",\"current failure: transform\",\"authorized candidate: c_0f65f992aa4f\",\"authorized candidate: c_31ed9ff1cced\",\"authorized candidate: c_c5b5ba0205e8\",\"authorized candidate: c_ef559138c816\",\"authorized candidate: c_33e9b9b8f249\",\"authorized candidate: c_f985384cdb0e\"],\"rationale\":\"verified_repair\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "CSV became nested JSON with six independent bounded shifts: repaired; program set_boolean_values, set_date_format, update_field_sources, set_source_format, set_record_path, set_cast; 19/19 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-split-source\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Two coordinates became one ordered pair: repaired; program set_split_source; 15/15 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Two coordinates became one ordered pair: repaired; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-split-source",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-split-source.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_27f9562b351f\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"repair\",\"steps\":[{\"operation\":\"set_split_source\",\"field_sources\":[],\"delimiter\":null,\"format\":null,\"field\":null,\"strategy\":null,\"input_format\":null,\"true_values\":[],\"false_values\":[],\"path\":null,\"sources\":[],\"source\":\"coordinates\",\"split_fields\":[{\"output_field\":\"latitude\",\"index\":0},{\"output_field\":\"longitude\",\"index\":1}],\"separator\":\",\"}],\"confidence\":1.0,\"evidence\":[\"removed field: latitude\",\"removed field: longitude\",\"added field: coordinates\",\"current failure: required:latitude\",\"current failure: required:longitude\",\"current failure: type:latitude\",\"current failure: type:longitude\",\"current failure: preserve_values\",\"authorized candidate: c_27f9562b351f\"],\"rationale\":\"verified_repair\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Two coordinates became one ordered pair: repaired; program set_split_source; 15/15 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-unchanged-json\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "JSON added metadata outside the declared chain: unchanged; program unchanged; 13/13 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "JSON added metadata outside the declared chain: unchanged; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-unchanged-json",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-unchanged-json.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"unchanged\",\"steps\":[],\"confidence\":1.0,\"evidence\":[\"added field: metadata\"],\"rationale\":\"contracts_already_satisfied\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "JSON added metadata outside the declared chain: unchanged; program unchanged; 13/13 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-ambiguous-date\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Symmetric dates permit two equivalent parsers: escalated; program escalate; 6/6 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Symmetric dates permit two equivalent parsers: escalated; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-ambiguous-date",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-ambiguous-date.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_31ed9ff1cced\",\n    \"c_a3d8f046cefc\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_31ed9ff1cced\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_31ed9ff1cced\",\n    \"c_a3d8f046cefc\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"escalate\",\"steps\":[],\"confidence\":1.0,\"evidence\":[\"current failure: transform\"],\"rationale\":\"ambiguous_repair\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Symmetric dates permit two equivalent parsers: escalated; program escalate; 6/6 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-ambiguous-boolean\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "One new token contradicts two prior boolean meanings: escalated; program escalate; 6/6 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "One new token contradicts two prior boolean meanings: escalated; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-ambiguous-boolean",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-ambiguous-boolean.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_ad884b022c01\",\n    \"c_479bf8fa69a9\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"escalate\",\"steps\":[],\"confidence\":1.0,\"evidence\":[\"current failure: transform\"],\"rationale\":\"search_exhausted\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "One new token contradicts two prior boolean meanings: escalated; program escalate; 6/6 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-duplicate-key\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "The current source duplicated the stable key: escalated; program escalate; 6/6 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "The current source duplicated the stable key: escalated; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-duplicate-key",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-duplicate-key.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"escalate\",\"steps\":[],\"confidence\":1.0,\"evidence\":[\"current failure: unique:id\",\"current failure: row_policy\"],\"rationale\":\"search_exhausted\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "The current source duplicated the stable key: escalated; program escalate; 6/6 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "{\"scenario_id\":\"custom-out-of-language\"}",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Values changed without a bounded structural explanation: escalated; program escalate; 6/6 deterministic checks passed.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "Values changed without a bounded structural explanation: escalated; deterministic terminal verified.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "custom-out-of-language",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": null,
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Inspected custom-out-of-language.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"repair\",\n  \"candidate_ids\": [\n    \"c_ad884b022c01\",\n    \"c_479bf8fa69a9\"\n  ]\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "repair_planner",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\n  \"decision\": \"escalate\",\n  \"candidate_ids\": []\n}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "{\"decision\":\"escalate\",\"steps\":[],\"confidence\":1.0,\"evidence\":[\"current failure: preserve_values\"],\"rationale\":\"search_exhausted\"}",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "driftpatch",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "Values changed without a bounded structural explanation: escalated; program escalate; 6/6 deterministic checks passed.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        }
+      ],
+      "eval_dataset_df": null,
+      "candidate_name": null
+    }
+  ],
+  "metadata": {
+    "candidate_names": [
+      "candidate_1"
+    ],
+    "dataset_name": null,
+    "dataset_id": null,
+    "creation_timestamp": "2026-08-17T18:14:52.649172Z",
+    "dataset": [
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-program-three\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-program-three\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Nested JSON moved, renamed a field and changed integer encoding: repaired; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Nested JSON moved, renamed a field and changed integer encoding: repaired; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Nested JSON moved, renamed a field and changed integer encoding: repaired; program set_record_path, update_field_sources, set_cast; 15/15 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Nested JSON moved, renamed a field and changed integer encoding: repaired; program set_record_path, update_field_sources, set_cast; 15/15 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-program-three.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_33e9b9b8f249\\\",\\n    \\\"c_c5b5ba0205e8\\\",\\n    \\\"c_f985384cdb0e\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"repair\\\",\\\"steps\\\":[{\\\"operation\\\":\\\"set_record_path\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":\\\"payload.rows\\\",\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"update_field_sources\\\",\\\"field_sources\\\":[{\\\"output_field\\\":\\\"name\\\",\\\"source_field\\\":\\\"display_name\\\"}],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_cast\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":\\\"units\\\",\\\"strategy\\\":\\\"integer_from_float\\\",\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null}],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"removed field: name\\\",\\\"added field: display_name\\\",\\\"current failure: transform\\\",\\\"authorized candidate: c_33e9b9b8f249\\\",\\\"authorized candidate: c_c5b5ba0205e8\\\",\\\"authorized candidate: c_f985384cdb0e\\\"],\\\"rationale\\\":\\\"verified_repair\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Nested JSON moved, renamed a field and changed integer encoding: repaired; program set_record_path, update_field_sources, set_cast; 15/15 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-program-five\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-program-five\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Nested JSON became semicolon CSV with three semantic shifts: repaired; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Nested JSON became semicolon CSV with three semantic shifts: repaired; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Nested JSON became semicolon CSV with three semantic shifts: repaired; program set_date_format, set_source_format, update_field_sources, set_cast, set_delimiter; 17/17 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Nested JSON became semicolon CSV with three semantic shifts: repaired; program set_date_format, set_source_format, update_field_sources, set_cast, set_delimiter; 17/17 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-program-five.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_566f79f6634c\\\",\\n    \\\"c_3f2b6a5c608f\\\",\\n    \\\"c_c5b5ba0205e8\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_566f79f6634c\\\",\\n    \\\"c_3f2b6a5c608f\\\",\\n    \\\"c_c5b5ba0205e8\\\",\\n    \\\"c_31ed9ff1cced\\\",\\n    \\\"c_f985384cdb0e\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"repair\\\",\\\"steps\\\":[{\\\"operation\\\":\\\"set_date_format\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":\\\"published_on\\\",\\\"strategy\\\":null,\\\"input_format\\\":\\\"%d/%m/%Y\\\",\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_source_format\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":\\\"csv\\\",\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"update_field_sources\\\",\\\"field_sources\\\":[{\\\"output_field\\\":\\\"name\\\",\\\"source_field\\\":\\\"display_name\\\"}],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_cast\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":\\\"units\\\",\\\"strategy\\\":\\\"integer_from_float\\\",\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_delimiter\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":\\\";\\\",\\\"format\\\":null,\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null}],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"source format: json to csv\\\",\\\"removed field: name\\\",\\\"added field: display_name\\\",\\\"current failure: transform\\\",\\\"authorized candidate: c_31ed9ff1cced\\\",\\\"authorized candidate: c_566f79f6634c\\\",\\\"authorized candidate: c_c5b5ba0205e8\\\",\\\"authorized candidate: c_f985384cdb0e\\\",\\\"authorized candidate: c_3f2b6a5c608f\\\"],\\\"rationale\\\":\\\"verified_repair\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Nested JSON became semicolon CSV with three semantic shifts: repaired; program set_date_format, set_source_format, update_field_sources, set_cast, set_delimiter; 17/17 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-program-six\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-program-six\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "CSV became nested JSON with six independent bounded shifts: repaired; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"CSV became nested JSON with six independent bounded shifts: repaired; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "CSV became nested JSON with six independent bounded shifts: repaired; program set_boolean_values, set_date_format, update_field_sources, set_source_format, set_record_path, set_cast; 19/19 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"CSV became nested JSON with six independent bounded shifts: repaired; program set_boolean_values, set_date_format, update_field_sources, set_source_format, set_record_path, set_cast; 19/19 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-program-six.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_ef559138c816\\\",\\n    \\\"c_33e9b9b8f249\\\",\\n    \\\"c_c5b5ba0205e8\\\",\\n    \\\"c_0f65f992aa4f\\\",\\n    \\\"c_31ed9ff1cced\\\",\\n    \\\"c_f985384cdb0e\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"repair\\\",\\\"steps\\\":[{\\\"operation\\\":\\\"set_boolean_values\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":\\\"active\\\",\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[\\\"si\\\"],\\\"false_values\\\":[\\\"no\\\"],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_date_format\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":\\\"published_on\\\",\\\"strategy\\\":null,\\\"input_format\\\":\\\"%d/%m/%Y\\\",\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"update_field_sources\\\",\\\"field_sources\\\":[{\\\"output_field\\\":\\\"name\\\",\\\"source_field\\\":\\\"display_name\\\"}],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_source_format\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":\\\"json\\\",\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_record_path\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":\\\"payload.rows\\\",\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null},{\\\"operation\\\":\\\"set_cast\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":\\\"units\\\",\\\"strategy\\\":\\\"integer_from_float\\\",\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":null,\\\"split_fields\\\":[],\\\"separator\\\":null}],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"source format: csv to json\\\",\\\"removed field: name\\\",\\\"added field: display_name\\\",\\\"current failure: transform\\\",\\\"authorized candidate: c_0f65f992aa4f\\\",\\\"authorized candidate: c_31ed9ff1cced\\\",\\\"authorized candidate: c_c5b5ba0205e8\\\",\\\"authorized candidate: c_ef559138c816\\\",\\\"authorized candidate: c_33e9b9b8f249\\\",\\\"authorized candidate: c_f985384cdb0e\\\"],\\\"rationale\\\":\\\"verified_repair\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"CSV became nested JSON with six independent bounded shifts: repaired; program set_boolean_values, set_date_format, update_field_sources, set_source_format, set_record_path, set_cast; 19/19 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-split-source\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-split-source\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Two coordinates became one ordered pair: repaired; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Two coordinates became one ordered pair: repaired; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Two coordinates became one ordered pair: repaired; program set_split_source; 15/15 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Two coordinates became one ordered pair: repaired; program set_split_source; 15/15 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-split-source.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_27f9562b351f\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"repair\\\",\\\"steps\\\":[{\\\"operation\\\":\\\"set_split_source\\\",\\\"field_sources\\\":[],\\\"delimiter\\\":null,\\\"format\\\":null,\\\"field\\\":null,\\\"strategy\\\":null,\\\"input_format\\\":null,\\\"true_values\\\":[],\\\"false_values\\\":[],\\\"path\\\":null,\\\"sources\\\":[],\\\"source\\\":\\\"coordinates\\\",\\\"split_fields\\\":[{\\\"output_field\\\":\\\"latitude\\\",\\\"index\\\":0},{\\\"output_field\\\":\\\"longitude\\\",\\\"index\\\":1}],\\\"separator\\\":\\\",\\\"}],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"removed field: latitude\\\",\\\"removed field: longitude\\\",\\\"added field: coordinates\\\",\\\"current failure: required:latitude\\\",\\\"current failure: required:longitude\\\",\\\"current failure: type:latitude\\\",\\\"current failure: type:longitude\\\",\\\"current failure: preserve_values\\\",\\\"authorized candidate: c_27f9562b351f\\\"],\\\"rationale\\\":\\\"verified_repair\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Two coordinates became one ordered pair: repaired; program set_split_source; 15/15 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-unchanged-json\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-unchanged-json\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "JSON added metadata outside the declared chain: unchanged; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"JSON added metadata outside the declared chain: unchanged; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "JSON added metadata outside the declared chain: unchanged; program unchanged; 13/13 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"JSON added metadata outside the declared chain: unchanged; program unchanged; 13/13 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-unchanged-json.\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"unchanged\\\",\\\"steps\\\":[],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"added field: metadata\\\"],\\\"rationale\\\":\\\"contracts_already_satisfied\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"JSON added metadata outside the declared chain: unchanged; program unchanged; 13/13 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-ambiguous-date\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-ambiguous-date\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Symmetric dates permit two equivalent parsers: escalated; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Symmetric dates permit two equivalent parsers: escalated; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Symmetric dates permit two equivalent parsers: escalated; program escalate; 6/6 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Symmetric dates permit two equivalent parsers: escalated; program escalate; 6/6 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-ambiguous-date.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_31ed9ff1cced\\\",\\n    \\\"c_a3d8f046cefc\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_31ed9ff1cced\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_31ed9ff1cced\\\",\\n    \\\"c_a3d8f046cefc\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"escalate\\\",\\\"steps\\\":[],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"current failure: transform\\\"],\\\"rationale\\\":\\\"ambiguous_repair\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Symmetric dates permit two equivalent parsers: escalated; program escalate; 6/6 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-ambiguous-boolean\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-ambiguous-boolean\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "One new token contradicts two prior boolean meanings: escalated; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"One new token contradicts two prior boolean meanings: escalated; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "One new token contradicts two prior boolean meanings: escalated; program escalate; 6/6 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"One new token contradicts two prior boolean meanings: escalated; program escalate; 6/6 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-ambiguous-boolean.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_ad884b022c01\\\",\\n    \\\"c_479bf8fa69a9\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"escalate\\\",\\n  \\\"candidate_ids\\\": []\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"escalate\\\",\\\"steps\\\":[],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"current failure: transform\\\"],\\\"rationale\\\":\\\"search_exhausted\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"One new token contradicts two prior boolean meanings: escalated; program escalate; 6/6 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-duplicate-key\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-duplicate-key\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "The current source duplicated the stable key: escalated; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"The current source duplicated the stable key: escalated; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "The current source duplicated the stable key: escalated; program escalate; 6/6 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"The current source duplicated the stable key: escalated; program escalate; 6/6 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-duplicate-key.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"escalate\\\",\\n  \\\"candidate_ids\\\": []\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"escalate\\\",\\\"steps\\\":[],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"current failure: unique:id\\\",\\\"current failure: row_policy\\\"],\\\"rationale\\\":\\\"search_exhausted\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"The current source duplicated the stable key: escalated; program escalate; 6/6 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "{\"scenario_id\":\"custom-out-of-language\"}",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"{\\\"scenario_id\\\":\\\"custom-out-of-language\\\"}\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "Values changed without a bounded structural explanation: escalated; deterministic terminal verified.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Values changed without a bounded structural explanation: escalated; deterministic terminal verified.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "Values changed without a bounded structural explanation: escalated; program escalate; 6/6 deterministic checks passed.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Values changed without a bounded structural explanation: escalated; program escalate; 6/6 deterministic checks passed.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Inspected custom-out-of-language.\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"repair\\\",\\n  \\\"candidate_ids\\\": [\\n    \\\"c_ad884b022c01\\\",\\n    \\\"c_479bf8fa69a9\\\"\\n  ]\\n}\"}], \"role\": \"model\"}}, {\"author\": \"repair_planner\", \"content\": {\"parts\": [{\"text\": \"{\\n  \\\"decision\\\": \\\"escalate\\\",\\n  \\\"candidate_ids\\\": []\\n}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"{\\\"decision\\\":\\\"escalate\\\",\\\"steps\\\":[],\\\"confidence\\\":1.0,\\\"evidence\\\":[\\\"current failure: preserve_values\\\"],\\\"rationale\\\":\\\"search_exhausted\\\"}\"}], \"role\": \"model\"}}, {\"author\": \"driftpatch\", \"content\": {\"parts\": [{\"text\": \"Values changed without a bounded structural explanation: escalated; program escalate; 6/6 deterministic checks passed.\"}], \"role\": \"model\"}}]}]}"
+      }
+    ]
+  },
+  "agent_info": null
+}
