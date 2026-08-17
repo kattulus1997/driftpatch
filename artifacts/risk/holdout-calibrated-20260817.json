@@ -1,0 +1,172 @@
+{
+  "calls_per_run": {
+    "main_planner": 5,
+    "optimized_baseline": 13,
+    "reduction": 0.307692,
+    "risk_critic": 4,
+    "total": 9
+  },
+  "cases_per_trial": 8,
+  "model": "gemini-3.5-flash-lite",
+  "product_gate": {
+    "confirmed": 12,
+    "eligible_cases": 12,
+    "note": "The critic is invoked only after deterministic search independently reaches escalation.",
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "raw": {
+    "false_negative": 0,
+    "false_positive": 1,
+    "precision": 0.923077,
+    "recall": 1.0,
+    "true_positive": 12
+  },
+  "results": [
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-three",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-five",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-six",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-split-source",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-ambiguous-date",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-ambiguous-boolean",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-duplicate-key",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-out-of-language",
+      "trial": 1
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-three",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-five",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-six",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-split-source",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-ambiguous-date",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-ambiguous-boolean",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-duplicate-key",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-out-of-language",
+      "trial": 2
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": true,
+      "scenario_id": "custom-program-three",
+      "trial": 3
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-five",
+      "trial": 3
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-program-six",
+      "trial": 3
+    },
+    {
+      "canonical_escalation": false,
+      "critic_escalation": false,
+      "scenario_id": "custom-split-source",
+      "trial": 3
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-ambiguous-date",
+      "trial": 3
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-ambiguous-boolean",
+      "trial": 3
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-duplicate-key",
+      "trial": 3
+    },
+    {
+      "canonical_escalation": true,
+      "critic_escalation": true,
+      "scenario_id": "custom-out-of-language",
+      "trial": 3
+    }
+  ],
+  "trials": 3
+}

@@ -4,7 +4,13 @@ import json
 
 import pytest
 
-from app.agent import inspect_incident, repair_planner, root_agent, synthesize_case
+from app.agent import (
+    expert_planner,
+    inspect_incident,
+    repair_planner,
+    root_agent,
+    synthesize_case,
+)
 from app.benchmark import load_scenario, scenario_case
 from app.case_data import inspect_case, parse_submission
 from app.execution import ExecutionBinding, bind_execution
@@ -62,6 +68,16 @@ class LineageStub:
 
     async def score(self, _case, _catalogue) -> dict[str, float]:
         return {self.candidate_id: 0.91}
+
+
+class RiskCriticStub:
+    def __init__(self, confirms: bool) -> None:
+        self.confirms = confirms
+        self.calls = 0
+
+    async def confirms_escalation(self, _report, _catalogue) -> bool:
+        self.calls += 1
+        return self.confirms
 
 
 def _submission(*, changed: bool = True) -> CustomRunSubmission:
@@ -180,6 +196,11 @@ def test_selector_reserves_output_for_complete_structured_json() -> None:
     assert config.max_output_tokens >= 2048
     assert config.thinking_config.thinking_level.value == "LOW"
 
+    expert_config = expert_planner.generate_content_config
+    assert expert_config.max_output_tokens is not None
+    assert expert_config.max_output_tokens >= 2048
+    assert expert_config.thinking_config.thinking_level.value == "MINIMAL"
+
 
 @pytest.mark.asyncio
 async def test_counterexample_guides_second_selection_without_raw_rows() -> None:
@@ -273,6 +294,60 @@ async def test_repairable_case_rejects_model_escalation_and_retries() -> None:
     assert result.status == "repaired"
     assert len(planner.prompts) == 2
     assert planner.prompts[1].counterexamples[0].invariant == "selection"
+
+
+@pytest.mark.asyncio
+async def test_risk_critic_can_confirm_only_canonical_escalation() -> None:
+    case = scenario_case(load_scenario("custom-ambiguous-date"))
+    report = inspect_case(case)
+    planner = PlannerStub([])
+    critic = RiskCriticStub(True)
+
+    result = await synthesize_case(
+        report,
+        case,
+        planner,
+        AllowingSafetyScreen(),
+        risk_critic=critic,
+    )
+
+    assert result.status == "escalated"
+    assert critic.calls == 1
+    assert planner.prompts == []
+
+
+@pytest.mark.asyncio
+async def test_risk_critic_cannot_veto_a_canonical_repair() -> None:
+    case = parse_submission(_submission(), case_id="custom_critic_guard")
+    report = inspect_case(case)
+    catalogue = build_candidate_catalogue(case, report)
+    planner = PlannerStub(
+        [
+            CandidateSelection(
+                decision="repair",
+                candidate_ids=[
+                    _candidate_id(catalogue, operation)
+                    for operation in (
+                        "set_source_format",
+                        "set_record_path",
+                        "update_field_sources",
+                    )
+                ],
+            )
+        ]
+    )
+    critic = RiskCriticStub(True)
+
+    result = await synthesize_case(
+        report,
+        case,
+        planner,
+        AllowingSafetyScreen(),
+        risk_critic=critic,
+    )
+
+    assert result.status == "repaired"
+    assert critic.calls == 0
 
 
 @pytest.mark.asyncio

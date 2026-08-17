@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {"scenario_id": "custom-program-three", "canonical_escalation": false, "planner_calls": 1},
+    {"scenario_id": "custom-program-five", "canonical_escalation": false, "planner_calls": 2},
+    {"scenario_id": "custom-program-six", "canonical_escalation": false, "planner_calls": 1},
+    {"scenario_id": "custom-split-source", "canonical_escalation": false, "planner_calls": 1},
+    {"scenario_id": "custom-ambiguous-date", "canonical_escalation": true, "planner_calls": 3},
+    {"scenario_id": "custom-ambiguous-boolean", "canonical_escalation": true, "planner_calls": 2},
+    {"scenario_id": "custom-duplicate-key", "canonical_escalation": true, "planner_calls": 1},
+    {"scenario_id": "custom-out-of-language", "canonical_escalation": true, "planner_calls": 2}
+  ]
+}

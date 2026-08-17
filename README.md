@@ -21,7 +21,9 @@ baseline + current source + pipeline + contract
     -> strict admission and baseline proof
     -> deterministic catalogue of authorized repair steps
     -> Gemini Embedding supplies abstaining field-lineage hints
+    -> Flash-Lite confirms only deterministic no-repair escalations
     -> ADK planner selects opaque candidate identifiers
+    -> Gemini 3.6 Flash handles verifier-rejected retries
     -> bounded verifier-guided proposal loop
     -> independent full-data replay by the result controller
     -> atomic configuration, rollback snapshot and receipt
@@ -69,6 +71,13 @@ transformations can be repaired safely.
   rename candidates exist. It emits one advisory hint only above calibrated
   similarity and margin thresholds; otherwise it abstains. It never sees rows,
   creates candidates or authorizes a repair.
+- `gemini-3.5-flash-lite` is a low-cost semantic risk preflight invoked only
+  after deterministic search independently finds no unique repair. It may
+  confirm escalation, but cannot veto a deterministic repair or authorize a
+  mutation; any error fails open to the main planner.
+- `gemini-3.6-flash` handles only second and third rounds after the verifier
+  rejects a 3.5 Flash proposal. It receives the same opaque catalogue and safe
+  counterexamples, so higher-capability reasoning does not expand authority.
 - Model Armor screens planner input and output in `europe-west1`. A match,
   partial scan or unavailable screen fails closed.
 - The result controller reloads the exact object generation, verifies its
@@ -123,11 +132,13 @@ on the trace-grounded response rubric:
 - [`custom-holdout.json`](artifacts/traces/custom-holdout.json)
 - [`decision results`](artifacts/grade_results/custom-holdout-rubric/results_20260814_010345.json)
 
-A fresh Vertex AI run after the verifier-loop changes preserves those scores
-while reducing planner calls from 19 to 13 (31.6%) on the same nine cases:
+A fresh integrated Vertex AI run preserves those scores while reducing model
+generation calls from 19 to 10 (47.4%) on the same nine cases: four initial
+3.5 Flash proposals, two verifier-triggered 3.6 Flash retries and four
+Flash-Lite risk confirmations. Both expert retries produced verified repairs:
 
 - [`credit baseline`](artifacts/grade_results/credit-baseline-20260817-enterprise/results_20260817_185602.json)
-- [`optimized run`](artifacts/grade_results/credit-final-20260817/results_20260817_191452.json)
+- [`optimized run`](artifacts/grade_results/credit-final-max-bonus-20260817/results_20260817_193847.json)
 
 The frozen eight-case field-lineage holdout measures the additional embedding
 model independently. Raw top-1 accuracy is 6/8; the calibrated 0.01 margin gate
@@ -136,6 +147,15 @@ two errors:
 
 - [`lineage holdout`](tests/eval/datasets/lineage-holdout.json)
 - [`calibrated result`](artifacts/lineage/holdout-calibrated-20260817.json)
+
+The separate risk-preflight holdout ran eight cases three times. Flash-Lite
+recalled all 12 unsafe cases with 92.3% raw precision. The product's
+deterministic eligibility gate ignored the one false positive, yielding 100%
+effective precision and recall while replacing eight main-planner calls with
+four cheaper confirmations in the frozen trace:
+
+- [`risk holdout`](tests/eval/datasets/risk-preflight-holdout.json)
+- [`risk result`](artifacts/risk/holdout-calibrated-20260817.json)
 
 The corpus and expected terminal hashes are frozen in
 [`benchmark/custom/manifest.json`](benchmark/custom/manifest.json). Property and

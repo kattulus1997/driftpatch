@@ -30,6 +30,7 @@ from .execution import current_execution
 from .lineage import LineageRanker, configured_lineage_ranker
 from .model_armor import SafetyScreen, configured_safety_screen
 from .repairs import CandidateCatalogue, build_candidate_catalogue
+from .risk_critic import RiskCritic, configured_risk_critic
 from .schemas import (
     CandidateOption,
     CandidatePrompt,
@@ -51,6 +52,16 @@ from .synthesis import (
 
 
 MODEL = "gemini-3.5-flash"
+EXPERT_MODEL = "gemini-3.6-flash"
+PLANNER_INSTRUCTION = """Select only from the opaque candidate IDs supplied by
+DriftPatch. Return `repair` with one to six unique IDs when the structural
+evidence and prior counterexamples justify that composition. Return
+`escalate` with no IDs when evidence is insufficient. Never invent an ID,
+operation, source field or success claim. A deterministic verifier—not this
+selection—decides whether the repair is valid. Each round is stateless, so
+return the complete candidate set rather than only a correction. When
+`previous_candidate_ids` is present, retain still-relevant IDs and add or
+remove IDs only as justified by the counterexamples."""
 
 
 def _structural_report(report: DriftReport) -> DriftReport:
@@ -109,18 +120,30 @@ repair_planner = LlmAgent(
             thinking_level=types.ThinkingLevel.LOW
         ),
     ),
-    instruction="""Select only from the opaque candidate IDs supplied by
-DriftPatch. Return `repair` with one to six unique IDs when the structural
-evidence and prior counterexamples justify that composition. Return
-`escalate` with no IDs when evidence is insufficient. Never invent an ID,
-operation, source field or success claim. A deterministic verifier—not this
-selection—decides whether the repair is valid. Each round is stateless, so
-return the complete candidate set rather than only a correction. When
-`previous_candidate_ids` is present, retain still-relevant IDs and add or
-remove IDs only as justified by the counterexamples.""",
+    instruction=PLANNER_INSTRUCTION,
     input_schema=CandidatePrompt,
     output_schema=CandidateSelection,
     output_key="candidate_selection",
+)
+
+expert_planner = LlmAgent(
+    name="expert_planner",
+    model=Gemini(
+        model=EXPERT_MODEL,
+        retry_options=types.HttpRetryOptions(attempts=3),
+    ),
+    mode="single_turn",
+    generate_content_config=types.GenerateContentConfig(
+        temperature=0,
+        max_output_tokens=2048,
+        thinking_config=types.ThinkingConfig(
+            thinking_level=types.ThinkingLevel.MINIMAL
+        ),
+    ),
+    instruction=PLANNER_INSTRUCTION,
+    input_schema=CandidatePrompt,
+    output_schema=CandidateSelection,
+    output_key="expert_candidate_selection",
 )
 
 
@@ -188,6 +211,7 @@ async def synthesize_case(
     planner: CandidatePlanner,
     safety: SafetyScreen,
     lineage: LineageRanker | None = None,
+    risk_critic: RiskCritic | None = None,
 ) -> ValidationResult:
     """Run a bounded verifier-guided selection loop over authorized mutations."""
     catalogue = build_candidate_catalogue(case, report)
@@ -200,6 +224,12 @@ async def synthesize_case(
         return unchanged
 
     canonical = search_catalogue(case, catalogue)
+    if (
+        canonical.decision == "escalate"
+        and risk_critic is not None
+        and await risk_critic.confirms_escalation(report, catalogue)
+    ):
+        return verify_program(case, canonical, catalogue)
     lineage_scores = await lineage.score(case, catalogue) if lineage is not None else {}
     feedback: list[Counterexample] = []
     previous_candidate_ids: list[str] = []
@@ -262,8 +292,9 @@ class _ContextPlanner:
         self._ctx = ctx
 
     async def select(self, prompt: CandidatePrompt) -> CandidateSelection:
+        planner = expert_planner if prompt.round > 1 else repair_planner
         output = await self._ctx.run_node(
-            repair_planner,
+            planner,
             prompt,
             run_id=f"proposal-r{prompt.round}",
         )
@@ -278,6 +309,7 @@ async def synthesize_program(node_input: DriftReport, ctx: Context) -> Event:
         _ContextPlanner(ctx),
         configured_safety_screen(),
         configured_lineage_ranker(),
+        configured_risk_critic(),
     )
     return Event(
         content=types.Content(
