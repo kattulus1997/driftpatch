@@ -7,7 +7,14 @@ configuration and data contract. DriftPatch either activates a typed,
 deterministically verified repair, confirms that nothing changed, or escalates
 without mutating configuration.
 
-**Try it:** [driftpatch.guillermozubikarai.dev](https://driftpatch.guillermozubikarai.dev)
+**Judge path:** [watch the 3:27 video](https://youtu.be/qY_rfbb0Th4) →
+[run the no-login demo](https://driftpatch.guillermozubikarai.dev) (`Load
+example` → `Repair this chain`) → [inspect the architecture](architecture.svg)
+→ [reproduce it from source](#run-and-verify).
+
+The video shows a continuous Chrome repair, its versioned receipt, Google ADK
+with Gemini 3.5 Flash, and the same event crossing the deployed Google Cloud
+control path.
 
 ![DriftPatch social preview](frontend/public/og-driftpatch.png)
 
